@@ -18,13 +18,13 @@ export default function Index() {
                     <Text className='text-4xl text-white font-semibold'>
                         Pulse
                     </Text>
-                    <Text className='text-5xl text-white font-semibold mt-7'>
+                    <Text className='text-5xl text-white font-semibold mb-7 mt-7'>
                         Logo Here
                     </Text>
                     <CustomButton
                         title="Continue"
                         handlePress={() => router.push('/sign-in')}
-                        containerStyle='w-full mt-7'
+                        containerStyle='w-[95vw] mt-7'
                     />
                 </View>
             </ScrollView>

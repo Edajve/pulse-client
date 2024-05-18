@@ -22,12 +22,12 @@ const SignIn = () => {
         setIsSubmitting(true)
 
         try {
-            await signIn(form.email, form.password)
+            // await signIn(form.email, form.password)
 
             // const result = await getCurrentUser()
 
-            setUser(result)
-            setIsLoggedIn(true)
+            // setUser(result)
+            // setIsLoggedIn(true)
 
             router.replace('/home')
         } catch (error) {
@@ -42,7 +42,7 @@ const SignIn = () => {
             <ScrollView>
                 <View className="w-full justify-center min-h-[80vh] px-4 my-6">
                     <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>
-                        Log in to Aora
+                        Log in to Pulse
                     </Text>
                     <FormField
                         title='Email'
