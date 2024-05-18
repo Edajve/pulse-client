@@ -1,5 +1,4 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {getUser} from "../app/lib/pulse-services";
 
 const GlobalContext = createContext()
 
@@ -9,30 +8,18 @@ const GlobalProvider = ({children}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
+    const [token, setToken] = useState("");
 
     useEffect(() => {
-        async function fetchData() {
-            await getUser()
-                .then((res) => {
-                    if (res) {
-                        setIsLoggedIn(true)
-                        setUser(res)
-                    } else {
-                        setIsLoggedIn(false)
-                        setUser(null)
-                    }
-                })
-                .catch((err) => {
-                    if (err) console.log(err)
-                })
-                .finally(() => {
-                    setIsLoading(false)
-                })
+        if (token) {
+            setIsLoggedIn(true)
+            // get user data and set user data to setUser so it can be used
+            // through program
         }
+        else setIsLoading(false)
 
-        fetchData()
 
-    }, []);
+    }, [isLoading, token]);
 
     return (
         <GlobalContext.Provider
@@ -42,6 +29,7 @@ const GlobalProvider = ({children}) => {
                 , user
                 , setUser
                 , isLoading
+                , setToken
             }}
         >
             {children}

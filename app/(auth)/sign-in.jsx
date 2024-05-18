@@ -6,9 +6,10 @@ import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
 import {Link, router} from "expo-router";
 import {useGlobalContext} from "../../context/GlobalProvider";
+import {authenticate} from "../lib/pulse-services";
 
 const SignIn = () => {
-    const {setUser, setIsLoggedIn} = useGlobalContext();
+    const {setToken, setIsLoggedIn} = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState({
         email: ''
@@ -22,16 +23,12 @@ const SignIn = () => {
         setIsSubmitting(true)
 
         try {
-            // await signIn(form.email, form.password)
-
-            // const result = await getCurrentUser()
-
-            // setUser(result)
-            // setIsLoggedIn(true)
-
+            const response = await authenticate(form);
+            setToken(response.data.token);
+            setIsLoggedIn(true)
             router.replace('/home')
         } catch (error) {
-            Alert.alert('Error', error.message)
+            Alert.alert('User not in database', "This user is not in the database")
         } finally {
             setIsSubmitting(false)
         }
