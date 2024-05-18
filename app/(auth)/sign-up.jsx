@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {Alert, Image, ScrollView, Text, View} from "react-native";
+import {Alert, ScrollView, Text, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import images from "../../constants/images";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
-import {Link, router} from "expo-router";
+import {Link} from "expo-router";
 import {useGlobalContext} from "../../context/GlobalProvider";
+import DropDown from "../components/DropDown";
 
 const SignUp = () => {
     const {setUser, setIsLoggedIn} = useGlobalContext();
@@ -17,17 +17,17 @@ const SignUp = () => {
         email: '',
         password: '',
         role: 'USER',
-        accountCreatedDate: 'set a date using localtime',
+        accountCreatedDate: new Date().toISOString(),
         sex: '',
         dateOfBirth: '',
         countryRegion: ''
     });
 
     const submit = async () => {
-        if (!form.username || !form.email || !form.password)
-            Alert.alert('Error', 'Please fill in all the fields')
 
-       // setIsSubmitting(true)
+        checkSignInFields()
+
+        // setIsSubmitting(true)
 
         try {
             // const result = await createUser(
@@ -48,20 +48,36 @@ const SignUp = () => {
         }
     }
 
-    /**
-     *  private Integer id;
-     *     private String firstName;
-     *     private String lastName;
-     *     private String email;
-     *     private String password;
-     *     @Enumerated(EnumType.STRING)
-     *     private Role role;
-     *     private LocalDateTime accountCreatedDate;
-     *     @Enumerated(EnumType.STRING)
-     *     private Sex sex;
-     *     private LocalDate dateOfBirth;
-     *     private Country countryRegion;
-     */
+    function checkSignInFields() {
+        // Are all fields not null
+        if (
+            !form.firstName ||
+            !form.lastName ||
+            !form.email ||
+            !form.password ||
+            !form.dateOfBirth
+        ) {
+            Alert.alert('Error', 'Please fill in all the fields');
+            return;
+        }
+
+        // is DoB in correct formatting? MM/DD/YYYY
+        const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+        if (!datePattern.test(form.dateOfBirth)) {
+            Alert.alert('Date Of Birth Incorrect format', 'The correct format is MM/DD/YYYY');
+            return;
+        }
+
+        // Calculate age
+        const dateParts = form.dateOfBirth.split("/");
+        const dobDate = new Date(parseInt(dateParts[2]), parseInt(dateParts[0]) - 1, parseInt(dateParts[1]));
+        const currentDate = new Date();
+        const ageDifference = currentDate - dobDate;
+        const ageInYears = ageDifference / (1000 * 60 * 60 * 24 * 365);
+
+        // Check if user is over 18
+        if (ageInYears < 18) Alert.alert('Age Error', 'You have to be 18+');
+    }
 
     return (
         <SafeAreaView className="bg-primary h-full">
@@ -73,41 +89,49 @@ const SignUp = () => {
                     <FormField
                         title='First Name'
                         value={form.firstName}
-                        handleChangeText={(e) => setForm({ ...form, firstName: e })}
+                        handleChangeText={(e) => setForm({...form, firstName: e})}
                         otherStyles='mt-7'
                         keyboardType='text'
                     />
                     <FormField
                         title='Last Name'
                         value={form.lastName}
-                        handleChangeText={(e) => setForm({ ...form, lastName: e })}
+                        handleChangeText={(e) => setForm({...form, lastName: e})}
                         otherStyles='mt-7'
                         keyboardType='text'
                     />
                     <FormField
                         title='Email'
                         value={form.email}
-                        handleChangeText={(e) => setForm({ ...form, email: e })}
+                        handleChangeText={(e) => setForm({...form, email: e})}
                         otherStyles='mt-7'
                         keyboardType='email-address'
                     />
                     <FormField
                         title='Password'
                         value={form.password}
-                        handleChangeText={(e) => setForm({ ...form, password: e })}
+                        handleChangeText={(e) => setForm({...form, password: e})}
                         otherStyles='mt-7'
                         keyboardType='default'
                         secureTextEntry={true}
                     />
-                    <Text className='text-white text-lg mt-7'>Sex</Text>
+                    <DropDown
+                        title='Sex'
+                        updateForm={(itemValue) => setForm({...form, sex: itemValue})}
+                        options={["Select your Sex", "Male", "Female", "Non-Binary", "Gender Queer", "Other"]}
+                    />
                     <FormField
-                        title='Date of Birth'
+                        title='Date of Birth (18+) MM/DD/YYYY'
                         value={form.dateOfBirth}
-                        handleChangeText={(e) => setForm({ ...form, dateOfBirth: e })}
+                        handleChangeText={(e) => setForm({...form, dateOfBirth: e})}
                         otherStyles='mt-7'
                         keyboardType='default'
                     />
-                    <Text className='text-white text-lg mt-7'>Country/Region</Text>
+                    <DropDown
+                        title='Country/Region'
+                        updateForm={(itemValue) => setForm({...form, countryRegion: itemValue})}
+                        options={["Select your Country/Region", "United States Of America"]}
+                    />
                     <CustomButton
                         title='Sign Up'
                         handlePress={submit}
