@@ -15,8 +15,6 @@ const GlobalProvider = ({children}) => {
     useEffect(() => {
         if (token) {
             setIsLoggedIn(true)
-
-
         } else {
             console.log('users credential cleared...')
             setUser(null)
