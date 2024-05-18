@@ -8,7 +8,7 @@ import {useGlobalContext} from "../../context/GlobalProvider";
 import {authenticate} from "../lib/pulse-services";
 
 const SignIn = () => {
-    const {setIsLoggedIn} = useGlobalContext();
+    const {setToken, setIsLoggedIn} = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState({
         email: ''
@@ -27,7 +27,7 @@ const SignIn = () => {
             setIsLoggedIn(true)
             router.replace('/home')
         } catch (error) {
-            Alert.alert('Incorrect Login Credentials', "Oops! It seems like the username or password you entered is incorrect. Double-check your credentials and try again. If you're still having trouble, you can reset your password.")
+            Alert.alert('Incorrect Login Credentials', "Oops! It seems like the email or password you entered is incorrect. Double-check your credentials and try again. If you're still having trouble, you can reset your password.")
         } finally {
             setIsSubmitting(false)
         }
