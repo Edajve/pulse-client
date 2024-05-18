@@ -15,8 +15,18 @@ const GlobalProvider = ({children}) => {
     useEffect(() => {
         if (token) {
             setIsLoggedIn(true)
-            // get user data and set user data to setUser so it can be used
-            // through program
+
+
+        } else {
+            console.log('users credential cleared...')
+            setUser(null)
+            setId(null)
+            setIsLoggedIn(false)
+        }
+    }, [token]);
+
+    useEffect(() => {
+        if (id) {
             getUser(id, token)
                 .then(response => {
                     setUser(response);
@@ -25,14 +35,8 @@ const GlobalProvider = ({children}) => {
                     if (err) throw err
                 });
 
-            console.log(user)
-        } else {
-            console.log('token has been discarded...')
-            setIsLoading(false)
-            setUser(null)
-            setIsLoggedIn(false)
         }
-    }, [token, id]);
+    }, [id])
 
     return (
         <GlobalContext.Provider

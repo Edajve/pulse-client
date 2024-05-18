@@ -27,7 +27,7 @@ export const authenticate = async (AuthenticateRequest) => {
 export const getUser = async (id, token) => {
     try {
 
-        const response = await apiClient.get(`/user/${id}`, {
+        const response = await apiClient.get(`/account/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

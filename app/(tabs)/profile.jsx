@@ -23,7 +23,7 @@ const Profile = () => {
                 <View className='flex-row justify-between'>
                     <View className='mb-24'>
                         <Text className='text-2xl text-white font-semibold'>
-                            Profile
+                            Hey {user.firstName}
                         </Text>
                     </View>
                     <View>

@@ -26,6 +26,7 @@ const SignIn = () => {
             setToken(response.data.token.token);
             setId(response.data.id)
             setIsLoggedIn(true)
+
             router.replace('/home')
         } catch (error) {
             Alert.alert('Incorrect Login Credentials', "Oops! It seems like the email or password you entered is incorrect. Double-check your credentials and try again. If you're still having trouble, you can reset your password.")
