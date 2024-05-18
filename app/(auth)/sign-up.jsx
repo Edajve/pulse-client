@@ -3,9 +3,10 @@ import {Alert, ScrollView, Text, View} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
-import {Link} from "expo-router";
+import {Link, router} from "expo-router";
 import {useGlobalContext} from "../../context/GlobalProvider";
 import DropDown from "../components/DropDown";
+import {register} from "../lib/pulse-services";
 
 const SignUp = () => {
     const {setUser, setIsLoggedIn} = useGlobalContext();
@@ -25,28 +26,25 @@ const SignUp = () => {
 
     const submit = async () => {
 
-        checkSignInFields()
+        if (!checkSignInFields()) return;
 
-        // setIsSubmitting(true)
+        setIsSubmitting(true);
 
         try {
-            // const result = await createUser(
-            //     form.email
-            //     , form.password
-            //     , form.username
-            //     , form.email
-            // );
+            // Convert date format to "MM-DD-YYYY"
+            const formattedDate = form.dateOfBirth.split("-").reverse().join("-");
+            const formData = {...form, dateOfBirth: formattedDate};
 
-            // setUser(result)
-            // setIsLoggedIn(true)
-
-            // router.replace('/home')
+            const response = await register(formData);
+            console.log('Register response:', response);
+            router.replace('/sign-in');
         } catch (error) {
-            Alert.alert('Error', error.message)
+            console.error('Register error:', error);
+            Alert.alert('Error', error.message || 'Something went wrong');
         } finally {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
         }
-    }
+    };
 
     function checkSignInFields() {
         // Are all fields not null
@@ -58,25 +56,30 @@ const SignUp = () => {
             !form.dateOfBirth
         ) {
             Alert.alert('Error', 'Please fill in all the fields');
-            return;
+            return false;
         }
 
-        // is DoB in correct formatting? MM/DD/YYYY
-        const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+        // is DoB in correct formatting? MM-DD-YYYY
+        const datePattern = /^(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])-(19|20)\d{2}$/;
         if (!datePattern.test(form.dateOfBirth)) {
-            Alert.alert('Date Of Birth Incorrect format', 'The correct format is MM/DD/YYYY');
-            return;
+            Alert.alert('Date Of Birth Incorrect format', 'The correct format is MM-DD-YYYY');
+            return false;
         }
 
         // Calculate age
-        const dateParts = form.dateOfBirth.split("/");
+        const dateParts = form.dateOfBirth.split("-");
         const dobDate = new Date(parseInt(dateParts[2]), parseInt(dateParts[0]) - 1, parseInt(dateParts[1]));
         const currentDate = new Date();
         const ageDifference = currentDate - dobDate;
         const ageInYears = ageDifference / (1000 * 60 * 60 * 24 * 365);
 
         // Check if user is over 18
-        if (ageInYears < 18) Alert.alert('Age Error', 'You have to be 18+');
+        if (ageInYears < 18) {
+            Alert.alert('Age Error', 'You have to be 18+');
+            return false;
+        }
+
+        return true;
     }
 
     return (
@@ -118,10 +121,10 @@ const SignUp = () => {
                     <DropDown
                         title='Sex'
                         updateForm={(itemValue) => setForm({...form, sex: itemValue})}
-                        options={["Select your Sex", "Male", "Female", "Non-Binary", "Gender Queer", "Other"]}
+                        options={["Select your Sex", "MALE", "FEMALE", "NON_BINARY", "GENDER_QUEER", "OTHER"]}
                     />
                     <FormField
-                        title='Date of Birth (18+) MM/DD/YYYY'
+                        title='Date of Birth (18+) MM-DD-YYYY'
                         value={form.dateOfBirth}
                         handleChangeText={(e) => setForm({...form, dateOfBirth: e})}
                         otherStyles='mt-7'
@@ -130,7 +133,7 @@ const SignUp = () => {
                     <DropDown
                         title='Country/Region'
                         updateForm={(itemValue) => setForm({...form, countryRegion: itemValue})}
-                        options={["Select your Country/Region", "United States Of America"]}
+                        options={["Select your Country/Region", "UNITED_STATES"]}
                     />
                     <CustomButton
                         title='Sign Up'

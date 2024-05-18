@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {authenticate} from "../app/lib/pulse-services";
+import {getUser} from "../app/lib/pulse-services";
 
 const GlobalContext = createContext()
 
@@ -11,22 +11,27 @@ const GlobalProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        authenticate()
-            .then((res) => {
-                if (res) {
-                    setIsLoggedIn(true)
-                    setUser(res)
-                } else {
-                    setIsLoggedIn(false)
-                    setUser(null)
-                }
-            })
-            .catch((err) => {
-                if (err) console.log(err)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+        async function fetchData() {
+            await getUser()
+                .then((res) => {
+                    if (res) {
+                        setIsLoggedIn(true)
+                        setUser(res)
+                    } else {
+                        setIsLoggedIn(false)
+                        setUser(null)
+                    }
+                })
+                .catch((err) => {
+                    if (err) console.log(err)
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        }
+
+        fetchData()
+
     }, []);
 
     return (
