@@ -15,10 +15,12 @@ const GlobalProvider = ({children}) => {
             setIsLoggedIn(true)
             // get user data and set user data to setUser so it can be used
             // through program
+        } else {
+            console.log('token has been discarded...')
+            setIsLoading(false)
+            setUser(null)
+            setIsLoggedIn(false)
         }
-        else setIsLoading(false)
-
-
     }, [isLoading, token]);
 
     return (
