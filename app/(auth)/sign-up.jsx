@@ -29,11 +29,7 @@ const SignUp = () => {
         setIsSubmitting(true);
 
         try {
-            // Convert date format to "MM-DD-YYYY"
-            const formattedDate = form.dateOfBirth.split("-").reverse().join("-");
-            const formData = {...form, dateOfBirth: formattedDate};
-
-            const response = await register(formData);
+            await register(form);
 
             router.replace('/sign-in');
 
