@@ -4,12 +4,10 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
 import {Link, router} from "expo-router";
-import {useGlobalContext} from "../../context/GlobalProvider";
 import DropDown from "../components/DropDown";
 import {register} from "../lib/pulse-services";
 
 const SignUp = () => {
-    const {setUser, setIsLoggedIn} = useGlobalContext();
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState({
@@ -36,8 +34,9 @@ const SignUp = () => {
             const formData = {...form, dateOfBirth: formattedDate};
 
             const response = await register(formData);
-            console.log('Register response:', response);
+
             router.replace('/sign-in');
+
         } catch (error) {
             console.error('Register error:', error);
             Alert.alert('Error', error.message || 'Something went wrong');
