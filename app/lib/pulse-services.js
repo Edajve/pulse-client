@@ -17,5 +17,3 @@ export const register = async (AuthenticateRequest) => {
 export const getUser = async () => {
    return false;
 }
-
-
