@@ -14,19 +14,29 @@ export const register = async (RegisterRequest) => {
 }
 
 export const authenticate = async (AuthenticateRequest) => {
-    // return true;
     try {
         return await apiClient.post(`/auth/authenticate`, AuthenticateRequest);
     } catch (error) {
         console.error('Register error:', error);
         throw error;
     }
+
+    // return true; // -> this is to force correct credentials for during development
 }
 
-export const logout = () => {
+export const getUser = async (id, token) => {
+    try {
 
-}
+        const response = await apiClient.get(`/user/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-export const getUser = async () => {
-   return false;
+        return response.data;
+    } catch (error) {
+
+        console.error('Register error:', error);
+        throw error;
+    }
 }

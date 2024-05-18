@@ -6,13 +6,14 @@ import {useGlobalContext} from "../../context/GlobalProvider";
 import {router} from "expo-router";
 
 const Profile = () => {
-    const {setIsLoggedIn, setUser, setToken} = useGlobalContext();
+    const {setIsLoggedIn, setUser, user, setToken, token, setId} = useGlobalContext();
 
     const logout = () => {
         console.log('logging user out')
         setToken(null)
         setIsLoggedIn(false);
         setUser(null)
+        setId(null)
         router.replace('/sign-in')
     };
 

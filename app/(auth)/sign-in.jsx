@@ -8,7 +8,7 @@ import {useGlobalContext} from "../../context/GlobalProvider";
 import {authenticate} from "../lib/pulse-services";
 
 const SignIn = () => {
-    const {setToken, setIsLoggedIn} = useGlobalContext();
+    const {setToken, setId, setIsLoggedIn} = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState({
         email: ''
@@ -23,7 +23,8 @@ const SignIn = () => {
 
         try {
             const response = await authenticate(form);
-            setToken(response.data.token);
+            setToken(response.data.token.token);
+            setId(response.data.id)
             setIsLoggedIn(true)
             router.replace('/home')
         } catch (error) {
