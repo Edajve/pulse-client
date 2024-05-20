@@ -32,7 +32,6 @@ const GlobalProvider = ({children}) => {
                 .catch(err => {
                     if (err) throw err
                 });
-
         }
     }, [id])
 
