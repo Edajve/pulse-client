@@ -9,22 +9,22 @@ const PersonalQr = ({closeQr}) => {
     const [byteArray, setByteArray] = useState("")
 
     useEffect(() => {
-        getUserQrCode("53", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBZCIsImlhdCI6MTcxNjE4NTkyMywiZXhwIjoxNzE2MTg3MzYzfQ.VXC00d7arhWeQ3lNalNP9f7Vr8-BzfjgK-9WW_Ec6syidECX06WEAPJ7RjJ1bTuH")
+        const fetchData = async () => {
+
+        getUserQrCode("53", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBZCIsImlhdCI6MTcxNjE4OTA0NSwiZXhwIjoxNzE2MTkwNDg1fQ.lIIt_WebPuv1A5cbhTAIbN6SsmULwqd7uHN3rnTaxarcmadbP1npTLmjLDIlQyES")
             .then(response => {
+                // console.log(response)
                 setByteArray(response);
             })
             .catch(err => {
                 if (err) throw err
             });
+        }
+
+        fetchData()
     }, []);
 
-    console.log(byteArray.imageBytes);
-
-    const convertByteArrayToPng = (byteArray) => {
-        if (byteArray === undefined) return;
-
-        //convert to a base 64 string, react native svg
-    }
+    console.log(byteArray);
 
     return (
         <SafeAreaView className="bg-white h-full w-full">
