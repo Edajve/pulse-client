@@ -1,67 +1,69 @@
-import { CameraView, useCameraPermissions } from "expo-camera";
-import React, { useState, useRef } from 'react';
-import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
+import {CameraView, useCameraPermissions} from "expo-camera";
+import React, {useRef, useState} from 'react';
+import {Button, Image, Text, TouchableOpacity, View} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
-import { SafeAreaView } from "react-native-safe-area-context";
-import icons from "../../constants/icons"
-import { router } from "expo-router";
+import {SafeAreaView} from "react-native-safe-area-context";
+import icons from "../../constants/icons";
 
-const QrCamera = ({ closeCamera }) => {
+const QrCamera = ({closeCamera}) => {
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [hasMediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
     const cameraRef = useRef(null);
+    const [scanned, setScanned] = useState(false);
 
-    if (!permission) {
-        // QrCamera permissions are still loading.
-        return <View />;
-    }
+    // QrCamera permissions are still loading.
+    if (!permission) return <View/>;
+
+    const handleBarCodeScanned = ({type, data}) => {
+        setScanned(true);
+        closeCamera();
+        alert(`Barcode with type ${type} and data ${data} has been scanned!`);
+    };
 
     if (!permission.granted) {
         // QrCamera permissions are not granted yet.
         return (
             <View className="flex-1 justify-center bg-primary">
-                <Text className="text-center text-base text-gray-200 font-pmedium px-4">
+                <Text className="text-center text-base text-gray-200 font-medium px-4">
                     We need your permission to show the camera
                 </Text>
-                <Button onPress={requestPermission} title="Grant permission" />
+                <Button onPress={requestPermission} title="Grant permission"/>
             </View>
         );
     }
 
-    if (!hasMediaLibraryPermission) {
-        // Media library permissions are still loading.
-        return <View />;
-    }
+    // Media library permissions are still loading.
+    if (!hasMediaLibraryPermission) return <View/>;
 
     if (!hasMediaLibraryPermission.granted) {
         // Media library permissions are not granted yet.
         return (
             <View className="flex-1 justify-center bg-primary">
-                <Text className="text-center text-base text-gray-200 font-pmedium px-4">
+                <Text className="text-center text-base text-gray-200 font-medium px-4">
                     We need your permission to access the media library
                 </Text>
-                <Button onPress={requestMediaLibraryPermission} title="Grant permission" />
+                <Button onPress={requestMediaLibraryPermission} title="Grant permission"/>
             </View>
         );
     }
 
-    const takePicture = async () => {
-        if (cameraRef.current) {
-            const photo = await cameraRef.current.takePictureAsync();
-            await MediaLibrary.saveToLibraryAsync(photo.uri);
-            closeCamera();
-        }
-    };
+    const scanBarcode = async () => setScanned(false)
 
-    function toggleCameraFacing() {
-        setFacing(current => (current === 'back' ? 'front' : 'back'));
-    }
+    const toggleCameraFacing = () => setFacing(current => (current === 'back' ? 'front' : 'back'));
 
     return (
         <SafeAreaView className="h-full w-full bg-primary">
             <View className="flex-1 justify-center">
-                <CameraView className="flex-1" facing={facing} ref={cameraRef}>
+                <CameraView
+                    className="flex-1"
+                    facing={facing}
+                    ref={cameraRef}
+                    onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    barcodeScannerSettings={{
+                        barcodeTypes: ["qr", "pdf417"],
+                    }}
+                >
                     <View className="absolute top-0 left-0 flex-row p-4 justify-between w-full">
                         <View>
                             <TouchableOpacity className="flex-1 items-center" onPress={closeCamera}>
@@ -79,8 +81,10 @@ const QrCamera = ({ closeCamera }) => {
                         </View>
                     </View>
                     <View className="absolute bottom-0 left-0 flex-row p-4 w-full justify-center">
-                        <TouchableOpacity className="items-center bg-primary p-4 rounded-full" onPress={takePicture}>
-                            <Text className="text-2xl font-bold text-secondary">Take Picture</Text>
+                        <TouchableOpacity className="items-center bg-primary p-4 rounded-full" onPress={scanBarcode}>
+                            {scanned && (
+                                <Text className="text-2xl font-bold text-secondary">Scan QR Code</Text>
+                            )}
                         </TouchableOpacity>
                     </View>
                 </CameraView>
