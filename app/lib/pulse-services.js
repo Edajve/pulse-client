@@ -40,3 +40,18 @@ export const getUser = async (id, token) => {
         throw error;
     }
 }
+
+export const getUserQrCode = async (accountId, token) => {
+    try {
+
+        const response = await apiClient.get(`/qr/${accountId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
