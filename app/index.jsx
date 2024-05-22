@@ -9,7 +9,7 @@ import Profile from "./(tabs)/profile";
 export default function Index() {
     const { isLoading, isLoggedIn } = useGlobalContext();
 
-    if (!isLoading && isLoggedIn) return <Redirect href='/home'/>;
+    // if (!isLoading && isLoggedIn) return <Redirect href='/home'/>;
 
     return (
         // <SafeAreaView className='bg-primary h-full'>
@@ -29,6 +29,6 @@ export default function Index() {
         //         </View>
         //     </ScrollView>
         // </SafeAreaView>
-        <Profile />
+        <Profile/>
     );
 }
