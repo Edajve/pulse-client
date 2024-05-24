@@ -43,15 +43,14 @@ export const getUser = async (id, token) => {
 
 export const getUserQrCode = async (accountId, token) => {
     try {
-
         const response = await apiClient.get(`/qr/${accountId}`, {
             headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return response.data;
     } catch (error) {
+        console.error('Error fetching user QR code:', error);
         throw error;
     }
-}
+};
