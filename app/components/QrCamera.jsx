@@ -19,22 +19,23 @@ const QrCamera = ({closeCamera, isQrValid}) => {
     
     const handleBarCodeScanned = ({ data }) => {
         closeCamera();
+    
+        const isValid = isUuidValid(JSON.parse(data), token); 
+        if (isValid._j) isQrValid()
+    
+    };    
 
-        isQrValid(isUuidValid(JSON.parse(data), token));
-    };
+    const isUuidValid = async (data, token) => {
+        // try {
+        //     const isValid = await isQrValid(data.id, data.data, token);
+        //     return false
+        // } catch (error) {
+        //     console.error('Error occurred:', error);
+        //     return false;
+        // }
 
-    const isUuidValid  = async (data, token) => {
-        await isQrValid(data.id, data.data, token)
-        .then((response) => {
-            console.log(response)
-                return response.tokenValid ? true : false
-        })
-        .catch((err) => {
-            console.error('Error UUID check for user ID: ',userId )
-            return false;
-        })
-        return false;
-    }
+        return false
+    };    
     
     // QrCamera permissions are still loading.
     if (!permission) return <View/>;
@@ -63,7 +64,6 @@ const QrCamera = ({closeCamera, isQrValid}) => {
             </View>
         );
     }
-
     
     const scanBarcode = async () => setScanned(false);
 
@@ -71,20 +71,7 @@ const QrCamera = ({closeCamera, isQrValid}) => {
 
     return (
         <SafeAreaView className="h-full w-full bg-primary">
-
-            {
-                showPasswordField
-                ?
-                (
-                    <View className="flex-1 justify-center bg-primary">
-                        <Text className="text-center text-base text-gray-200 font-medium px-4">
-                            Password
-                        </Text>
-                    </View>
-                )
-                :
-                (
-                    <View className="flex-1 justify-center">
+            <View className="flex-1 justify-center">
                     <CameraView
                         className="flex-1"
                         facing={facing}
@@ -119,8 +106,6 @@ const QrCamera = ({closeCamera, isQrValid}) => {
                         </View>
                     </CameraView>
                 </View>
-                )
-            }
         </SafeAreaView>
     );
 }

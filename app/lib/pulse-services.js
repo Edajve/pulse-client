@@ -86,6 +86,7 @@ export const isQrValid = async (userID, uuid, token)  => {
                 },
             }
         );
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error fetching user QR code:', error);

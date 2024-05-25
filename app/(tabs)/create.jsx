@@ -12,9 +12,9 @@ const Create = () => {
     const closeCamera = () => setShowCamera(false);
     const openCamera = () => setShowCamera(true);
 
-    const isQrValid = (isValid) => {
-        setPasswordField(isValid);
-        if (isValid) router.push('/password-validate');
+    if (passwordField) {
+         // Check if passwordField is true before navigating
+         if (passwordField === true) router.push('/password-validate');
     }
 
     const showMainCreatePage = !showCamera;
@@ -23,7 +23,7 @@ const Create = () => {
         <>
             {showCamera && (
                 <QrCamera
-                    isQrValid={isQrValid}
+                    isQrValid={() => setPasswordField(true)}
                     closeCamera={closeCamera}
                 />
             )}
