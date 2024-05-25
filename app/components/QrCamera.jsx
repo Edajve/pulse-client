@@ -1,9 +1,11 @@
 import {CameraView, useCameraPermissions} from "expo-camera";
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Button, Image, Text, TouchableOpacity, View} from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import {SafeAreaView} from "react-native-safe-area-context";
 import icons from "../../constants/icons";
+import { useGlobalContext } from "../../context/GlobalProvider";
+
 
 const QrCamera = ({closeCamera}) => {
     const [facing, setFacing] = useState('back');
@@ -11,6 +13,20 @@ const QrCamera = ({closeCamera}) => {
     const [hasMediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
     const cameraRef = useRef(null);
     const [scanned, setScanned] = useState(false);
+    const [scannedData, setScannedData] = useState()
+
+
+
+    useEffect(() => {
+    first
+
+    return () => {
+        if (scannedData) {
+            // scanUser()
+        }
+    }
+    }, [scannedData])
+
 
     // QrCamera permissions are still loading.
     if (!permission) return <View/>;
@@ -18,6 +34,7 @@ const QrCamera = ({closeCamera}) => {
     const handleBarCodeScanned = ({type, data}) => {
         setScanned(true);
         closeCamera();
+        setScannedData(data)
         alert(`Barcode with type ${type} and data ${data} has been scanned!`);
     };
 

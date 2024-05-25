@@ -6,22 +6,11 @@ const GlobalContext = createContext()
 export const useGlobalContext = () => useContext(GlobalContext)
 
 const GlobalProvider = ({children}) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false) // isLoggedIn is set from the sign in page
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
-    const [token, setToken] = useState("");
-    const [id, setId] = useState("")
-
-    useEffect(() => {
-        if (token) {
-            setIsLoggedIn(true)
-        } else {
-            console.log('users credential cleared...')
-            setUser(null)
-            setId(null)
-            setIsLoggedIn(false)
-        }
-    }, [token]);
+    const [token, setToken] = useState(""); // token is set from the sign in page
+    const [id, setId] = useState("") // id is set from the sign in page
 
     useEffect(() => {
         if (id) {
@@ -35,6 +24,19 @@ const GlobalProvider = ({children}) => {
         }
     }, [id])
 
+    
+    useEffect(() => {
+        // If the token is has been previously set from the user signing-in
+        if (token) {
+            setIsLoggedIn(true)
+        } else { // Means user logged out
+            console.info('users credential cleared...')
+            setUser(null)
+            setId(null)
+            setIsLoggedIn(false)
+        }
+    }, [token]);
+
     return (
         <GlobalContext.Provider
             value={{
@@ -44,6 +46,7 @@ const GlobalProvider = ({children}) => {
                 , setUser
                 , isLoading
                 , setToken
+                , token
                 , setId
             }}
         >

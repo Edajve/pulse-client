@@ -4,18 +4,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
 import QRCode from 'react-native-qrcode-svg';
 import { getUserQrCode } from '../lib/pulse-services';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const PersonalQr = ({ closeQr }) => {
+    const [error, setError] = useState(null);
     const [qr, setQr] = useState({
         id: ""
         , uuid: ""
     });
-    const [error, setError] = useState(null);
+
+    const {token} = useGlobalContext()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getUserQrCode("252", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJBZCIsImlhdCI6MTcxNjU1ODIwMiwiZXhwIjoxNzE2NTU5NjQyfQ.RFnjQjPjv7fWssmKGy2IEkyDSf_zsB-LkAZ37keSo4UfhzIf22xi-v5S-LmH9LKT");
+                const response = await getUserQrCode("252", token);
                 if (response && response.generatedQrID && response.id) {
                     const userCredentials = {
                         id: response.id
