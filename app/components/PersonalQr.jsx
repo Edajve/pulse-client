@@ -6,23 +6,23 @@ import QRCode from 'react-native-qrcode-svg';
 import { getUserQrCode } from '../lib/pulse-services';
 import { useGlobalContext } from '../../context/GlobalProvider';
 
-const PersonalQr = ({ closeQr }) => {
+const PersonalQr = ({ closeQr, isQrValid }) => {
     const [error, setError] = useState(null);
     const [qr, setQr] = useState({
         id: ""
-        , uuid: ""
+        , data: ""
     });
 
-    const {token} = useGlobalContext()
+    const {token, id} = useGlobalContext()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getUserQrCode("252", token);
-                if (response && response.generatedQrID && response.id) {
+                const response = await getUserQrCode(id, token);
+                if (response) {
                     const userCredentials = {
                         id: response.id
-                        , uuid: response.generatedQrID
+                        , data: response.generatedQrID
                     }
 
                     setQr(userCredentials)
@@ -54,7 +54,7 @@ const PersonalQr = ({ closeQr }) => {
                     <Text>Error: {error}</Text>
                 ) : qr ? (
                     <QRCode 
-                        value={qr.generatedQrID}
+                        value={JSON.stringify(qr)} 
                         size={250}
                     />
                 ) : (

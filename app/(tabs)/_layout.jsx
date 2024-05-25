@@ -53,7 +53,6 @@ const TabsLayout = () => {
                         )
                     }}
                 />
-
                 <Tabs.Screen
                     name='create'
                     options={{

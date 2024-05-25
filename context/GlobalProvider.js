@@ -48,6 +48,7 @@ const GlobalProvider = ({children}) => {
                 , setToken
                 , token
                 , setId
+                , id
             }}
         >
             {children}

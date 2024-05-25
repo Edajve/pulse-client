@@ -46,7 +46,7 @@ export const getUserQrCode = async (accountId, token) => {
         const response = await apiClient.get(`/qr/${accountId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
-            },
+        },
         });
         return response.data;
     } catch (error) {

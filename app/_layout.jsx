@@ -2,6 +2,7 @@ import {SplashScreen, Stack} from "expo-router";
 import {useFonts} from "expo-font";
 import {useEffect} from "react";
 import GlobalProvider from "../context/GlobalProvider";
+import PasswordValidate from "./(contract)/password-validate";
 
 // This shows the splash screen until the fonts are ready
 SplashScreen.preventAutoHideAsync();
@@ -33,6 +34,7 @@ const RootLayout = () => {
                 <Stack.Screen name="index" options={{headerShown: false}}/>
                 <Stack.Screen name="(auth)" options={{headerShown: false}}/>
                 <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+                <Stack.Screen name="(contract)" options={{headerShown: false}}/>
             </Stack>
         </GlobalProvider>
     )
