@@ -6,6 +6,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { TouchableOpacity, Image } from 'react-native';
 import icons from "../../constants/icons";
 import { useGlobalContext } from '../../context/GlobalProvider';
+import {isUsersQrValid} from '../lib/pulse-services'
 
 const QrCamera = ({closeCamera, isQrValid}) => {
     const [facing, setFacing] = useState('back');
@@ -17,26 +18,27 @@ const QrCamera = ({closeCamera, isQrValid}) => {
 
     const { token } = useGlobalContext();
     
-    const handleBarCodeScanned = ({ data }) => {
-    
-        const isValid = isUuidValid(JSON.parse(data), token); 
-        if (isValid._j) isQrValid()
-
+    const handleBarCodeScanned = async ({ data }) => {
+        try {
+            const parsedData = JSON.parse(data);
+            const isValid = await isUuidValid(parsedData, token);
+            if (isValid) isQrValid();
             closeCamera();
-    };    
+        } catch (error) {
+            console.error('Error in handleBarCodeScanned:', error);
+        }
+    }; 
 
     const isUuidValid = async (data, token) => {
-        // try {
-        //     const isValid = await isQrValid(data.id, data.data, token);
-        //     return false
-        // } catch (error) {
-        //     console.error('Error occurred:', error);
-        //     return false;
-        // }
+        try {
+            const isValid = await isUsersQrValid(data.id, data.data, token);
+            return isValid.tokenValid;
+        } catch (error) {
+            console.error('Error occurred:', error);
+            return false;
+        }
+    };
 
-        return true
-    };    
-    
     // QrCamera permissions are still loading.
     if (!permission) return <View/>;
 
