@@ -24,7 +24,6 @@ const Profile = () => {
         <>
             {showQr && (
                 <PersonalQr
-                    
                     closeQr={() => setShowQr(false)}
                 />
             )}

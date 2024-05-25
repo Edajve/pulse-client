@@ -14,23 +14,26 @@ const QrCamera = ({closeCamera, isQrValid}) => {
     const cameraRef = useRef(null);
     const [showPasswordField, setShowPasswordField] = useState(false)
     const [scanned, setScanned] = useState(true);
-    const [scannedData, setScannedData] = useState({
-        barcodeType: "",
-        barcodeData: ""
-    });
 
     const { token } = useGlobalContext();
     
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = ({ data }) => {
         closeCamera();
-        isQrValid(isUuidValid(JSON.parse(data), token))
+
+        isQrValid(isUuidValid(JSON.parse(data), token));
     };
 
-    const isUuidValid = (data, token) => {
-        const userId = data.id
-        const uuid = data.data
-
-        return true;
+    const isUuidValid  = async (data, token) => {
+        await isQrValid(data.id, data.data, token)
+        .then((response) => {
+            console.log(response)
+                return response.tokenValid ? true : false
+        })
+        .catch((err) => {
+            console.error('Error UUID check for user ID: ',userId )
+            return false;
+        })
+        return false;
     }
     
     // QrCamera permissions are still loading.

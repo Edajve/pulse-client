@@ -3,18 +3,20 @@ import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import QrCamera from "../components/QrCamera";
 import CustomButton from "../components/CustomButton";
-import  {router} from "expo-router";
+import { router } from "expo-router";
 
 const Create = () => {
     const [showCamera, setShowCamera] = useState(false);
-    const [passwordField, setPasswordField] = useState(false)
+    const [passwordField, setPasswordField] = useState(false);
 
     const closeCamera = () => setShowCamera(false);
     const openCamera = () => setShowCamera(true);
-    const isQrValid = () => {
-        setPasswordField(true)
-        router.push('/password-validate')
+
+    const isQrValid = (isValid) => {
+        setPasswordField(isValid);
+        if (isValid) router.push('/password-validate');
     }
+
     const showMainCreatePage = !showCamera;
 
     return (

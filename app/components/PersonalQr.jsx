@@ -6,7 +6,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { getUserQrCode } from '../lib/pulse-services';
 import { useGlobalContext } from '../../context/GlobalProvider';
 
-const PersonalQr = ({ closeQr, isQrValid }) => {
+const PersonalQr = ({closeQr}) => {
     const [error, setError] = useState(null);
     const [qr, setQr] = useState({
         id: ""
