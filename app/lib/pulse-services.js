@@ -55,26 +55,7 @@ export const getUserQrCode = async (accountId, token) => {
     }
 };
 
-// export const scanUser = async (scannedUser, token) => {
-//     try {
-//         const response = await apiClient.post(`/qr/authenticate/${scannedUser.id}`, 
-//             {
-//                 uuid: scannedUser.uuid
-//             },
-//             {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                 },
-//             }
-//         );
-//         return response.data;
-//     } catch (error) {
-//         console.error('Error fetching user QR code:', error);
-//         throw error;
-//     }
-// };
-
-export const isQrValid = async (userID, uuid, token)  => {
+export const isUsersQrValid = async (userID, uuid, token) => {
     try {
         const response = await apiClient.post(`/qr/authenticate/${userID}`, 
             {
@@ -86,10 +67,10 @@ export const isQrValid = async (userID, uuid, token)  => {
                 },
             }
         );
-        console.log(response)
+    
         return response.data;
     } catch (error) {
         console.error('Error fetching user QR code:', error);
         throw error;
     }
-}
+};
