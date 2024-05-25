@@ -14,7 +14,7 @@ const Create = () => {
 
     if (passwordField) {
          // Check if passwordField is true before navigating
-         if (passwordField === true) router.push('/password-validate');
+         if (passwordField === true) router.push('/password-validate')
     }
 
     const showMainCreatePage = !showCamera;

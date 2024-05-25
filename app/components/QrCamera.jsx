@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, Button, Alert } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCameraPermissions, CameraView } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -18,11 +18,11 @@ const QrCamera = ({closeCamera, isQrValid}) => {
     const { token } = useGlobalContext();
     
     const handleBarCodeScanned = ({ data }) => {
-        closeCamera();
     
         const isValid = isUuidValid(JSON.parse(data), token); 
         if (isValid._j) isQrValid()
-    
+
+            closeCamera();
     };    
 
     const isUuidValid = async (data, token) => {
@@ -34,7 +34,7 @@ const QrCamera = ({closeCamera, isQrValid}) => {
         //     return false;
         // }
 
-        return false
+        return true
     };    
     
     // QrCamera permissions are still loading.

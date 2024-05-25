@@ -37,7 +37,7 @@ const RootLayout = () => {
                     headerShown: false
                     ,  gestureEnabled: false
                     }}/>
-                <Stack.Screen name="(contract)" options={{headerShown: false}}/>
+                <Stack.Screen name="(contract)" options={{headerShown: false,  gestureEnabled: false}}/>
             </Stack>
         </GlobalProvider>
     )
