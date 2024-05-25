@@ -6,23 +6,24 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import icons from "../../constants/icons";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
-
 const QrCamera = ({closeCamera}) => {
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [hasMediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
     const cameraRef = useRef(null);
     const [scanned, setScanned] = useState(false);
-    const [scannedData, setScannedData] = useState()
+    const [scannedData, setScannedData] = useState({
+        barcodeType: ""
+        , barcodeData: ""
+    })
 
-
+    const {token} = useGlobalContext()
 
     useEffect(() => {
-    first
-
     return () => {
         if (scannedData) {
             // scanUser()
+            console.log(scannedData)
         }
     }
     }, [scannedData])
@@ -32,9 +33,16 @@ const QrCamera = ({closeCamera}) => {
     if (!permission) return <View/>;
 
     const handleBarCodeScanned = ({type, data}) => {
+        
         setScanned(true);
+
         closeCamera();
-        setScannedData(data)
+
+        setScannedData({
+            barcodeType: type
+            , barcodeData: data
+        })
+
         alert(`Barcode with type ${type} and data ${data} has been scanned!`);
     };
 
