@@ -36,6 +36,9 @@ const GlobalProvider = ({children}) => {
             setUser(null)
             setId(null)
             setIsLoggedIn(false)
+            setScannieId({
+                "scannieId": ""
+            })
         }
     }, [token]);
 

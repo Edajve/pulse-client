@@ -7,16 +7,17 @@ import icons from '../../constants/icons';
 import CustomButton from "../components/CustomButton";
 import FormField from "../components/FormField";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { createOrUpdateContract } from "../lib/pulse-services";
 
 const PasswordValidate = () => {
-  
+
   const [form, setForm] = useState({
     password: '',
     consentNumber: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const {scannieId, user} = useGlobalContext();
+  const { scannieId, user, token } = useGlobalContext();
 
   const handleEnrollInConsent = async () => {
     if (!checkSignInFields()) return;
@@ -25,24 +26,21 @@ const PasswordValidate = () => {
 
     try {
 
-      
-      // Uncomment and implement authentication logic here
-      // const response = await authenticate(form);
-      // setToken(response.data.token.token);
-      // setId(response.data.id);
-      // setIsLoggedIn(true);
-      // console.log('the scannies id', scannieId.scannieId)
-      // router.replace('/home');
-
       const payload = {
-        "contractNumber": form.consentNumber
-        , "usersPassword" : form.password
-        , "scannerUserId" : user.id
-        , "scannieUserId" : scannieId.scannieId
-    }
+        contractNumber: parseInt(form.consentNumber),
+        usersPassword: String(form.password),
+        scannerUserId: parseInt(user.id),
+        scannieUserId: parseInt(scannieId.scannieId)
+    };
 
+      const response = await createOrUpdateContract(payload, token);
+
+      console.log(response)
+
+      // router.replace('/home');
     } catch (error) {
-      Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, "Double-check your password, or have re-initiate process");
+      console.log(error)
+      Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, "Check your password, or have re-initiate process");
     } finally {
       setIsSubmitting(false);
     }
