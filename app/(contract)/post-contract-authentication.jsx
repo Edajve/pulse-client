@@ -3,8 +3,19 @@ import React, { Component } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import { router } from 'expo-router';
+import { useGlobalContext } from '../../context/GlobalProvider';
+import { useEffect } from 'react';
 
 const PostContractAuthentication = () => {
+    const { setScannieId } = useGlobalContext()
+
+    useEffect(() => {
+        // Clear user that you scanned bc record is already in db
+        setScannieId({
+            "scannieId": ""
+        })
+    }, [])
+
     return (
         <SafeAreaView className='w-full h-full bg-primary px-5 '>
             <View className='w-full h-full items-center justify-center'>
