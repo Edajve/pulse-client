@@ -4,6 +4,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { Text, View, FlatList, RefreshControl } from "react-native";
 import EmptyState from '../components/EmptyState';
 import ActiveContracts from '../components/ActiveContracts';
+import SearchInput from '../components/SearchInput';
 
 const Home = () => {
     const {
@@ -24,6 +25,7 @@ const Home = () => {
         <SafeAreaView className='bg-primary h-full'>
             <View className='px-2 my-6'>
                 <Text className='text-4xl text-white font-semibold'>Home</Text>
+            <SearchInput />
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
             </View>
             <FlatList
