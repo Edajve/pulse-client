@@ -91,5 +91,19 @@ export const createOrUpdateContract = async (payload, token) => {
         console.error('Error fetching user QR code:', error);
         throw error;
     }
+}
 
+export const activeContracts = async (userId, token) => {
+    try {
+
+        const response = await apiClient.get(`/contract/valid/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
 }

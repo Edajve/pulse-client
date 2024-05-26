@@ -1,15 +1,18 @@
-import React from 'react'
-import { ScrollView, Text, View } from "react-native";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React from 'react';
+import { Text, View } from "react-native";
 
-const ActiveContracts = ({ contract }) => {
+const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
 
-    const parseTime = (time) => {
-        if (time.length > 10) {
-            return time.substring(0, 10)
-        }
-        return time;
-    }
+    // fix this method
+    // const parseTime = (time) => {
+    //     console.log(typeof time)
+    //     if (typeof time === String) {
+    //         if (time.length > 10) {
+    //             return time.substring(0, 10)
+    //         }
+    //     }
+    //     return time
+    // }
 
     const dynamicStatusColor = (status) => {
         switch (status) {
@@ -25,7 +28,7 @@ const ActiveContracts = ({ contract }) => {
                 return 'text-grey-100';
         }
     }
-    
+
     const showCancelReason = () => {
         return contract.status === 'CANCELLED'
     }
@@ -35,7 +38,7 @@ const ActiveContracts = ({ contract }) => {
             <View className='flex justify-between items-start flex-row mb-6'>
                 <View>
                     <Text className='font-plite text-xs text-gray-100'>
-                        Christopher & Jasmine
+                        {participantOne} & {participantTwo}
                     </Text>
                     <Text className={`font-plite text-2xs text-gray-100 pt-[4px]`}>
                         STATUS: <Text className={`font-plite text-2xs ${dynamicStatusColor(contract.status)}`}>
@@ -47,16 +50,16 @@ const ActiveContracts = ({ contract }) => {
                 </View>
                 <View>
                     <Text className='font-plite text-xs text-gray-100'>
-                        Started: {parseTime(contract.start_time)}
+                        Started: {parseTime(contract.startTime)}
                     </Text>
                     <Text className='font-plite text-xs text-gray-100'>
-                        Duration: {contract.duration_minutes}m
+                        Duration: {contract.durationMinutes}m
                     </Text>
 
                     {showCancelReason() && (
                         <Text className='font-plite text-xs text-gray-100'>
-                        Cancel Reason: Both Rovoked
-                    </Text>
+                            Cancel Reason: Both Rovoked
+                        </Text>
                     )}
                 </View>
             </View>

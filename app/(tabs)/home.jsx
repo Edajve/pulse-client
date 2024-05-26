@@ -1,69 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { FlatList, RefreshControl, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { Text, View, FlatList, RefreshControl } from "react-native";
-import EmptyState from '../components/EmptyState';
 import ActiveContracts from '../components/ActiveContracts';
+import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
+import { activeContracts } from '../lib/pulse-services';
 
 const Home = () => {
-    const {
-        isLoggedIn,
-        setIsLoggedIn,
-        user,
-        setUser,
-        isLoading,
-    } = useGlobalContext();
+    const { id, token } = useGlobalContext();
+    const [refreshing, setRefreshing] = useState(false)
+    const [active, setActiveContracts] = useState([])
 
-    const onRefresh = async () => {
-        setRefreshing(true);
-        await refetch();
-        setRefreshing(false);
-    };
+    // const onRefreshActiveContracts = async () => {
+    //     setRefreshing(true);
+    //     await activeContracts(id, token);
+    //     setRefreshing(false);
+    // };
+
+    useEffect(() => {
+
+        const getActiveContracts = async () => {
+            try {
+                const response = await activeContracts(id, token)
+                setActiveContracts(response)
+            }
+            catch (err) {
+                console.error('Error fetching Active Contracts:', err);
+            }
+        }
+
+        getActiveContracts()
+
+    }, [])
 
     return (
         <SafeAreaView className='bg-primary h-full'>
             <View className='px-2 my-6'>
                 <Text className='text-4xl text-white font-semibold'>Home</Text>
-            <SearchInput />
+                <SearchInput />
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
             </View>
             <FlatList
-                data={[
-                    {
-                        "id": 12,
-                        "contract_cancel_reason": null,
-                        "contract_number": 10,
-                        "did_participant_one_revoke": false,
-                        "did_participant_two_revoke": false,
-                        "duration_minutes": 0,
-                        "end_time": null,
-                        "participant_one_revoke_reason": null,
-                        "participant_two_revoke_reason": null,
-                        "start_time": "2024-05-25 22:54:24.199341",
-                        "status": "ACTIVE",
-                        "participant_one_id": 252,
-                        "participant_two_id": null
-                    },
-                    {
-                        "id": 18,
-                        "contract_cancel_reason": null,
-                        "contract_number": 18,
-                        "did_participant_one_revoke": false,
-                        "did_participant_two_revoke": false,
-                        "duration_minutes": 30,
-                        "end_time": null,
-                        "participant_one_revoke_reason": null,
-                        "participant_two_revoke_reason": null,
-                        "start_time": "2024-05-25 22:54:24.199341",
-                        "status": "ACTIVE",
-                        "participant_one_id": 252,
-                        "participant_two_id": null
-                    }
-                ]}
-                keyExtractor={(contract) => contract.id.toString()}
+                data={active}
+                keyExtractor={(contract) => contract.id}
                 renderItem={({ item: contract }) => (
-                    <ActiveContracts contract={contract} />
+                    <ActiveContracts 
+                    participantOne={contract.participantOne.firstName}
+                    participantTwo={contract.participantTwo.firstName}
+                    contract={contract} />
                 )}
                 ListEmptyComponent={() => (
                     <EmptyState
@@ -71,7 +56,7 @@ const Home = () => {
                         subtitle="Nothing to Show"
                     />
                 )}
-                refreshControl={<RefreshControl /*refreshing={refreshing}*/ onRefresh={onRefresh} />}
+                refreshControl={<RefreshControl /*refreshing={refreshing}onRefresh={onRefreshActiveContracts} *//>}
             />
             <View className='px-2 my-6'>
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
@@ -79,7 +64,7 @@ const Home = () => {
             <FlatList
                 data={[
                     {
-                        "id": 12,
+                        "id": 19,
                         "contract_cancel_reason": null,
                         "contract_number": 10,
                         "did_participant_one_revoke": true,
@@ -94,7 +79,7 @@ const Home = () => {
                         "participant_two_id": null
                     },
                     {
-                        "id": 18,
+                        "id": 5,
                         "contract_cancel_reason": null,
                         "contract_number": 18,
                         "did_participant_one_revoke": false,
@@ -134,7 +119,7 @@ const Home = () => {
                         subtitle="Nothing to Show"
                     />
                 )}
-                refreshControl={<RefreshControl /*refreshing={refreshing}*/ onRefresh={onRefresh} />}
+                refreshControl={<RefreshControl /*refreshing={refreshing} onRefresh={onRefreshActiveContracts} *//>}
             />
         </SafeAreaView>
     );
