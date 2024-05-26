@@ -1,20 +1,19 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCameraPermissions, CameraView } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import { TouchableOpacity, Image } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import icons from "../../constants/icons";
 import { useGlobalContext } from '../../context/GlobalProvider';
-import {isUsersQrValid} from '../lib/pulse-services'
+import { isUsersQrValid } from '../lib/pulse-services';
 
 const QrCamera = ({closeCamera, isQrValid}) => {
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [hasMediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
     const cameraRef = useRef(null);
-    const [showPasswordField, setShowPasswordField] = useState(false)
     const [scanned, setScanned] = useState(true);
+    const {setScannieId} = useGlobalContext();
 
     const { token } = useGlobalContext();
     
@@ -22,7 +21,10 @@ const QrCamera = ({closeCamera, isQrValid}) => {
         try {
             const parsedData = JSON.parse(data);
             const isValid = await isUuidValid(parsedData, token);
-            if (isValid) isQrValid();
+            if (isValid) {
+                setScannieId({"scannieId": parsedData.id})
+                isQrValid();
+            }
             closeCamera();
         } catch (error) {
             console.error('Error in handleBarCodeScanned:', error);

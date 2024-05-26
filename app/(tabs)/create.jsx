@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
+import { router } from "expo-router";
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import QrCamera from "../components/QrCamera";
 import CustomButton from "../components/CustomButton";
-import { router } from "expo-router";
+import QrCamera from "../components/QrCamera";
 
 const Create = () => {
     const [showCamera, setShowCamera] = useState(false);
-    const [passwordField, setPasswordField] = useState(false);
+    const [showAuthenticationIntoConsent, setShowAuthenticationIntoConsent] = useState(false);
+    const [scannieInfo, setScannieInfo] = useState(null);
 
     const closeCamera = () => setShowCamera(false);
     const openCamera = () => setShowCamera(true);
 
-    if (passwordField) {
-         // Check if passwordField is true before navigating
-         if (passwordField === true) router.push('/password-validate')
-    }
+    useEffect(() => {
+        if (showAuthenticationIntoConsent) {
+
+            router.replace('/password-validate')            
+        }
+    }, [showAuthenticationIntoConsent, scannieInfo]);
 
     const showMainCreatePage = !showCamera;
 
@@ -23,7 +26,7 @@ const Create = () => {
         <>
             {showCamera && (
                 <QrCamera
-                    isQrValid={() => setPasswordField(true)}
+                    isQrValid={() => setShowAuthenticationIntoConsent(true)}
                     closeCamera={closeCamera}
                 />
             )}

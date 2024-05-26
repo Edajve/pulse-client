@@ -11,6 +11,9 @@ const GlobalProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [token, setToken] = useState(""); // token is set from the sign in page
     const [id, setId] = useState("") // id is set from the sign in page
+    const [scannieId, setScannieId] = useState({
+        "scannieId": ""
+    })
 
     useEffect(() => {
         if (id) {
@@ -23,7 +26,6 @@ const GlobalProvider = ({children}) => {
                 });
         }
     }, [id])
-
     
     useEffect(() => {
         // If the token is has been previously set from the user signing-in
@@ -49,6 +51,8 @@ const GlobalProvider = ({children}) => {
                 , token
                 , setId
                 , id
+                , setScannieId
+                , scannieId
             }}
         >
             {children}
