@@ -12,11 +12,18 @@ const Home = () => {
     const [refreshing, setRefreshing] = useState(false)
     const [active, setActiveContracts] = useState([])
 
-    // const onRefreshActiveContracts = async () => {
-    //     setRefreshing(true);
-    //     await activeContracts(id, token);
-    //     setRefreshing(false);
-    // };
+    const onRefreshActiveContracts = async () => {
+        setRefreshing(true); // Show the refresh indicator
+      
+        try {
+          const response = await activeContracts(id, token);
+          setActiveContracts(response); // Update the state with new data
+        } catch (error) {
+          console.error('Error fetching Active Contracts:', error);
+        }
+      
+        setRefreshing(false); // Hide the refresh indicator
+      };
 
     useEffect(() => {
 
@@ -56,7 +63,7 @@ const Home = () => {
                         subtitle="Nothing to Show"
                     />
                 )}
-                refreshControl={<RefreshControl /*refreshing={refreshing}onRefresh={onRefreshActiveContracts} *//>}
+                refreshControl={<RefreshControl refreshing={refreshing}onRefresh={onRefreshActiveContracts} />}
             />
             <View className='px-2 my-6'>
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>

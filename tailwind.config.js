@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class', // Enable dark mode
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        primary: "#161622",
+        primary: "#000033", // Darker primary color
         secondary: {
-          DEFAULT: "#FF9C01",
-          100: "#FF9001",
-          200: "#FF8E01",
+          DEFAULT: "#718096", // Calmer secondary color
+          100: "#A0AEC0",
+          200: "#CBD5E0",
         },
         black: {
           DEFAULT: "#000",
@@ -34,4 +35,3 @@ module.exports = {
   },
   plugins: [],
 }
-

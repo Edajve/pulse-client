@@ -35,7 +35,7 @@ export const getUser = async (id, token) => {
 
         return response.data;
     } catch (error) {
-        
+
     }
 }
 
@@ -74,23 +74,23 @@ export const isUsersQrValid = async (userID, uuid, token) => {
 }
 
 export const createOrUpdateContract = async (payload, token) => {
-   
-    try {
-        const response = await apiClient.post(
-            `/contract/create`,
-            payload,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        )    
 
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching user QR code:', error);
-        throw error;
-    }
+    console.log(payload)
+    await apiClient.post(
+        `/contract/create`,
+        payload,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    ).then((response) => {
+        return response.data
+    }).catch((err) => {
+        if (err) {
+            return err
+        }
+    })
 }
 
 export const activeContracts = async (userId, token) => {

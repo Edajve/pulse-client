@@ -5,7 +5,6 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
 
     // fix this method
     const parseTime = (time) => {
-        console.log(typeof time)
         if (typeof time === String) {
             if (time.length > 10) {
                 return time.substring(0, 10)

@@ -24,23 +24,26 @@ const PasswordValidate = () => {
 
     setIsSubmitting(true);
 
-    try {
+    const payload = {
+      contractNumber: parseInt(form.consentNumber),
+      usersPassword: String(form.password).toLowerCase(),
+      scannerUserId: parseInt(user.id),
+      scannieUserId: parseInt(scannieId.scannieId)
+    };
 
-      const payload = {
-        contractNumber: parseInt(form.consentNumber),
-        usersPassword: String(form.password),
-        scannerUserId: parseInt(user.id),
-        scannieUserId: parseInt(scannieId.scannieId)
-      };
+    await createOrUpdateContract(payload, token)
+      .then((response) => {
+        router.replace('/post-contract-authentication')
+      })
+      .catch((err) => {
+        if (err) {
+          Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, err);
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false)
+      })
 
-      await createOrUpdateContract(payload, token);
-
-      router.replace('/post-contract-authentication');
-    } catch (error) {
-      Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, error);
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   const checkSignInFields = () => {

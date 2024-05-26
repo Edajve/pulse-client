@@ -8,7 +8,7 @@ import CustomButton from "../components/CustomButton";
 import PersonalQr from "../components/PersonalQr";
 
 const Profile = () => {
-    const { setIsLoggedIn, setUser, user, setToken, token, setId } = useGlobalContext();
+    const { setIsLoggedIn, setUser, user, setToken, setId } = useGlobalContext();
     const [showQr, setShowQr] = useState()
 
     const logout = () => {
