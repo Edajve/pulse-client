@@ -1,10 +1,9 @@
-import {Redirect, router} from "expo-router";
-import {useGlobalContext} from "../context/GlobalProvider";
+import { Redirect, router } from "expo-router";
 import React from "react";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {ScrollView, View, Text} from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useGlobalContext } from "../context/GlobalProvider";
 import CustomButton from "./components/CustomButton";
-import Profile from "./(tabs)/profile";
 
 export default function Index() {
     const { isLoading, isLoggedIn } = useGlobalContext();

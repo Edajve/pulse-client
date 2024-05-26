@@ -31,16 +31,13 @@ const PasswordValidate = () => {
         usersPassword: String(form.password),
         scannerUserId: parseInt(user.id),
         scannieUserId: parseInt(scannieId.scannieId)
-    };
+      };
 
-      const response = await createOrUpdateContract(payload, token);
+      await createOrUpdateContract(payload, token);
 
-      console.log(response)
-
-      // router.replace('/home');
+      router.replace('/post-contract-authentication');
     } catch (error) {
-      console.log(error)
-      Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, "Check your password, or have re-initiate process");
+      Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, error);
     } finally {
       setIsSubmitting(false);
     }

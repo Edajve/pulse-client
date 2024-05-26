@@ -35,9 +35,7 @@ export const getUser = async (id, token) => {
 
         return response.data;
     } catch (error) {
-
-        console.error('Register error:', error);
-        throw error;
+        
     }
 }
 

@@ -12,6 +12,12 @@ const ContractLayout = () => {
                         headerShown: false
                     }}
                 />
+                <Stack.Screen
+                    name="post-contract-authentication"
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </Stack>
             <StatusBar
                 backgroundColor="#161622"
