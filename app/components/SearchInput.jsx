@@ -24,7 +24,7 @@ const SearchInput = ({initialQuery}) => {
             <TextInput
                 className='text-base text-white flex-1 font-pregular'
                 // value={query}
-                placeholder='Search for a Contract'
+                placeholder='Enter user of other participants'
                 placeholderText="#CDCDE0"
                 onChangeText={(e) => setQuery(e)}
             />

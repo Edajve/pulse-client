@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {SafeAreaView} from "react-native-safe-area-context";
-import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import React, { useState } from 'react';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import icons from "../../constants/icons";
-import {useGlobalContext} from "../../context/GlobalProvider";
-import {router} from "expo-router";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import PersonalQr from "../components/PersonalQr";
 
 const Profile = () => {
-    const {setIsLoggedIn, setUser, user, setToken, token, setId} = useGlobalContext();
+    const { setIsLoggedIn, setUser, user, setToken, token, setId } = useGlobalContext();
     const [showQr, setShowQr] = useState()
 
     const logout = () => {
@@ -50,6 +50,9 @@ const Profile = () => {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        <Text className='text-gray-200 text-base font-pregular text-1xl text-center mb-[50]'>
+                            This mobile application offers users a personalized QR code for identity verification. Users are cautioned against scanning codes of individuals they aren't consenting to engage with in a contractual agreement. When scanning, users must authenticate their identity with a password, ensuring informed and deliberate consent in the contract process.
+                        </Text>
                         <CustomButton
                             title='Show Personal QR-Code'
                             handlePress={() => setShowQr(true)}

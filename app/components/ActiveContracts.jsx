@@ -4,15 +4,15 @@ import { Text, View } from "react-native";
 const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
 
     // fix this method
-    // const parseTime = (time) => {
-    //     console.log(typeof time)
-    //     if (typeof time === String) {
-    //         if (time.length > 10) {
-    //             return time.substring(0, 10)
-    //         }
-    //     }
-    //     return time
-    // }
+    const parseTime = (time) => {
+        console.log(typeof time)
+        if (typeof time === String) {
+            if (time.length > 10) {
+                return time.substring(0, 10)
+            }
+        }
+        return time
+    }
 
     const dynamicStatusColor = (status) => {
         switch (status) {

@@ -95,7 +95,7 @@ const PasswordValidate = () => {
             otherStyles='mt-7'
           />
           <CustomButton
-            title='ENROLL IN CONSENT'
+            title='Enroll in Consent Contract'
             handlePress={handleEnrollInConsent}
             containerStyle='mt-7'
             disabled={isSubmitting} // Disable button while submitting
