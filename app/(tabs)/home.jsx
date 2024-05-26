@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, RefreshControl, Text, View } from "react-native";
+import { FlatList, RefreshControl, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
 import { activeContracts } from '../lib/pulse-services';
+import { router, push } from 'expo-router';
 
 const Home = () => {
     const { id, token } = useGlobalContext();
@@ -13,17 +14,17 @@ const Home = () => {
     const [active, setActiveContracts] = useState([])
 
     const onRefreshActiveContracts = async () => {
-        setRefreshing(true); // Show the refresh indicator
-      
+        setRefreshing(true);
+
         try {
-          const response = await activeContracts(id, token);
-          setActiveContracts(response); // Update the state with new data
+            const response = await activeContracts(id, token);
+            setActiveContracts(response);
         } catch (error) {
-          console.error('Error fetching Active Contracts:', error);
+            console.error('Error fetching Active Contracts:', error);
         }
-      
-        setRefreshing(false); // Hide the refresh indicator
-      };
+
+        setRefreshing(false);
+    };
 
     useEffect(() => {
 
@@ -52,10 +53,16 @@ const Home = () => {
                 data={active}
                 keyExtractor={(contract) => contract.id}
                 renderItem={({ item: contract }) => (
-                    <ActiveContracts 
-                    participantOne={contract.participantOne.firstName}
-                    participantTwo={contract.participantTwo.firstName}
-                    contract={contract} />
+                    <TouchableOpacity
+                    // cpt how do i get the id of this contract, then when i click on it and push to single contract, i also cary or 
+                    // can view this contract using the id
+                    onPress={() => router.push(`/single-contract/${contract.id}`)}
+                    >
+                        <ActiveContracts
+                            participantOne={contract.participantOne.firstName}
+                            participantTwo={contract.participantTwo.firstName}
+                            contract={contract} />
+                    </TouchableOpacity>
                 )}
                 ListEmptyComponent={() => (
                     <EmptyState
@@ -63,7 +70,7 @@ const Home = () => {
                         subtitle="Nothing to Show"
                     />
                 )}
-                refreshControl={<RefreshControl refreshing={refreshing}onRefresh={onRefreshActiveContracts} />}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
             />
             <View className='px-2 my-6'>
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
@@ -118,7 +125,9 @@ const Home = () => {
                 ]}
                 keyExtractor={(contract) => contract.id.toString()}
                 renderItem={({ item: contract }) => (
-                    <ActiveContracts contract={contract} />
+                    <TouchableOpacity>
+                        <ActiveContracts contract={contract} />
+                    </TouchableOpacity>
                 )}
                 ListEmptyComponent={() => (
                     <EmptyState
@@ -126,7 +135,7 @@ const Home = () => {
                         subtitle="Nothing to Show"
                     />
                 )}
-                refreshControl={<RefreshControl /*refreshing={refreshing} onRefresh={onRefreshActiveContracts} *//>}
+                refreshControl={<RefreshControl /*refreshing={refreshing} onRefresh={onRefreshActiveContracts} */ />}
             />
         </SafeAreaView>
     );
