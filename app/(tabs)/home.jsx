@@ -53,11 +53,7 @@ const Home = () => {
                 data={active}
                 keyExtractor={(contract) => contract.id}
                 renderItem={({ item: contract }) => (
-                    <TouchableOpacity
-                    // cpt how do i get the id of this contract, then when i click on it and push to single contract, i also cary or 
-                    // can view this contract using the id
-                    onPress={() => router.push(`/single-contract/${contract.id}`)}
-                    >
+                    <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
                         <ActiveContracts
                             participantOne={contract.participantOne.firstName}
                             participantTwo={contract.participantTwo.firstName}
