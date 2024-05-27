@@ -36,27 +36,26 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
         <View className='flex mt-6 px-4 space-y-6 w-full border-b border-gray-600'>
             <View className='flex justify-between items-start flex-row mb-6'>
                 <View>
-                    <Text className='font-plite text-xs text-gray-100'>
+                    <Text className='font-plight text-xs text-gray-100'>
                         {participantOne} & {participantTwo}
                     </Text>
-                    <Text className={`font-plite text-2xs text-gray-100 pt-[4px]`}>
-                        STATUS: <Text className={`font-plite text-2xs ${dynamicStatusColor(contract.status)}`}>
+                    <Text className={`font-plight text-2xs text-gray-100 pt-[4px]`}>
+                        STATUS: <Text className={`font-plight text-2xs ${dynamicStatusColor(contract.status)}`}>
                             {contract.status}
                         </Text>
                     </Text>
 
-
                 </View>
                 <View>
-                    <Text className='font-plite text-xs text-gray-100'>
+                    <Text className='font-plight text-xs text-gray-100'>
                         Started: {parseTime(contract.startTime)}
                     </Text>
-                    <Text className='font-plite text-xs text-gray-100'>
+                    <Text className='font-plight text-xs text-gray-100'>
                         Duration: {contract.durationMinutes}m
                     </Text>
 
                     {showCancelReason() && (
-                        <Text className='font-plite text-xs text-gray-100'>
+                        <Text className='font-plight text-xs text-gray-100'>
                             Cancel Reason: Both Rovoked
                         </Text>
                     )}

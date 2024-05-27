@@ -34,7 +34,7 @@ const Create = () => {
             {showMainCreatePage && (
                 <SafeAreaView className="bg-primary h-full">
                     <ScrollView className="px-4 my-6">
-                        <Text className='text-4xl text-white font-semibold'>
+                        <Text className='text-4xl text-white font-psemibold'>
                             Create Consent Document
                         </Text>
                         <Text className='text-gray-200 text-base font-pregular text-1xl mt-[32px]'>
