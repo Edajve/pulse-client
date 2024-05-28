@@ -24,6 +24,12 @@ const AuthLayout = () => {
                         headerShown: false
                     }}
                 />
+                 <Stack.Screen
+                    name="terms-and-condition"
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </Stack>
             <StatusBar
                 backgroundColor="#161622"

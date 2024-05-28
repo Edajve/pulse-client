@@ -31,7 +31,7 @@ const SignUp = () => {
         try {
             await register(form);
 
-            router.replace('/sign-in');
+            router.replace('/terms-and-condition');
 
         } catch (error) {
             console.error('Register error:', error);

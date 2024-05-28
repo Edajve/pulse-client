@@ -34,7 +34,7 @@ const Profile = () => {
                         <View className='flex-row justify-between'>
                             <View className='mb-24'>
                                 <Text className='text-4xl text-white font-psemibold'>
-                                    Hey {user.firstName}
+                                    Hey {user?.firstName}
                                 </Text>
                             </View>
                             <View>
