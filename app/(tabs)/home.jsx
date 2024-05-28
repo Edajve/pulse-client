@@ -3,6 +3,7 @@ import { FlatList, RefreshControl, Text, View, TouchableOpacity } from "react-na
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
+import { InactiveContracts } from '../lib/pulse-services';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
 import { activeContracts } from '../lib/pulse-services';
@@ -12,6 +13,7 @@ const Home = () => {
     const { id, token } = useGlobalContext();
     const [refreshing, setRefreshing] = useState(false)
     const [active, setActiveContracts] = useState([])
+    const [notActive, setNotActiveContracts] = useState([])
 
     const onRefreshActiveContracts = async () => {
         setRefreshing(true);
@@ -19,6 +21,19 @@ const Home = () => {
         try {
             const response = await activeContracts(id, token);
             setActiveContracts(response);
+        } catch (error) {
+            console.error('Error fetching Active Contracts:', error);
+        }
+
+        setRefreshing(false);
+    };
+
+    const onRefreshInactiveContracts = async () => {
+        setRefreshing(true);
+
+        try {
+            const response = await InactiveContracts(id, token);
+            setNotActiveContracts(response);
         } catch (error) {
             console.error('Error fetching Active Contracts:', error);
         }
@@ -40,6 +55,19 @@ const Home = () => {
 
         getActiveContracts()
 
+
+        const getInactiveContracts = async () => {
+            try {
+                const response = await InactiveContracts(id, token)
+                setNotActiveContracts(response)
+            }
+            catch (err) {
+                console.error('Error fetching Active Contracts:', err);
+            }
+        }
+
+        getInactiveContracts()
+
     }, [])
 
     return (
@@ -55,8 +83,8 @@ const Home = () => {
                 renderItem={({ item: contract }) => (
                     <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
                         <ActiveContracts
-                            participantOne={contract.participantOne.firstName}
-                            participantTwo={contract.participantTwo.firstName}
+                            participantOne={contract.participantOne?.firstName}
+                            participantTwo={contract.participantTwo?.firstName}
                             contract={contract} />
                     </TouchableOpacity>
                 )}
@@ -72,57 +100,14 @@ const Home = () => {
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
             </View>
             <FlatList
-                data={[
-                    {
-                        "id": 19,
-                        "contract_cancel_reason": null,
-                        "contract_number": 10,
-                        "did_participant_one_revoke": true,
-                        "did_participant_two_revoke": false,
-                        "duration_minutes": 60,
-                        "end_time": "2024-05-25 22:54:24.199341",
-                        "participant_one_revoke_reason": "oidf lalfid ofpadi berjer adf9aud ",
-                        "participant_two_revoke_reason": null,
-                        "start_time": "2024-05-25 22:54:24.199341",
-                        "status": "CANCELLED",
-                        "participant_one_id": 252,
-                        "participant_two_id": null
-                    },
-                    {
-                        "id": 5,
-                        "contract_cancel_reason": null,
-                        "contract_number": 18,
-                        "did_participant_one_revoke": false,
-                        "did_participant_two_revoke": false,
-                        "duration_minutes": 30,
-                        "end_time": null,
-                        "participant_one_revoke_reason": null,
-                        "participant_two_revoke_reason": null,
-                        "start_time": "2024-05-25 22:54:24.199341",
-                        "status": "FINISHED",
-                        "participant_one_id": 252,
-                        "participant_two_id": null
-                    }
-                    , {
-                        "id": 18,
-                        "contract_cancel_reason": null,
-                        "contract_number": 18,
-                        "did_participant_one_revoke": false,
-                        "did_participant_two_revoke": false,
-                        "duration_minutes": 30,
-                        "end_time": null,
-                        "participant_one_revoke_reason": null,
-                        "participant_two_revoke_reason": null,
-                        "start_time": "2024-05-25 22:54:24.199341",
-                        "status": "PROGRESS",
-                        "participant_one_id": 252,
-                        "participant_two_id": null
-                    }
-                ]}
+                data={notActive}
                 keyExtractor={(contract) => contract.id.toString()}
                 renderItem={({ item: contract }) => (
-                    <TouchableOpacity>
-                        <ActiveContracts contract={contract} />
+                    <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
+                        <ActiveContracts
+                            participantOne={contract.participantOne?.firstName}
+                            participantTwo={contract.participantTwo?.firstName}
+                            contract={contract} />
                     </TouchableOpacity>
                 )}
                 ListEmptyComponent={() => (
@@ -131,7 +116,7 @@ const Home = () => {
                         subtitle="Nothing to Show"
                     />
                 )}
-                refreshControl={<RefreshControl /*refreshing={refreshing} onRefresh={onRefreshActiveContracts} */ />}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshInactiveContracts} />}
             />
         </SafeAreaView>
     );

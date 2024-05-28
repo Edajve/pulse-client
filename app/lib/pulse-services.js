@@ -108,6 +108,21 @@ export const activeContracts = async (userId, token) => {
     }
 }
 
+export const InactiveContracts = async (userId, token) => {
+    try {
+
+        const response = await apiClient.get(`/contract/inactive/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+}
+
 export const getContract = async (contractId, token) => {
     try {
 

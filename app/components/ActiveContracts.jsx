@@ -19,7 +19,7 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
                 return 'text-yellow-600';
             case "ACTIVE":
                 return 'text-green-600';
-            case "FINISHED":
+            case "COMPLETED":
                 return 'text-blue-600';
             case "CANCELLED":
                 return 'text-red-600';
@@ -30,6 +30,10 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
 
     const showCancelReason = () => {
         return contract.status === 'CANCELLED'
+    }
+
+    const doesContractHaveEndTime = () => {
+        return contract.endTime !== null || contract.endTime !== "" ? false : true
     }
 
     return (
@@ -44,12 +48,16 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
                             {contract.status}
                         </Text>
                     </Text>
-
                 </View>
                 <View>
                     <Text className='font-plight text-xs text-gray-100'>
                         Started: {parseTime(contract.startTime)}
                     </Text>
+                    {doesContractHaveEndTime() && (
+                        <Text className='font-plight text-xs text-gray-100'>
+                        Ended: {parseTime(contract?.endTime)}
+                    </Text>
+                    )}
                     <Text className='font-plight text-xs text-gray-100'>
                         Duration: {contract.durationMinutes}m
                     </Text>
