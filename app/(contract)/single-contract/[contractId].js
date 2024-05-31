@@ -5,7 +5,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import icons from '../../../constants/icons';
 import { useGlobalContext } from '../../../context/GlobalProvider';
-import BlurryModal from '../../components/BlurModal';
+import BlurryModalYesOrNo from '../../components/BlurModalYesOrNo';
 import CustomButton from "../../components/CustomButton";
 import { getContract } from '../../lib/pulse-services';
 
@@ -55,8 +55,17 @@ const SingleContract = () => {
     setTogglePopUp(true);
   };
 
-  const closePopUp = () => {
+  const rejectInitialRevoke = () => {
+    setRevoke({ ...revoke, initialRevoke: false, finalRevoke: false });
     setTogglePopUp(false);
+  };
+
+  const acceptInitialRevoke = () => {
+    setRevoke({ ...revoke, finalRevoke: true });
+    setTogglePopUp(false);
+
+    // add another pop up to get revoke reason
+    // sent api call to update contract record
   };
 
   // Reusable Styles 
@@ -153,14 +162,14 @@ const SingleContract = () => {
           />
         )}
         {togglePopup && (
-          <BlurryModal
+          <BlurryModalYesOrNo
             visible={togglePopup}
             onRequestClose={() => setTogglePopUp(false)}
             title='Are you sure you want to revoke this contract?'
             affirmativeButtonTitle='Yes'
             negativeButtonTitle='No'
-            onYes={closePopUp}
-            onNo={closePopUp}
+            onYes={acceptInitialRevoke}
+            onNo={rejectInitialRevoke}
           />
         )}
       </ScrollView>

@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal, Text, View } from 'react-native';
 import CustomButton from './CustomButton';
 
-const BlurryModal = ({ visible, onRequestClose, title, styles, onYes, onNo, affirmativeButtonTitle, negativeButtonTitle }) => {
+const BlurryModalYesOrNo = ({ visible, onRequestClose, title, styles, onYes, onNo, affirmativeButtonTitle, negativeButtonTitle }) => {
     return (
         <Modal
             visible={visible}
@@ -39,4 +39,4 @@ const BlurryModal = ({ visible, onRequestClose, title, styles, onYes, onNo, affi
     );
 };
 
-export default BlurryModal;
+export default BlurryModalYesOrNo;
