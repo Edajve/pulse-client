@@ -15,6 +15,8 @@ const Profile = () => {
 
     const logout = () => {
         try {
+            console.log('logging out')
+            setLogoutModal(false)
             setToken(null);
             setIsLoggedIn(false);
             setUser(null);
