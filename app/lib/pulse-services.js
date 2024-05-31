@@ -137,3 +137,18 @@ export const getContract = async (contractId, token) => {
         return error;
     }
 }
+
+export const InProgressContracts = async (userId, token) => {
+    try {
+
+        const response = await apiClient.get(`/contract/progress/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+}

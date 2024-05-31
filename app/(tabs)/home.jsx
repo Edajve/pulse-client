@@ -1,13 +1,12 @@
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, RefreshControl, Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { RefreshControl, FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
-import { InactiveContracts } from '../lib/pulse-services';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
-import { activeContracts } from '../lib/pulse-services';
-import { router, push } from 'expo-router';
+import { InProgressContracts, InactiveContracts, activeContracts } from '../lib/pulse-services';
 
 const Home = () => {
     const { id, token } = useGlobalContext();
@@ -16,25 +15,18 @@ const Home = () => {
     const [inProgress, setInProgress] = useState([])
     const [notActive, setNotActiveContracts] = useState([])
 
-    const onRefreshActiveContracts = async () => {
+
+    //Hey Gpt how can i make this a refresh on teh whole page when i pull it down
+    const onRefreshAllContracts = async () => {
         setRefreshing(true);
 
         try {
-            const response = await activeContracts(id, token);
-            setActiveContracts(response);
-        } catch (error) {
-            console.error('Error fetching Active Contracts:', error);
-        }
-
-        setRefreshing(false);
-    };
-
-    const onRefreshInactiveContracts = async () => {
-        setRefreshing(true);
-
-        try {
-            const response = await InactiveContracts(id, token);
-            setNotActiveContracts(response);
+            const activeResponse = await activeContracts(id, token);
+            const inActiveResponse = await InactiveContracts(id, token);
+            const inProgressContracts = await InProgressContracts(id, token);
+            setActiveContracts(activeResponse);
+            setNotActiveContracts(inActiveResponse);
+            inProgress(inProgressContracts);
         } catch (error) {
             console.error('Error fetching Active Contracts:', error);
         }
@@ -56,7 +48,6 @@ const Home = () => {
 
         getActiveContracts()
 
-
         const getInactiveContracts = async () => {
             try {
                 const response = await InactiveContracts(id, token)
@@ -69,36 +60,36 @@ const Home = () => {
 
         getInactiveContracts()
 
+        const getInProgressContracts = async () => {
+            try {
+                const response = await InProgressContracts(id, token)
+                setInProgress(response)
+            }
+            catch (err) {
+                console.error('Error fetching In Progress Contracts:', err);
+            }
+        }
+
+        getInProgressContracts()
+
     }, [])
 
     return (
-        <ScrollView className='bg-primary h-full'>
+        <ScrollView className='bg-primary h-full'
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefreshAllContracts}
+                />}
+        >
             <SafeAreaView >
                 <View className='px-2 my-6'>
                     <Text className='text-4xl text-gray-200 font-psemibold'>Home</Text>
                     <SearchInput />
-                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Progress Consent</Text>
+
                 </View>
                 <View>
-                <FlatList
-                        data={inProgress}
-                        keyExtractor={(contract) => contract.id}
-                        renderItem={({ item: contract }) => (
-                            <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
-                                <ActiveContracts
-                                    participantOne={contract.participantOne?.firstName}
-                                    participantTwo={contract.participantTwo?.firstName}
-                                    contract={contract} />
-                            </TouchableOpacity>
-                        )}
-                        ListEmptyComponent={() => (
-                            <EmptyState
-                                title='No In Progress Contracts'
-                                subtitle="Nothing to Show"
-                            />
-                        )}
-                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
-                    />
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
                     <FlatList
                         data={active}
                         keyExtractor={(contract) => contract.id}
@@ -116,10 +107,29 @@ const Home = () => {
                                 subtitle="Nothing to Show"
                             />
                         )}
-                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
                     />
                 </View>
-
+                <View>
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>In Progress Consent</Text>
+                    <FlatList
+                        data={inProgress}
+                        keyExtractor={(contract) => contract.id}
+                        renderItem={({ item: contract }) => (
+                            <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
+                                <ActiveContracts
+                                    participantOne={contract.participantOne?.firstName}
+                                    participantTwo={contract.participantTwo?.firstName}
+                                    contract={contract} />
+                            </TouchableOpacity>
+                        )}
+                        ListEmptyComponent={() => (
+                            <EmptyState
+                                title='No In Progress Contracts'
+                                subtitle="Nothing to Show"
+                            />
+                        )}
+                    />
+                </View>
                 <View className='px-2 my-6'>
                     <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
                 </View>
@@ -140,10 +150,9 @@ const Home = () => {
                             subtitle="Nothing to Show"
                         />
                     )}
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshInactiveContracts} />}
                 />
             </SafeAreaView>
-        </ScrollView>
+        </ScrollView >
     );
 };
 

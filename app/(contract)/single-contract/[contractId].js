@@ -111,12 +111,12 @@ const SingleContract = () => {
             <View className='w-full flex-col'>
               <View className='mt-4'>
                 <Text className={headerStyle}>Participants</Text>
-                <Text className={textSpacing}>{contract.participantOne.firstName} & {contract.participantTwo.firstName}</Text>
+                <Text className={textSpacing}>{contract?.participantOne?.firstName} & {contract?.participantTwo?.firstName}</Text>
               </View>
               <View className={sectionStyle}>
                 <Text className={headerStyle}>Contract Details</Text>
-                <Text className={textSpacing}>Contract # {contract.contractNumber}</Text>
-                <Text className={textSpacing}>Duration: {contract.durationMinutes} minutes</Text>
+                <Text className={textSpacing}>Contract # {contract?.contractNumber}</Text>
+                <Text className={textSpacing}>Duration: {contract?.durationMinutes} minutes</Text>
               </View>
               <View className={sectionStyle}>
                 <Text className={headerStyle}>Status</Text>
@@ -141,8 +141,8 @@ const SingleContract = () => {
                     {contract?.participantOneRevokeContractReason}
                   </Text>
                 )}
-                <Text className={renderParticipantNames}>{contract.participantTwo.firstName}</Text>
-                <Text className={renderUsersNames}>Did {contract.participantTwo.firstName} revoke: {renderRevokeStatusText(contract.didParticipantTwoRevoke)}</Text>
+                <Text className={renderParticipantNames}>{contract?.participantTwo?.firstName}</Text>
+                <Text className={renderUsersNames}>Did {contract?.participantTwo?.firstName} revoke: {renderRevokeStatusText(contract.didParticipantTwoRevoke)}</Text>
                 {contract.didParticipantTwoRevoke && (
                   <Text className={renderRevokeText()}>
                     {contract?.participantTwoRevokeContractReason}
