@@ -74,7 +74,6 @@ const SingleContract = () => {
   const textSpacing = "text-md text-gray-100 font-pregular mt-0.7 ml-3";
   const renderParticipantNames = 'text-md text-gray-100 font-pbold mt-2 mb-1';
   const renderUsersNames = 'text-md text-gray-100 font-pregular ml-3';
-  const Popup = styled(View, 'absolute inset-0 justify-center items-center bg-black bg-opacity-50');
 
   // Editable styles
   const renderEndTime = () => contract.endTime === null || contract.endTime === "" ? "Contract Still Progress" : contract?.endTime;
