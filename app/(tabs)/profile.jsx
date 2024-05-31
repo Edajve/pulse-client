@@ -33,7 +33,7 @@ const Profile = () => {
                     <ScrollView className='px-4 my-6'>
                         <View className='flex-row justify-between'>
                             <View className='mb-24'>
-                                <Text className='text-4xl text-white font-psemibold'>
+                                <Text className='text-4xl text-gray-200 font-psemibold'>
                                     Hey {user?.firstName}
                                 </Text>
                             </View>

@@ -75,7 +75,7 @@ const Home = () => {
         <ScrollView className='bg-primary h-full'>
             <SafeAreaView >
                 <View className='px-2 my-6'>
-                    <Text className='text-4xl text-white font-psemibold'>Home</Text>
+                    <Text className='text-4xl text-gray-200 font-psemibold'>Home</Text>
                     <SearchInput />
                     <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Progress Consent</Text>
                 </View>

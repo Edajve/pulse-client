@@ -18,9 +18,9 @@ const FormField = ({
             <Text className='text-base text-gray-100 font-pmedium'>{title}</Text>
             <View
                 className='border-2
-                border-black-200
+                border-gray-100
                 w-full h-16 px-4
-                bg-black-100
+                bg-gray-100
                 rounded-2xl
                 focus:border-secondary
                 items-center
