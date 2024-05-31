@@ -1,5 +1,4 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { styled } from 'nativewind';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,10 +7,12 @@ import { useGlobalContext } from '../../../context/GlobalProvider';
 import BlurryModalYesOrNo from '../../components/BlurModalYesOrNo';
 import CustomButton from "../../components/CustomButton";
 import { getContract } from '../../lib/pulse-services';
+import BlurryModalInput from '../../components/BlurryModalInput';
 
 const SingleContract = () => {
   const [contract, setContract] = useState(null);
   const [isContractActive, setContractActive] = useState();
+  const [askForReasonModal, setAskForReasonModal] = useState(false)
   const [revoke, setRevoke] = useState({
     initialRevoke: false,
     finalRevoke: false,
@@ -64,9 +65,33 @@ const SingleContract = () => {
     setRevoke({ ...revoke, finalRevoke: true });
     setTogglePopUp(false);
 
-    // add another pop up to get revoke reason
-    // sent api call to update contract record
+    // ask for reason of revoke
+    setAskForReasonModal(true)
   };
+
+  const onSubmitReasonAndChangeContractStatus = (revokeReason) => {
+    // sent api call to send revoke reason and update contract record status to CANCELLED
+    try {
+
+    } catch (Err) {
+
+    }
+    finally {
+      setAskForReasonModal(false)
+    }
+  }
+
+  const onSkipReason = () => {
+    // sent api call to update contract record status to CANCELLED
+    try {
+
+    } catch (Err) {
+
+    }
+    finally {
+      setAskForReasonModal(false)
+    }
+  }
 
   // Reusable Styles 
   const sectionStyle = 'border-t border-gray-600 mt-4 pb-2';
@@ -169,6 +194,17 @@ const SingleContract = () => {
             negativeButtonTitle='No'
             onYes={acceptInitialRevoke}
             onNo={rejectInitialRevoke}
+          />
+        )}
+        {askForReasonModal && (
+          <BlurryModalInput
+            visible={askForReasonModal}
+            onRequestClose={() => setAskForReasonModal(false)}
+            title='What is the reason for revoking? (This is Optional)?'
+            affirmativeButtonTitle='Submit Reason'
+            negativeButtonTitle='Skip Reason'
+            onSubmit={(revokeReason) => onSubmitReasonAndChangeContractStatus(revokeReason)}
+            onSkip={onSkipReason}
           />
         )}
       </ScrollView>
