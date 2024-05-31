@@ -77,6 +77,7 @@ const Home = () => {
                 <SearchInput />
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
             </View>
+            <View>
             <FlatList
                 data={active}
                 keyExtractor={(contract) => contract.id}
@@ -96,6 +97,8 @@ const Home = () => {
                 )}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
             />
+            </View>
+           
             <View className='px-2 my-6'>
                 <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
             </View>

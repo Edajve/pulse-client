@@ -41,7 +41,7 @@ const SingleContract = () => {
         return 'text-yellow-600';
       case "ACTIVE":
         return 'text-green-600';
-      case "FINISHED":
+      case "COMPLETED":
         return 'text-blue-600';
       case "CANCELLED":
         return 'text-red-600';
