@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, RefreshControl, Text, View, TouchableOpacity } from "react-native";
+import { FlatList, RefreshControl, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
@@ -13,6 +13,7 @@ const Home = () => {
     const { id, token } = useGlobalContext();
     const [refreshing, setRefreshing] = useState(false)
     const [active, setActiveContracts] = useState([])
+    const [inProgress, setInProgress] = useState([])
     const [notActive, setNotActiveContracts] = useState([])
 
     const onRefreshActiveContracts = async () => {
@@ -71,57 +72,78 @@ const Home = () => {
     }, [])
 
     return (
-        <SafeAreaView className='bg-primary h-full'>
-            <View className='px-2 my-6'>
-                <Text className='text-4xl text-white font-psemibold'>Home</Text>
-                <SearchInput />
-                <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
-            </View>
-            <View>
-            <FlatList
-                data={active}
-                keyExtractor={(contract) => contract.id}
-                renderItem={({ item: contract }) => (
-                    <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
-                        <ActiveContracts
-                            participantOne={contract.participantOne?.firstName}
-                            participantTwo={contract.participantTwo?.firstName}
-                            contract={contract} />
-                    </TouchableOpacity>
-                )}
-                ListEmptyComponent={() => (
-                    <EmptyState
-                        title='No Active Contracts'
-                        subtitle="Nothing to Show"
+        <ScrollView className='bg-primary h-full'>
+            <SafeAreaView >
+                <View className='px-2 my-6'>
+                    <Text className='text-4xl text-white font-psemibold'>Home</Text>
+                    <SearchInput />
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Progress Consent</Text>
+                </View>
+                <View>
+                <FlatList
+                        data={inProgress}
+                        keyExtractor={(contract) => contract.id}
+                        renderItem={({ item: contract }) => (
+                            <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
+                                <ActiveContracts
+                                    participantOne={contract.participantOne?.firstName}
+                                    participantTwo={contract.participantTwo?.firstName}
+                                    contract={contract} />
+                            </TouchableOpacity>
+                        )}
+                        ListEmptyComponent={() => (
+                            <EmptyState
+                                title='No In Progress Contracts'
+                                subtitle="Nothing to Show"
+                            />
+                        )}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
                     />
-                )}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
-            />
-            </View>
-           
-            <View className='px-2 my-6'>
-                <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
-            </View>
-            <FlatList
-                data={notActive}
-                keyExtractor={(contract) => contract.id.toString()}
-                renderItem={({ item: contract }) => (
-                    <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
-                        <ActiveContracts
-                            participantOne={contract.participantOne?.firstName}
-                            participantTwo={contract.participantTwo?.firstName}
-                            contract={contract} />
-                    </TouchableOpacity>
-                )}
-                ListEmptyComponent={() => (
-                    <EmptyState
-                        title='No Active Contracts'
-                        subtitle="Nothing to Show"
+                    <FlatList
+                        data={active}
+                        keyExtractor={(contract) => contract.id}
+                        renderItem={({ item: contract }) => (
+                            <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
+                                <ActiveContracts
+                                    participantOne={contract.participantOne?.firstName}
+                                    participantTwo={contract.participantTwo?.firstName}
+                                    contract={contract} />
+                            </TouchableOpacity>
+                        )}
+                        ListEmptyComponent={() => (
+                            <EmptyState
+                                title='No Active Contracts'
+                                subtitle="Nothing to Show"
+                            />
+                        )}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshActiveContracts} />}
                     />
-                )}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshInactiveContracts} />}
-            />
-        </SafeAreaView>
+                </View>
+
+                <View className='px-2 my-6'>
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
+                </View>
+                <FlatList
+                    data={notActive}
+                    keyExtractor={(contract) => contract.id.toString()}
+                    renderItem={({ item: contract }) => (
+                        <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
+                            <ActiveContracts
+                                participantOne={contract.participantOne?.firstName}
+                                participantTwo={contract.participantTwo?.firstName}
+                                contract={contract} />
+                        </TouchableOpacity>
+                    )}
+                    ListEmptyComponent={() => (
+                        <EmptyState
+                            title='No Active Contracts'
+                            subtitle="Nothing to Show"
+                        />
+                    )}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshInactiveContracts} />}
+                />
+            </SafeAreaView>
+        </ScrollView>
     );
 };
 
