@@ -6,7 +6,7 @@ import CustomButton from "../components/CustomButton";
 
 const Authorities = () => {
 
-    const handlePress  = () = {
+    const handleCallAuthorities = () => {
             // Here its complicated to call the police,
             // it requires you to set up a api call to the backend
             // then use a third party library like twillio to send a signal to the police
@@ -25,7 +25,7 @@ const Authorities = () => {
           <View>
               <CustomButton
                   title="Call Authorities"
-                  // handlePress={}
+                  handlePress={handleCallAuthorities}
                   containerStyle="mt-10"
               />
           </View>
