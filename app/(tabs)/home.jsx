@@ -15,7 +15,6 @@ const Home = () => {
     const [inProgress, setInProgress] = useState([])
     const [notActive, setNotActiveContracts] = useState([])
 
-
     const onRefreshAllContracts = async () => {
         setRefreshing(true);
 
