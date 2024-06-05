@@ -83,6 +83,21 @@ const TabsLayout = () => {
                         )
                     }}
                 />
+                <Tabs.Screen
+                    name='authorities'
+                    options={{
+                        title: "Authorities"
+                        , headerShown: false
+                        , tabBarIcon: ({color, focused}) => (
+                            <TabIcon
+                                icon={icons.profile}
+                                color={color}
+                                name='Authorities'
+                                focused={focused}
+                            />
+                        )
+                    }}
+                />
             </Tabs>
         </>
     );

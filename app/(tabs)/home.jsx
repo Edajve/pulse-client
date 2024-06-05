@@ -16,7 +16,6 @@ const Home = () => {
     const [notActive, setNotActiveContracts] = useState([])
 
 
-    //Hey Gpt how can i make this a refresh on teh whole page when i pull it down
     const onRefreshAllContracts = async () => {
         setRefreshing(true);
 
