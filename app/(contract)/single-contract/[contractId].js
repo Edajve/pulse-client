@@ -22,10 +22,18 @@ const SingleContract = () => {
   const { token } = useGlobalContext();
   const { contractId } = useLocalSearchParams();
 
+  // endtime format is YYYY-MM-DDTHH:MM:SS.sss
+  const parseTime = (endTime) => {return endTime.substring(0, 10)}
+
   useEffect(() => {
     const fetchContractDetails = async () => {
       try {
-        const response = await getContract(contractId, token);
+        const res = await getContract(contractId, token);
+        const response = {
+                ...res
+                , startTime: parseTime(res.startTime)
+                ,endTime: parseTime(res.endTime)
+        }
         setContract(response);
         if (response.status === 'ACTIVE') setContractActive(true);
       } catch (error) {

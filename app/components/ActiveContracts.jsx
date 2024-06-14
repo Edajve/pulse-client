@@ -5,13 +5,14 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
 
     // fix this method
     const parseTime = (time) => {
-        if (typeof time === String) {
-            if (time.length > 10) {
-                return time.substring(0, 10)
-            }
-        }
-        return time
-    }
+       if (
+           time === null
+           || time === ""
+           || time === undefined
+        ) return time
+
+        return time.substring(0,10)
+   }
 
     const dynamicStatusColor = (status) => {
         switch (status) {
