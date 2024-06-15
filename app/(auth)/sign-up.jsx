@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {Alert, ScrollView, Text, View} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
+import React, { useState } from 'react';
+import { Alert, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
-import {Link, router} from "expo-router";
+import { Link, router } from "expo-router";
 import DropDown from "../components/DropDown";
-import {register} from "../lib/pulse-services";
+import { register } from "../lib/pulse-services";
 
 const SignUp = () => {
 
@@ -85,52 +85,59 @@ const SignUp = () => {
                         Sign Up to Pulse
                     </Text>
                     <FormField
+                        placeholder={"First Name"}
                         title='First Name'
                         value={form.firstName}
-                        handleChangeText={(e) => setForm({...form, firstName: e})}
+                        handleChangeText={(e) => setForm({ ...form, firstName: e })}
                         otherStyles='mt-7'
                         keyboardType='text'
                     />
                     <FormField
+                        placeholder={"Last Name"}
                         title='Last Name'
                         value={form.lastName}
-                        handleChangeText={(e) => setForm({...form, lastName: e})}
+                        handleChangeText={(e) => setForm({ ...form, lastName: e })}
                         otherStyles='mt-7'
                         keyboardType='text'
                     />
                     <FormField
+                        placeholder={"Email"}
                         title='Email'
                         value={form.email}
-                        handleChangeText={(e) => setForm({...form, email: e})}
+                        handleChangeText={(e) => setForm({ ...form, email: e })}
                         otherStyles='mt-7'
                         keyboardType='email-address'
                     />
                     <FormField
+                        placeholder={"Password"}
                         title='Password'
                         value={form.password}
-                        handleChangeText={(e) => setForm({...form, password: e})}
+                        handleChangeText={(e) => setForm({ ...form, password: e })}
                         otherStyles='mt-7'
                         keyboardType='default'
                         secureTextEntry={true}
                     />
                     <DropDown
+                        testID='sexDropDown'
                         title='Sex'
-                        updateForm={(itemValue) => setForm({...form, sex: itemValue})}
+                        updateForm={(itemValue) => setForm({ ...form, sex: itemValue })}
                         options={["Select your Sex", "MALE", "FEMALE", "NON_BINARY", "GENDER_QUEER", "OTHER"]}
                     />
                     <FormField
+                        placeholder={"Date of Birth (18+) MM-DD-YYYY"}
                         title='Date of Birth (18+) MM-DD-YYYY'
                         value={form.dateOfBirth}
-                        handleChangeText={(e) => setForm({...form, dateOfBirth: e})}
+                        handleChangeText={(e) => setForm({ ...form, dateOfBirth: e })}
                         otherStyles='mt-7'
                         keyboardType='default'
                     />
                     <DropDown
                         title='Country/Region'
-                        updateForm={(itemValue) => setForm({...form, countryRegion: itemValue})}
+                        updateForm={(itemValue) => setForm({ ...form, countryRegion: itemValue })}
                         options={["Select your Country/Region", "UNITED_STATES"]}
                     />
                     <CustomButton
+                        placeholder={"First Name"}
                         title='Sign Up'
                         handlePress={submit}
                         containerStyle='mt-7'

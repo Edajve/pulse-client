@@ -1,8 +1,8 @@
-import {Text, View} from "react-native";
-import {Picker} from "@react-native-picker/picker";
-import React, {useState} from "react";
+import { Text, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import React, { useState } from "react";
 
-const DropDown = ({title, options, updateForm}) => {
+const DropDown = ({ title, options, updateForm, testID }) => {
     const [selectedValue, setSelectedValue] = useState("");
 
     const handleValueChange = (value) => {
@@ -14,6 +14,7 @@ const DropDown = ({title, options, updateForm}) => {
         <View>
             <Text className='text-base text-lg text-gray-200 font-pmedium mt-7'>{title}</Text>
             <Picker
+                testID={testID}
                 selectedValue={selectedValue}
                 onValueChange={handleValueChange}
                 style={{
@@ -24,10 +25,10 @@ const DropDown = ({title, options, updateForm}) => {
                     borderStyle: "solid",
                     borderColor: '#CDCDE0',
                 }}
-                itemStyle={{color: 'white', fontSize: 16}}
+                itemStyle={{ color: 'white', fontSize: 16 }}
             >
                 {options.map((option, index) => (
-                    <Picker.Item key={index} label={option} value={option.toLowerCase()}/>
+                    <Picker.Item testID='MALE' key={index} label={option} value={option.toLowerCase()} />
                 ))}
             </Picker>
         </View>
