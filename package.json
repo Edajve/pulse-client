@@ -12,13 +12,14 @@
     "lint": "expo lint"
   },
   "jest": {
-  "preset": "jest-expo",
-  "transformIgnorePatterns": [
-    "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules-permissions-interface/.*|sentry-expo|native-base))"
-  ]
-},
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules-permissions-interface/.*|sentry-expo|native-base))"
+    ]
+  },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
+    "@react-native-community/progress-bar-android": "^1.0.5",
     "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
