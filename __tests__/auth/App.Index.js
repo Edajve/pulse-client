@@ -1,10 +1,10 @@
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import React from 'react';
-import Index from '../app/index.jsx';
-import { useGlobalContext } from '../context/GlobalProvider.js';
+import Index from '../../app/index.jsx';
+import { useGlobalContext } from '../../context/GlobalProvider.js';
 import { router } from 'expo-router';
 
-jest.mock('../context/GlobalProvider.js', () => ({
+jest.mock('../../context/GlobalProvider.js', () => ({
     useGlobalContext: jest.fn(),
 }));
 

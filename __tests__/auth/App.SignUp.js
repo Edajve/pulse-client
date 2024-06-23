@@ -1,10 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { Alert } from 'react-native';
-import SignUp from '../app/(auth)/sign-up';
-import { register } from '../app/lib/pulse-services';
+import SignUp from '../../app/(auth)/sign-up';
+import { register } from '../../app/lib/pulse-services';
 
-jest.mock('../app/lib/pulse-services', () => ({
+jest.mock('../../app/lib/pulse-services', () => ({
     register: jest.fn().mockResolvedValue(),
 }));
 
