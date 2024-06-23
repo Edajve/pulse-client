@@ -9,9 +9,8 @@ const BlurModalOk = ({
     , title
     , styles
     , onYes
-    , onNo
     , affirmativeButtonTitle
-    
+
 }) => {
     return (
         <Modal
