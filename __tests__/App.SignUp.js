@@ -1,32 +1,8 @@
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import SignUp from '../app/(auth)/sign-up';
 import { register } from '../app/lib/pulse-services';
-import { Alert } from 'react-native';
-import { ProgressBarAndroid } from '@react-native-community/progress-bar-android';
-import { PushNotificationIOS } from '@react-native-community/push-notification-ios';
-
-// Mock the Alert module
-jest.mock('react-native', () => {
-    const actualReactNative = jest.requireActual('react-native');
-    return {
-        ...actualReactNative,
-        Alert: {
-            alert: jest.fn(),
-        },
-        NativeModules: {
-            ...actualReactNative.NativeModules,
-            SettingsManager: {
-                settings: {},
-                setValues: jest.fn(),
-            },
-        },
-    };
-});
-
-jest.mock('@react-native-community/progress-bar-android', () => 'ProgressBarAndroid');
-
-jest.mock('@react-native-community/push-notification-ios', () => 'PushNotificationIOS');
 
 jest.mock('../app/lib/pulse-services', () => ({
     register: jest.fn().mockResolvedValue(),

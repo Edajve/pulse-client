@@ -15,6 +15,7 @@ const GlobalProvider = ({children}) => {
         "scannieId": ""
     })
 
+    // Sets user information
     useEffect(() => {
         if (id) {
             getUser(id, token)
