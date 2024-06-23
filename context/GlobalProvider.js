@@ -1,11 +1,11 @@
-import {createContext, useContext, useEffect, useState} from 'react'
-import {getUser} from "../app/lib/pulse-services";
+import { createContext, useContext, useEffect, useState } from 'react'
+import { getUser } from "../app/lib/pulse-services";
 
 const GlobalContext = createContext()
 
 export const useGlobalContext = () => useContext(GlobalContext)
 
-const GlobalProvider = ({children}) => {
+const GlobalProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false) // isLoggedIn is set from the sign in page
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,7 @@ const GlobalProvider = ({children}) => {
                 });
         }
     }, [id])
-    
+
     useEffect(() => {
         // If the token is has been previously set from the user signing-in
         if (token) {
@@ -47,14 +47,14 @@ const GlobalProvider = ({children}) => {
         <GlobalContext.Provider
             value={{
                 isLoggedIn
-                , setIsLoggedIn
                 , user
-                , setUser
                 , isLoading
-                , setToken
                 , token
-                , setId
                 , id
+                , setIsLoggedIn
+                , setUser
+                , setToken
+                , setId
                 , setScannieId
                 , scannieId
             }}
