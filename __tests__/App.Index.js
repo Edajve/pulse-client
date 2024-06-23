@@ -15,11 +15,8 @@ jest.mock('expo-router', () => ({
 }));
 
 describe('Splash component test', () => {
-    const mockUseGlobalContext = useGlobalContext;
-
-    // Test for not logged in
-    test('should render splash page when not logged in', () => {
-        mockUseGlobalContext.mockReturnValue({
+    beforeEach(() => {
+        useGlobalContext.mockReturnValue({
             isLoading: false,
             isLoggedIn: false,
             user: null,
@@ -32,7 +29,9 @@ describe('Splash component test', () => {
             id: '',
             scannieId: { scannieId: '' },
         });
+    });
 
+    test('should render splash page when not logged in', () => {
         const { getByText } = render(<Index />);
 
         const continueButton = getByText('Continue');
@@ -40,20 +39,6 @@ describe('Splash component test', () => {
     });
 
     test('should navigate from the splash to sign-in page', async () => {
-        mockUseGlobalContext.mockReturnValue({
-            isLoading: false,
-            isLoggedIn: false,
-            user: null,
-            setIsLoggedIn: jest.fn(),
-            setUser: jest.fn(),
-            setToken: jest.fn(),
-            setId: jest.fn(),
-            setScannieId: jest.fn(),
-            token: '',
-            id: '',
-            scannieId: { scannieId: '' },
-        });
-
         const { getByText } = render(<Index />);
 
         const continueButton = getByText('Continue');
