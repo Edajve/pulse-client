@@ -1,19 +1,25 @@
-import React, {useState} from 'react';
-import {Alert, ScrollView, Text, View} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
+import React, { useState } from 'react';
+import { Alert, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
-import {Link, router} from "expo-router";
-import {useGlobalContext} from "../../context/GlobalProvider";
-import {authenticate} from "../lib/pulse-services";
+import { Link, router } from "expo-router";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { authenticate } from "../lib/pulse-services";
+import BlurModalOk from '../components/BlurModalOk';
 
 const SignIn = () => {
-    const {setToken, setId, setIsLoggedIn} = useGlobalContext();
+    const { setToken, setId, setIsLoggedIn } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [togglePopup, setTogglePopUp] = useState(false);
     const [form, setForm] = useState({
         email: ''
         , password: ''
     });
+
+    const rejectInitialRevoke = () => { setTogglePopUp(false); };
+
+    const acceptInitialRevoke = () => { setTogglePopUp(false); };
 
     const submit = async () => {
         if (!form.email || !form.password)
@@ -29,7 +35,7 @@ const SignIn = () => {
 
             router.replace('/home')
         } catch (error) {
-            Alert.alert('Incorrect Login Credentials', "Oops! It seems like the email or password you entered is incorrect. Double-Check your credentials and try again. If you're still having trouble, you can reset your password.")
+            setTogglePopUp(true)
         } finally {
             setIsSubmitting(false)
         }
@@ -37,6 +43,18 @@ const SignIn = () => {
 
     return (
         <SafeAreaView className="bg-primary h-full">
+            {
+                togglePopup && (
+                    <BlurModalOk
+                        visible={togglePopup}
+                        onRequestClose={() => setTogglePopUp(false)}
+                        title='Incorrect email or password. Please try again.'
+                        affirmativeButtonTitle='OK'
+                        onYes={acceptInitialRevoke}
+                        onNo={rejectInitialRevoke}
+                    />
+                )
+            }
             <ScrollView>
                 <View className="w-full justify-center min-h-[80vh] px-4 my-6">
                     <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>
@@ -45,14 +63,14 @@ const SignIn = () => {
                     <FormField
                         title='Email'
                         value={form.email}
-                        handleChangeText={(e) => setForm({...form, email: e})}
+                        handleChangeText={(e) => setForm({ ...form, email: e })}
                         otherStyles='mt-7'
                         keyboardType='email-address'
                     />
                     <FormField
                         title='Password'
                         value={form.password}
-                        handleChangeText={(e) => setForm({...form, password: e})}
+                        handleChangeText={(e) => setForm({ ...form, password: e })}
                         otherStyles='mt-7'
                     />
                     <CustomButton
