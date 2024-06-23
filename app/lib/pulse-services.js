@@ -17,8 +17,7 @@ export const authenticate = async (AuthenticateRequest) => {
     try {
         return await apiClient.post(`/auth/authenticate`, AuthenticateRequest);
     } catch (error) {
-        console.error('Register error:', error);
-        throw error;
+        // need to use some type of loggin system for this
     }
 
     // return true; // -> this is to force correct credentials for during development
@@ -35,7 +34,7 @@ export const getUser = async (id, token) => {
 
         return response.data;
     } catch (error) {
-
+        // need to use some type of loggin system for this
     }
 }
 
