@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
-import { Alert, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import FormField from "../components/FormField";
-import CustomButton from "../components/CustomButton";
 import { Link, router } from "expo-router";
+import React, { useState } from 'react';
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { authenticate } from "../lib/pulse-services";
 import BlurModalOk from '../components/BlurModalOk';
+import CustomButton from "../components/CustomButton";
+import FormField from "../components/FormField";
+import { authenticate } from "../lib/pulse-services";
 
 const SignIn = () => {
     const { setToken, setId, setIsLoggedIn } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [togglePopup, setTogglePopUp] = useState(false);
+    const [modalForIncorrectCredentials, setModalForIncorrectCredentials] = useState(false);
+    const [modalForEmptyFields, setModalForEmptyFields] = useState(false);
     const [form, setForm] = useState({
         email: ''
         , password: ''
     });
 
-    const rejectInitialRevoke = () => { setTogglePopUp(false); };
-
-    const acceptInitialRevoke = () => { setTogglePopUp(false); };
+    const acceptButtonOnToggle = () => {
+        // no two modals should be up at the same time
+        if (modalForIncorrectCredentials) setModalForIncorrectCredentials(false)
+        if (modalForEmptyFields) setModalForEmptyFields(false)
+    };
 
     const submit = async () => {
-        if (!form.email || !form.password)
-            Alert.alert('Error', 'Please fill in all the fields')
+        if (!form.email || !form.password) {
+            setModalForEmptyFields(true)
+            return
+        }
 
         setIsSubmitting(true)
 
@@ -35,7 +40,7 @@ const SignIn = () => {
 
             router.replace('/home')
         } catch (error) {
-            setTogglePopUp(true)
+            setModalForIncorrectCredentials(true)
         } finally {
             setIsSubmitting(false)
         }
@@ -44,14 +49,24 @@ const SignIn = () => {
     return (
         <SafeAreaView className="bg-primary h-full">
             {
-                togglePopup && (
+                modalForIncorrectCredentials && (
                     <BlurModalOk
-                        visible={togglePopup}
-                        onRequestClose={() => setTogglePopUp(false)}
+                        visible={modalForIncorrectCredentials}
+                        onRequestClose={() => setModalForIncorrectCredentials(false)}
                         title='Incorrect email or password. Please try again.'
                         affirmativeButtonTitle='OK'
-                        onYes={acceptInitialRevoke}
-                        onNo={rejectInitialRevoke}
+                        onYes={acceptButtonOnToggle}
+                    />
+                )
+            }
+            {
+                modalForEmptyFields && (
+                    <BlurModalOk
+                        visible={modalForEmptyFields}
+                        onRequestClose={() => setModalForEmptyFields(false)}
+                        title='You have some missing fields'
+                        affirmativeButtonTitle='OK'
+                        onYes={acceptButtonOnToggle}
                     />
                 )
             }
@@ -61,6 +76,7 @@ const SignIn = () => {
                         Log in to Pulse
                     </Text>
                     <FormField
+                        placeholder={"email"}
                         title='Email'
                         value={form.email}
                         handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -68,6 +84,7 @@ const SignIn = () => {
                         keyboardType='email-address'
                     />
                     <FormField
+                        placeholder={"password"}
                         title='Password'
                         value={form.password}
                         handleChangeText={(e) => setForm({ ...form, password: e })}

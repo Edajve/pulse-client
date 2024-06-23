@@ -34,7 +34,6 @@ const SignUp = () => {
             router.replace('/terms-and-condition');
 
         } catch (error) {
-            console.error('Register error:', error);
             Alert.alert('Error', error.message || 'Something went wrong');
         } finally {
             setIsSubmitting(false);

@@ -1,22 +1,15 @@
-import { render } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import SignIn from '../../app/(auth)/sign-in.jsx';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import { router } from 'expo-router';
 
+// Mock useGlobalContext
 jest.mock('../../context/GlobalProvider.js', () => ({
     useGlobalContext: jest.fn(),
 }));
 
-// jest.mock('expo-router', () => ({
-//     router: {
-//         push: jest.fn(),
-//     },
-// }));
-
 describe('SignIn component test', () => {
     beforeEach(() => {
-        // Mocking useGlobalContext to return necessary values
         useGlobalContext.mockReturnValue({
             isLoading: false,
             isLoggedIn: false,
@@ -42,5 +35,28 @@ describe('SignIn component test', () => {
         expect(getByText('Log In')).toBeTruthy();
         expect(getByText('Reset Password')).toBeTruthy();
         expect(getByText('Sign Up')).toBeTruthy();
+    });
+
+    test('should show pop up when clicks Log In button with no fields present', async () => {
+        const { getByText, findByTestId } = render(<SignIn />);
+        fireEvent.press(getByText('Log In'));
+        const modal = await findByTestId('blur-modal-container');
+        expect(modal).toBeTruthy();
+    });
+
+    test('should show pop up when user only puts in email field and not password as well', async () => {
+        const { getByPlaceholderText, getByText, findByTestId } = render(<SignIn />);
+        fireEvent.changeText(getByPlaceholderText('email'), 'test@example.com');
+        fireEvent.press(getByText('Log In'));
+        const modal = await findByTestId('blur-modal-container');
+        expect(modal).toBeTruthy();
+    });
+
+    test('should show pop up when user only puts in password field and not email as well', async () => {
+        const { getByPlaceholderText, getByText, findByTestId } = render(<SignIn />);
+        fireEvent.changeText(getByPlaceholderText('password'), 'testPassword');
+        fireEvent.press(getByText('Log In'));
+        const modal = await findByTestId('blur-modal-container');
+        expect(modal).toBeTruthy();
     });
 });

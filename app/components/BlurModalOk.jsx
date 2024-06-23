@@ -20,10 +20,13 @@ const BlurModalOk = ({
             transparent={true}
         >
             <BlurView
+                id='blur-test-id'
                 intensity={10}
                 className='flex-1 justify-center items-center'
             >
-                <View className={`bg-primary p-4 rounded-2xl items-center w-[90vw] border border-secondary ${styles}`}>
+                <View
+                    testID="blur-modal-container"
+                    className={`bg-primary p-4 rounded-2xl items-center w-[90vw] border border-secondary ${styles}`}>
                     <Text className='text-md text-gray-100 font-psemibold'>
                         {title}
                     </Text>
