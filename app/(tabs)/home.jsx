@@ -1,12 +1,15 @@
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { RefreshControl, FlatList, ScrollView, Text, TouchableOpacity, View, LogBox } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
 import { InProgressContracts, InactiveContracts, activeContracts } from '../lib/pulse-services';
+
+// Ignore the warning about VirtualizedLists nested inside ScrollViews
+LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
 const Home = () => {
     const { id, token } = useGlobalContext();
