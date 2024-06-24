@@ -1,6 +1,6 @@
+import { router } from "expo-router";
 import React from 'react';
-import {View, TouchableOpacity, Text} from "react-native";
-import {router} from "expo-router";
+import { Text, TouchableOpacity } from "react-native";
 
 const CustomButton = ({title, handlePress, containerStyle, textStyles, isLoading}) => {
     return (

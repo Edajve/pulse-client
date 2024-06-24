@@ -1,10 +1,10 @@
+import { router } from 'expo-router';
 import React from 'react';
-import {View, Image, Text} from "react-native";
-import images from "../../constants/images"
+import { Image, Text, View } from "react-native";
+import images from "../../constants/images";
 import CustomButton from "./CustomButton";
-import {router, push} from 'expo-router'
 
-const EmptyState = ({title, subtitle}) => {
+const EmptyState = ({ title, subtitle }) => {
     return (
         <View className={'justify-center items-center px-4'}>
             <Image

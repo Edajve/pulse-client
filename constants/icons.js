@@ -19,6 +19,7 @@ import sectionaverage from "../assets/icons/sectionaverage.png";
 import sectiongood from "../assets/icons/sectiongood.png";
 import sectionstrong from "../assets/icons/sectionstrong.png";
 import qr from "../assets/icons/qr.svg";
+import settings from "../assets/icons/settings.png";
 
 export default {
   play,
@@ -41,5 +42,6 @@ export default {
   sectionaverage,
   sectiongood,
   sectionstrong,
-  qr
+  qr,
+  settings
 };
