@@ -26,7 +26,80 @@ const mockedActiveContractsResponse = [
 
 const mockedInactiveContractsResponse = [];
 
-const mockedInProgressContractsResponse = [];
+const mockedInProgressContractsResponse = [
+    {
+        "id": 21,
+        "participantOne": {
+            "id": 353,
+            "firstName": "Ashley",
+            "lastName": "Tisdale",
+            "email": "Tt",
+            "password": "$2a$10$ks5fjjhgNnjAL7Hjj1swLeCMwj/gIKD.Jju5mXjcnxwpFAmnFNRKW",
+            "role": "USER",
+            "accountCreatedDate": "2024-05-26T08:23:10.007",
+            "sex": "non_binary",
+            "dateOfBirth": "01-01-1980",
+            "countryRegion": "united_states",
+            "enabled": true,
+            "accountNonExpired": true,
+            "accountNonLocked": true,
+            "credentialsNonExpired": true,
+            "username": "Tt",
+            "authorities": [
+                {
+                    "authority": "USER"
+                }
+            ]
+        },
+        "participantTwo": null,
+        "startTime": "2024-06-02T23:32:01.29295",
+        "endTime": null,
+        "status": "PROGRESS",
+        "didParticipantOneRevoke": false,
+        "didParticipantTwoRevoke": false,
+        "participantOneRevokeContractReason": null,
+        "participantTwoRevokeContractReason": null,
+        "contractCancelReason": null,
+        "durationMinutes": 60,
+        "contractNumber": 3
+    },
+    {
+        "id": 24,
+        "participantOne": {
+            "id": 353,
+            "firstName": "Ashley",
+            "lastName": "Tisdale",
+            "email": "Tt",
+            "password": "$2a$10$ks5fjjhgNnjAL7Hjj1swLeCMwj/gIKD.Jju5mXjcnxwpFAmnFNRKW",
+            "role": "USER",
+            "accountCreatedDate": "2024-05-26T08:23:10.007",
+            "sex": "non_binary",
+            "dateOfBirth": "01-01-1980",
+            "countryRegion": "united_states",
+            "enabled": true,
+            "accountNonExpired": true,
+            "accountNonLocked": true,
+            "credentialsNonExpired": true,
+            "username": "Tt",
+            "authorities": [
+                {
+                    "authority": "USER"
+                }
+            ]
+        },
+        "participantTwo": null,
+        "startTime": "2024-06-23T20:25:33.76014",
+        "endTime": null,
+        "status": "PROGRESS",
+        "didParticipantOneRevoke": false,
+        "didParticipantTwoRevoke": false,
+        "participantOneRevokeContractReason": null,
+        "participantTwoRevokeContractReason": null,
+        "contractCancelReason": null,
+        "durationMinutes": 60,
+        "contractNumber": 1
+    }
+];
 
 const mockedUser = useGlobalContext.mockReturnValue({
     isLoading: false,

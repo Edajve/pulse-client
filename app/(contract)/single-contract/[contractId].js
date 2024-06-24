@@ -23,16 +23,20 @@ const SingleContract = () => {
   const { contractId } = useLocalSearchParams();
 
   // endtime format is YYYY-MM-DDTHH:MM:SS.sss
-  const parseTime = (endTime) => {return endTime.substring(0, 10)}
+  const parseTime = (endTime) => {
+    if (endTime) {
+      return endTime.substring(0, 10)
+    } else return ""
+  }
 
   useEffect(() => {
     const fetchContractDetails = async () => {
       try {
         const res = await getContract(contractId, token);
         const response = {
-                ...res
-                , startTime: parseTime(res.startTime)
-                ,endTime: parseTime(res.endTime)
+          ...res
+          , startTime: parseTime(res.startTime)
+          , endTime: parseTime(res.endTime)
         }
         setContract(response);
         if (response.status === 'ACTIVE') setContractActive(true);
