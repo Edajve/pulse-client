@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
+import { router } from 'expo-router';
 
 const Settings = () => {
     const navigation = useNavigation();
@@ -16,7 +17,7 @@ const Settings = () => {
     const SettingsOption = ({ title, route }) => {
         return (
             <TouchableOpacity
-            // onPress={() => navigation.navigate(route)}
+                onPress={() => router.push(route)}
             >
 
                 <View className="flex-row justify-between items-center py-2 mb-2">
@@ -44,7 +45,7 @@ const Settings = () => {
                         id='account-section'
                         className='w-[93vw] mt-6 px-4 pt-3'
                     >
-                        <SettingsOption title='Account' route="Account" />
+                        <SettingsOption title='Account' route="account" />
                         <SettingsOption title='Privacy & Security' />
                         <SettingsOption title='Display' />
                         <SettingsOption title='Payments' />
