@@ -6,7 +6,7 @@ import icons from '../../../constants/icons';
 import { useGlobalContext } from '../../../context/GlobalProvider';
 import BlurryModalYesOrNo from '../../components/BlurModalYesOrNo';
 import CustomButton from "../../components/CustomButton";
-import { getContract } from '../../lib/pulse-services';
+import { getContract, revokeContract } from '../../lib/pulse-services';
 import BlurryModalInput from '../../components/BlurryModalInput';
 
 const SingleContract = () => {
@@ -19,7 +19,7 @@ const SingleContract = () => {
   });
   const [togglePopup, setTogglePopUp] = useState(false);
 
-  const { token } = useGlobalContext();
+  const { token, id } = useGlobalContext();
   const { contractId } = useLocalSearchParams();
 
   // endtime format is YYYY-MM-DDTHH:MM:SS.sss
@@ -81,12 +81,12 @@ const SingleContract = () => {
     setAskForReasonModal(true)
   };
 
-  const onSubmitReasonAndChangeContractStatus = (revokeReason) => {
+  const onSubmitReasonAndChangeContractStatus = async (revokeReason) => {
     // sent api call to send revoke reason and update contract record status to CANCELLED
     try {
-
-    } catch (Err) {
-
+      await revokeContract(contractId, id, token, revokeReason)
+    } catch (error) {
+      console.error('Error revoking contract', error);
     }
     finally {
       setAskForReasonModal(false)
@@ -96,7 +96,7 @@ const SingleContract = () => {
   const onSkipReason = () => {
     // sent api call to update contract record status to CANCELLED
     try {
-
+      console.log(id)
     } catch (Err) {
 
     }

@@ -151,3 +151,19 @@ export const InProgressContracts = async (userId, token) => {
         return error;
     }
 }
+
+export const revokeContract = async (contractId, userId, token, requestBody) => {
+    try {
+        const response = await apiClient.put(`/contract/update/revoke/${contractId}/${userId}`,
+             requestBody, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+}
