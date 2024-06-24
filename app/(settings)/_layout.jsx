@@ -11,6 +11,12 @@ const SettingLayout = () => {
                         headerShown: false
                     }}
                 />
+                <Stack.Screen
+                    name="stats"
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </Stack>
             <StatusBar
                 backgroundColor="#161622"

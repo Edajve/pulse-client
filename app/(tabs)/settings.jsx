@@ -46,6 +46,7 @@ const Settings = () => {
                         className='w-[93vw] mt-6 px-4 pt-3'
                     >
                         <SettingsOption title='Account' route="account" />
+                        <SettingsOption title='Stats' route='stats' />
                         <SettingsOption title='Privacy & Security' />
                         <SettingsOption title='Display' />
                         <SettingsOption title='Payments' />
