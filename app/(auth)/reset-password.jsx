@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
-import {Alert, Image, ScrollView, Text, View} from "react-native";
+import {Alert, Image, ScrollView, Text, View, TouchableOpacity} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import ResetPasswordInput from "../components/ResetPasswordInput";
 import image from "../../constants/images"
+import icons from "../../constants/icons";
 import CustomButton from "../components/CustomButton";
+import { router } from 'expo-router';
+
 
 const ResetPassword = () => {
 
@@ -29,7 +32,14 @@ const ResetPassword = () => {
 
     return (
         <SafeAreaView className="h-full bg-primary">
-            <ScrollView>
+            <ScrollView> 
+            <TouchableOpacity className='pl-5 mt-7' onPress={() => router.back()}>
+                    <Image
+                        className='w-[25px] h-[25px]'
+                        source={icons.leftArrow}
+                        resizeMode="contain"
+                    />
+                </TouchableOpacity>
                 <Text className='text-white text-base font-psemibold text-3xl justify-center pl-5 mt-7'>Reset
                     Password</Text>
                 {doPasswordsMatch ? (

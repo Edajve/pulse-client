@@ -47,9 +47,9 @@ const Settings = () => {
                     >
                         <SettingsOption title='Account' route="account" />
                         <SettingsOption title='Stats' route='stats' />
-                        <SettingsOption title='Privacy & Security' />
-                        <SettingsOption title='Display' />
-                        <SettingsOption title='Payments' />
+                        <SettingsOption title='Privacy & Security' route='security'/>
+                        <SettingsOption title='Display' route='display'/>
+                        <SettingsOption title='Payments' route='payments'/>
                     </View>
                 </View>
                 <View className='w-[100vw]'>
@@ -57,10 +57,10 @@ const Settings = () => {
                         id='account-section'
                         className='w-[93vw] mt-6 px-4 pt-3'
                     >
-                        <SettingsOption title='Copyright Information' />
-                        <SettingsOption title='Privay Policy' />
-                        <SettingsOption title='Rate Us' />
-                        <SettingsOption title='About' />
+                        <SettingsOption title='Copyright Information' route='copyright'/>
+                        <SettingsOption title='Privacy Policy' route='privacyPolicy'/>
+                        <SettingsOption title='Rate Us' route='rateUs'/>
+                        <SettingsOption title='About'  route='about'/>
                     </View>
                 </View>
             </ScrollView>

@@ -5,12 +5,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
 import InformationBlock from '../components/SettingsInformationBlocks';
 
-const Stats = () => {
+const Security = () => {
 
     return (
         <SafeAreaView className="bg-primary h-full p-5">
             <View className='mt-4 mb-9'>
-                <TouchableOpacity onPress={() => router.back('/settings')}>
+                <TouchableOpacity onPress={() => router.back()}>
                     <Image
                         className='w-[25px] h-[25px]'
                         source={icons.leftArrow}
@@ -19,14 +19,12 @@ const Stats = () => {
                 </TouchableOpacity>
             </View>
             <View>
-                <InformationBlock title='Total Contracts' text='10' />
-                <InformationBlock title='Contracts Revoked' text='1' />
-                <InformationBlock title='Successful to Revoked contract ration' text='1.25%' />
-                <InformationBlock title='Most consent parthner' text='Nikki' />
-                <InformationBlock title='Most revoked parthner' text='Lala' />
+                <TouchableOpacity onPress={() => router.push('/reset-password')}>
+                    <InformationBlock title='Click to reset password' text='**********' />
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )
 }
 
-export default Stats
+export default Security
