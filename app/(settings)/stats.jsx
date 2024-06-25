@@ -21,7 +21,7 @@ const Stats = () => {
             <View>
                 <InformationBlock title='Total Contracts' text='10' />
                 <InformationBlock title='Contracts Revoked' text='1' />
-                <InformationBlock title='Successful to Revoked contract ration' text='1.25%' />
+                <InformationBlock title='Successful to Revoked contract ratio' text='1.25%' />
                 <InformationBlock title='Most consent parthner' text='Nikki' />
                 <InformationBlock title='Most revoked parthner' text='Lala' />
             </View>
