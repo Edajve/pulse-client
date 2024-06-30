@@ -45,4 +45,3 @@ const RootLayout = () => {
 }
 
 export default RootLayout;
-9
