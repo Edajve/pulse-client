@@ -48,7 +48,7 @@ const Settings = () => {
                         <SettingsOption title='Account' route="account" />
                         <SettingsOption title='Stats' route='stats' />
                         <SettingsOption title='Privacy & Security' route='security'/>
-                        <SettingsOption title='Display' route='display'/>
+                        {/* <SettingsOption title='Display' route='display'/> */}
                         <SettingsOption title='Payments' route='payments'/>
                     </View>
                 </View>
