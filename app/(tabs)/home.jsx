@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, FlatList, ScrollView, Text, TouchableOpacity, View, LogBox } from "react-native";
+import { FlatList, LogBox, RefreshControl, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
@@ -84,12 +84,12 @@ const Home = () => {
                 />}
         >
             <SafeAreaView >
-                <View className='px-2 my-6'>
+                <View className='px-2'>
                     <Text className='text-4xl text-gray-200 font-psemibold'>Home</Text>
                     <SearchInput />
 
                 </View>
-                <View>
+                <View className='px-2 my-6'>
                     <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
                     <FlatList
                         data={active}
@@ -110,7 +110,7 @@ const Home = () => {
                         )}
                     />
                 </View>
-                <View>
+                <View className='px-2 my-6'>
                     <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>In Progress Consent</Text>
                     <FlatList
                         data={inProgress}
