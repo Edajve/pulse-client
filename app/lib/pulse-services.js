@@ -167,3 +167,18 @@ export const revokeContract = async (contractId, userId, token, requestBody) => 
         return error;
     }
 }
+
+export const getContractStats = async (userId, token) => {
+    try {
+
+        const response = await apiClient.get(`/account/stats/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+}
