@@ -33,6 +33,20 @@ class PasswordStrengthEvaluator {
         NUMBER_REQUIRED: "At least one number required"
     };
 
+    doesPasswordMeetRequirements(password) {
+        // Check if the password meets all the requirements
+        if (
+            password.length >= 6 &&
+            this.upperCaseRegex.test(password) &&
+            this.lowerCaseRegex.test(password) &&
+            this.symbolRegex.test(password) &&
+            this.numberRegex.test(password)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     validatePassword(password) {
         const listOfReasons = [];
 

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Image, Text, TextInput, TouchableOpacity, View} from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import icons from "../../constants/icons";
 import PasswordVisualStrength from "../components/PasswordVisualStrength";
 import PasswordStrengthEvaluator from "./../utilities/PasswordStrengthEvaluator";
 
-const ResetPasswordInput = ({title, password}) => {
+const ResetPasswordInput = ({ title, password }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showAuthenticator, setShowAuthenticator] = useState(false);
     const [form, setForm] = useState("");
@@ -52,7 +52,7 @@ const ResetPasswordInput = ({title, password}) => {
     );
 };
 
-const PasswordAuthentication = ({form}) => {
+const PasswordAuthentication = ({ form }) => {
     const [isPasswordValid, setIsPasswordValid] = useState(false)
     const [passwordStatus, setPasswordStatus] = useState(null)
     const evaluator = new PasswordStrengthEvaluator();
@@ -90,8 +90,8 @@ const PasswordAuthentication = ({form}) => {
                 <View className='flex-row w-full ml-1'>
                     <View className='w-[30px] h-[20px] justify-center items-center'>
                         {isPasswordValid ?
-                            (<Image className='w-[15px] h-[25px]' source={icons.done} resizeMode="contain"/>) :
-                            (<Image className='w-[8px] h-[8px]' source={icons.circle} resizeMode="contain"/>)
+                            (<Image className='w-[15px] h-[25px]' source={icons.done} resizeMode="contain" />) :
+                            (<Image className='w-[8px] h-[8px]' source={icons.circle} resizeMode="contain" />)
                         }
                     </View>
                     <Text className='text-white text-1xl'>
@@ -101,8 +101,8 @@ const PasswordAuthentication = ({form}) => {
                 <View className='flex-row w-full ml-1'>
                     <View className='w-[30px] h-[20px] justify-center items-center'>
                         {isPasswordValid ?
-                            (<Image className='w-[15px] h-[25px]' source={icons.done} resizeMode="contain"/>) :
-                            (<Image className='w-[8px] h-[8px]' source={icons.circle} resizeMode="contain"/>)
+                            (<Image className='w-[15px] h-[25px]' source={icons.done} resizeMode="contain" />) :
+                            (<Image className='w-[8px] h-[8px]' source={icons.circle} resizeMode="contain" />)
                         }
                     </View>
                     <Text className='text-white text-1xl'>
@@ -112,8 +112,8 @@ const PasswordAuthentication = ({form}) => {
                 <View className='flex-row w-full ml-1'>
                     <View className='w-[30px] h-[20px] justify-center items-center'>
                         {isPasswordValid ?
-                            (<Image className='w-[15px] h-[25px]' source={icons.done} resizeMode="contain"/>) :
-                            (<Image className='w-[8px] h-[8px]' source={icons.circle} resizeMode="contain"/>)
+                            (<Image className='w-[15px] h-[25px]' source={icons.done} resizeMode="contain" />) :
+                            (<Image className='w-[8px] h-[8px]' source={icons.circle} resizeMode="contain" />)
                         }
                     </View>
                     <Text className='text-white text-1xl'>
