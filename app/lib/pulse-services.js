@@ -155,7 +155,7 @@ export const InProgressContracts = async (userId, token) => {
 export const revokeContract = async (contractId, userId, token, requestBody) => {
     try {
         const response = await apiClient.put(`/contract/update/revoke/${contractId}/${userId}`,
-             requestBody, {
+            requestBody, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -174,6 +174,22 @@ export const getContractStats = async (userId, token) => {
         const response = await apiClient.get(`/account/stats/${userId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+}
+
+export const resetPassword = async (id, token, requestBody) => {
+    try {
+        const response = await apiClient.put(`/account/password/reset/${id}`,
+            requestBody, {  
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         });
 
