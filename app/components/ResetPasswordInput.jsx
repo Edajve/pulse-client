@@ -24,7 +24,7 @@ const ResetPasswordInput = ({ title, password }) => {
         <>
             <View className="px-4">
                 <View
-                    className="border-2 border-black-200 w-full h-16 px-4 bg-black-200 mt-7 rounded-2xl focus:border-secondary items-center flex-row"
+                    className="border-2 border-black-200 w-full h-16 px-4 bg-gray-400 mt-7 rounded-2xl focus:border-secondary items-center flex-row"
                 >
                     {renderPlaceholderText && <Text className="text-base text-gray-200">{title}</Text>}
                     <TextInput
