@@ -9,7 +9,7 @@ const TermsAndConditions = () => {
 
     const renderTermsText = () => { return terms ? "Yes" : "No" }
     const renderAcceptButtonColor = () => { return terms ? "bg-green" : "" }
-    const renderRejectButtonColor = () => {  return !terms ? "bg-red" : "" }
+    const renderRejectButtonColor = () => { return !terms ? "bg-red" : "" }
 
     return (
         <SafeAreaView className='w-full h-full bg-primary px-5 '>
@@ -70,16 +70,6 @@ const TermsAndConditions = () => {
                         E. Waiver. No waiver of any provision of this Agreement by us shall be deemed a further or continuing waiver of such provision or any other provision, and our failure to assert any right or provision under this Agreement shall not constitute a waiver of such right or provision.D. Survival. The provisions of this Agreement which by their nature should survive the termination of this Agreement shall survive such termination, including but not limited to the restrictions, disclaimers, limitations, our rights to use submitted content, and rules regarding dispute resolution in Section 2, 3, 6, 7 and 8 as well as the general provisions in this Section 9.
                     </Text>
 
-                    {
-                        terms && (
-                            <CustomButton
-                                title='Home'
-                                containerStyle={'w-[90vw] mt-10'}
-                                handlePress={() => router.replace('/sign-in')}
-                            />
-                        )
-                    }
-
                     <Text className='text-gray-200 text-base font-pregular text-1xl mt-[32px]'>
                         Accept Terms: {renderTermsText()}
                     </Text>
@@ -100,8 +90,15 @@ const TermsAndConditions = () => {
                             />
                         </View>
                     </View>
-
-                  
+                    {
+                        terms && (
+                            <CustomButton
+                                title='Home'
+                                containerStyle={'w-[90vw] mt-10'}
+                                handlePress={() => router.replace('/sign-in')}
+                            />
+                        )
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>
