@@ -1,7 +1,8 @@
-import { ScrollView, View, Text, Alert } from "react-native";
+import { ScrollView, View, Text, Alert, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
 import { useState, useEffect } from "react";
+import icons from "../../constants/icons";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { register } from "../lib/pulse-services";
@@ -42,8 +43,15 @@ const TermsAndConditions = () => {
 
     return (
         <SafeAreaView className='w-full h-full bg-primary px-5 '>
+            <TouchableOpacity className='pl-5 mt-7' onPress={() => router.push("/sign-up")}>
+                    <Image
+                        className='w-[25px] h-[25px]'
+                        source={icons.leftArrow}
+                        resizeMode="contain"
+                    />
+                </TouchableOpacity>
             <ScrollView>
-                <View className='w-full h-full items-center justify-center'>
+                <View className='w-full h-full items-center justify-center mt-[20px]'>
                     <Text className='text-white text-base font-psemibold text-2xl'>
                         Terms and Condition
                     </Text>
