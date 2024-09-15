@@ -22,14 +22,20 @@ const ResetPasswordInput = ({ title, password }) => {
 
     return (
         <>
-            <View className="px-4">
+            <View className="px-2">
                 <View
-                    className="border-2 border-black-200 w-full h-16 px-4 bg-gray-400 mt-7 rounded-2xl focus:border-secondary items-center flex-row"
+                    className="
+                    w-full h-16 px-4 mt-7 rounded-2xl border-2
+                    border-gray-100
+                    w-full h-16 px-4
+                    bg-gray-100
+                    rounded-2xl
+                    focus:border-secondary items-center flex-row"
                 >
-                    {renderPlaceholderText && <Text className="text-base text-gray-200">{title}</Text>}
+                    {renderPlaceholderText && <Text className="text-base text-black pmedium">{title}</Text>}
                     <TextInput
-                        className="flex-1 font-psemibold text-base text-gray-700"
-                        placeholderTextColor="#CDCDE0"
+                        className="flex-1 text-base text-white font-pmedium"
+                        placeholderTextColor="#7b7b8b"
                         secureTextEntry={!showPassword}
                         onChangeText={onChangeText}
                     />
@@ -69,14 +75,16 @@ const PasswordAuthentication = ({ form }) => {
             border-2
             border-black-200
             mt-4
-            rounded-2xl"
+            rounded-2xl
+            text-base"
+
         >
             {passwordStatus !== null ? (
-                <Text className="text-white font-psemibold text-sm ml-4 mt-4">
+                <Text className=" text-base text-white font-pmedium text-sm ml-4 mt-4">
                     {passwordStatus.title}
                 </Text>
             ) : (
-                <Text className="text-white font-psemibold text-sm ml-4 mt-4">
+                <Text className=" text-base text-white font-pmedium text-sm ml-4 mt-4">
                     have at least 6 characters.
                 </Text>
             )}

@@ -3,20 +3,27 @@ import React, { useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
+import FormField from '../components/FormField';
 import BlurModalOk from '../components/BlurModalOk';
 import CustomButton from "../components/CustomButton";
 import ResetPasswordInput from "../components/ResetPasswordInput";
 import PasswordStrengthEvaluator from '../utilities/PasswordStrengthEvaluator';
+import DropDown from "../components/DropDown";
 
 const ResetPassword = () => {
     const [popUp, setPopUp] = useState(false)
     const [popUpMessage, setPopUpMesage] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false);
     const evaluator = new PasswordStrengthEvaluator()
-    const [newPasswords, setNewPasswords] = useState({
-        newPassword: ""
+    const [resetPasswordRequest, setResetPasswordRequest] = useState({
+        email : ""
+        , securityQuestion: ""
+        , securityAnswer: ""
+        , newPassword: ""
         , confirmPassword: ""
     });
+
+    console.log(resetPasswordRequest.securityQuestion)
 
     const closePopUp = () => {
         setPopUpMesage("")
@@ -28,18 +35,29 @@ const ResetPassword = () => {
         try {
 
 
-            // Check if both passwords are filled in
-            if (newPasswords.newPassword === "" || newPasswords.confirmPassword === "") {
+            // Check if fields are filled in
+            if (
+                resetPasswordRequest.newPassword === "" 
+                || resetPasswordRequest.confirmPassword === ""
+                || resetPasswordRequest.email === ""
+                || resetPasswordRequest.securityAnswer === ""
+            ) {
                 setPopUp(true);
-                setPopUpMesage("Both new and confirming passwords need to be filled in");
+                setPopUpMesage("All fields needs to be populated");
+            // Check if both user didn't choose their security question
+            } else if ( resetPasswordRequest.securityQuestion === "select your security question" |
+                resetPasswordRequest.securityQuestion === ""
+            ) {
+                    setPopUp(true);
+                    setPopUpMesage("Please put in your Security Question Upon Sign Up");
             }
             // Check if both passwords match
-            else if (newPasswords.newPassword !== newPasswords.confirmPassword) {
+            else if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
                 setPopUp(true);
                 setPopUpMesage("Both new and confirming passwords should match");
             }
             // Check if password meets criteria
-            else if (!evaluator.doesPasswordMeetRequirements(newPasswords.newPassword)) {
+            else if (!evaluator.doesPasswordMeetRequirements(resetPasswordRequest.newPassword)) {
                 setPopUp(true);
                 setPopUpMesage("New Password doesn't meet the criteria");
             }
@@ -80,13 +98,43 @@ const ResetPassword = () => {
                         reset</Text> */}
                 <View className='w-full h-full'>
                     <View className='p-2 mt-10'>
+                    <FormField
+                        placeholder={"Email"}
+                        title='Email'
+                        value={setResetPasswordRequest.email}
+                        handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, email: e })}
+                        keyboardType='text'
+                    />
+                     <DropDown
+                        testID='securityQuestion'
+                        title='Security Question'
+                        updateForm={(itemValue) => setResetPasswordRequest({ ...resetPasswordRequest, securityQuestion: itemValue })}
+                        options={[
+                            "Select your Security Question"
+                            , "What was the name of your first pet?"
+                            , "What was your childhood nickname?"
+                            , "What is your mother’s maiden name?"
+                            , "What is your favorite book?",
+                            "What is your favorite movie?"
+                            , "What was your favorite teacher’s name?",
+                            "What is your favorite food?"
+                        ]}
+                    />
+                    <FormField
+                        placeholder={"Security Answer"}
+                        title='Security Answer'
+                        value={resetPasswordRequest.securityAnswer}
+                        handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, securityAnswer: e })}
+                        otherStyles='mt-7'
+                        keyboardType='text'
+                    />
                     </View>
                     <View>
                         <ResetPasswordInput
                             title='New Password'
-                            password={(newPass) => setNewPasswords(
+                            password={(newPass) => setResetPasswordRequest(
                                 {
-                                    ...newPasswords
+                                    ...resetPasswordRequest
                                     , newPassword: newPass
                                 }
                             )}
@@ -94,9 +142,9 @@ const ResetPassword = () => {
                         <ResetPasswordInput
                             title='Confirm Password'
                             placeholder='Confirm Password'
-                            password={(confirmPass) => setNewPasswords(
+                            password={(confirmPass) => setResetPasswordRequest(
                                 {
-                                    ...newPasswords
+                                    ...resetPasswordRequest
                                     , confirmPassword: confirmPass
                                 }
                             )}
