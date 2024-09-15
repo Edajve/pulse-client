@@ -1,11 +1,40 @@
-import { ScrollView, View, Text } from "react-native";
+import { ScrollView, View, Text, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { router } from "expo-router";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { register } from "../lib/pulse-services";
 
 const TermsAndConditions = () => {
-    const [terms, setTerms] = useState(false)
+    const [terms, setTerms] = useState(null)
+    const { signUpFormData } = useGlobalContext()
+
+    useEffect(() => {
+        const handleTerms = async () => {
+            if (signUpFormData) {
+                console.log("Form Data:", signUpFormData);
+            }
+
+            if (terms) {
+
+                await register(signUpFormData);
+
+                router.replace('/sign-in')
+
+            } else if (terms == false) {
+
+                setTerms(null)
+                // show an alert
+                Alert.alert(
+                    "Terms and Conditions Required",
+                    "You must accept the Terms and Conditions to proceed. " +
+                    "Please review the terms and accept them to complete the registration.");
+            }
+        }
+
+        handleTerms();
+    }, [signUpFormData, terms]);
 
     const renderTermsText = () => { return terms ? "Yes" : "No" }
     const renderAcceptButtonColor = () => { return terms ? "bg-green" : "" }
@@ -74,7 +103,7 @@ const TermsAndConditions = () => {
                         Accept Terms: {renderTermsText()}
                     </Text>
 
-                    <View className='w-full flex-row justify-between' >
+                    <View className='w-full flex-row justify-between mb-[70px]' >
                         <View>
                             <CustomButton
                                 title='Accept'
@@ -90,15 +119,6 @@ const TermsAndConditions = () => {
                             />
                         </View>
                     </View>
-                    {
-                        terms && (
-                            <CustomButton
-                                title='Home'
-                                containerStyle={'w-[90vw] mt-10'}
-                                handlePress={() => router.replace('/sign-in')}
-                            />
-                        )
-                    }
                 </View>
             </ScrollView>
         </SafeAreaView>

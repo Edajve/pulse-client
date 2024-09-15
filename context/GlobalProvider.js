@@ -11,6 +11,19 @@ const GlobalProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [token, setToken] = useState(""); // token is set from the sign in page
     const [id, setId] = useState("") // id is set from the sign in page
+    const [signUpFormData, setSignUpFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        role: 'USER',
+        accountCreatedDate: new Date().toISOString(),
+        sex: '',
+        dateOfBirth: '',
+        countryRegion: '',
+        securityQuestion: '',
+        securityAnswer: ''
+    });
     const [scannieId, setScannieId] = useState({
         "scannieId": ""
     })
@@ -51,12 +64,14 @@ const GlobalProvider = ({ children }) => {
                 , isLoading
                 , token
                 , id
+                , signUpFormData
+                , scannieId
                 , setIsLoggedIn
                 , setUser
                 , setToken
                 , setId
                 , setScannieId
-                , scannieId
+                , setSignUpFormData
             }}
         >
             {children}

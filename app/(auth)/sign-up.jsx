@@ -3,12 +3,12 @@ import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
-import { Link, router } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import DropDown from "../components/DropDown";
-import { register } from "../lib/pulse-services";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignUp = () => {
-
+    const { setSignUpFormData } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState({
         firstName: '',
@@ -24,6 +24,8 @@ const SignUp = () => {
         securityAnswer: ''
     });
 
+    const router = useRouter();
+
     const submit = async () => {
 
         if (!checkSignInFields()) return;
@@ -31,8 +33,8 @@ const SignUp = () => {
         setIsSubmitting(true);
 
         try {
-            await register(form);
-
+            // Add this to global state 
+            setSignUpFormData(form)
             router.replace('/terms-and-condition');
 
         } catch (error) {
@@ -43,70 +45,68 @@ const SignUp = () => {
     };
 
     function checkSignInFields() {
-        console.log(form);
-    
         // Check if all required fields are populated
         if (!form.firstName || !form.lastName || !form.email || !form.password) {
             Alert.alert('Error', 'Please fill in all the fields');
             return false;
         }
-    
+
         // Check if age and date of birth are valid
         if (!form.dateOfBirth) {
             Alert.alert("Please Fill in Date of Birth", "Date of Birth Field is not populated");
             return false;
         }
-    
+
         // is DoB in correct formatting? MM-DD-YYYY
         const datePattern = /^(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])-(19|20)\d{2}$/;
         if (!datePattern.test(form.dateOfBirth)) {
             Alert.alert('Date Of Birth Incorrect format', 'The correct format is MM-DD-YYYY');
             return false;
         }
-    
+
         // Calculate age
         const dateParts = form.dateOfBirth.split("-");
         const dobDate = new Date(parseInt(dateParts[2]), parseInt(dateParts[0]) - 1, parseInt(dateParts[1]));
         const currentDate = new Date();
         const ageDifference = currentDate - dobDate;
         const ageInYears = ageDifference / (1000 * 60 * 60 * 24 * 365);
-    
+
         if (ageInYears < 18) {
             Alert.alert('Age Error', 'You have to be 18+');
             return false;
         }
-    
+
         // Check if dropdowns are populated correctly
         const isSexDropdownEmpty = !form.sex || form.sex === "Select your Sex";
         const isSecurityQuestionDropdownEmpty = !form.securityQuestion || form.securityQuestion === "Select your Security Question";
         const isCountryEmpty = !form.countryRegion || form.countryRegion === "Select your Country/Region"
         const isSecurityAnswerEmpty = !form.securityAnswer
-    
-    if (isSexDropdownEmpty && isSecurityQuestionDropdownEmpty && isCountryEmpty) {
-        Alert.alert('Dropdown Errors', 'All DropDowns need to be Populated');
-        return false;
-    }
-    
-    if (isSexDropdownEmpty) {
-        Alert.alert('Dropdown Error', 'Please populate the Sex Dropdown');
-        return false;
-    }
-    
-    if (isSecurityQuestionDropdownEmpty) {
-        Alert.alert('Dropdown Error', 'Please populate the Security Question Dropdown');
-        return false;
-    }
 
-    if (isCountryEmpty) {
-        Alert.alert('Dropdown Error', 'Please populate the Country/Region Dropdown');
-        return false;
-    }
+        if (isSexDropdownEmpty && isSecurityQuestionDropdownEmpty && isCountryEmpty) {
+            Alert.alert('Dropdown Errors', 'All DropDowns need to be Populated');
+            return false;
+        }
 
-    if (isSecurityAnswerEmpty) {
-        Alert.alert('Security Answer Error', 'Please answer the Security Answer');
-        return false;
-    }
-    
+        if (isSexDropdownEmpty) {
+            Alert.alert('Dropdown Error', 'Please populate the Sex Dropdown');
+            return false;
+        }
+
+        if (isSecurityQuestionDropdownEmpty) {
+            Alert.alert('Dropdown Error', 'Please populate the Security Question Dropdown');
+            return false;
+        }
+
+        if (isCountryEmpty) {
+            Alert.alert('Dropdown Error', 'Please populate the Country/Region Dropdown');
+            return false;
+        }
+
+        if (isSecurityAnswerEmpty) {
+            Alert.alert('Security Answer Error', 'Please answer the Security Answer');
+            return false;
+        }
+
         return true;
     }
 
@@ -156,18 +156,18 @@ const SignUp = () => {
                         updateForm={(itemValue) => setForm({ ...form, sex: itemValue })}
                         options={["Select your Sex", "MALE", "FEMALE", "NON_BINARY", "GENDER_QUEER", "OTHER"]}
                     />
-                     <DropDown
+                    <DropDown
                         testID='securityQuestion'
                         title='Security Question'
                         updateForm={(itemValue) => setForm({ ...form, securityQuestion: itemValue })}
                         options={[
                             "Select your Security Question"
-                            ,"What was the name of your first pet?"
-                            ,"What was your childhood nickname?"
-                            ,"What is your mother’s maiden name?"
-                            ,"What is your favorite book?",
+                            , "What was the name of your first pet?"
+                            , "What was your childhood nickname?"
+                            , "What is your mother’s maiden name?"
+                            , "What is your favorite book?",
                             "What is your favorite movie?"
-                            ,"What was your favorite teacher’s name?",
+                            , "What was your favorite teacher’s name?",
                             "What is your favorite food?"
                         ]}
                     />
