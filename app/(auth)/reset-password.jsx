@@ -9,69 +9,60 @@ import CustomButton from "../components/CustomButton";
 import ResetPasswordInput from "../components/ResetPasswordInput";
 import PasswordStrengthEvaluator from '../utilities/PasswordStrengthEvaluator';
 import DropDown from "../components/DropDown";
+import { resetPassword } from '../lib/pulse-services';
 
 const ResetPassword = () => {
     const [popUp, setPopUp] = useState(false)
     const [popUpMessage, setPopUpMesage] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false);
     const evaluator = new PasswordStrengthEvaluator()
+    const [resetStatus, setResetStatus] = useState(null);
     const [resetPasswordRequest, setResetPasswordRequest] = useState({
-        email : ""
+        email: ""
         , securityQuestion: ""
         , securityAnswer: ""
         , newPassword: ""
         , confirmPassword: ""
     });
 
-    console.log(resetPasswordRequest.securityQuestion)
-
     const closePopUp = () => {
         setPopUpMesage("")
         setPopUp(false)
     }
 
-    const onResetPassword = () => {
+    const onResetPassword = async () => {
         setIsSubmitting(true);
+        console.log('Submitting reset password request...');
         try {
-
-
-            // Check if fields are filled in
-            if (
-                resetPasswordRequest.newPassword === "" 
-                || resetPasswordRequest.confirmPassword === ""
-                || resetPasswordRequest.email === ""
-                || resetPasswordRequest.securityAnswer === ""
-            ) {
-                setPopUp(true);
-                setPopUpMesage("All fields needs to be populated");
-            // Check if both user didn't choose their security question
-            } else if ( resetPasswordRequest.securityQuestion === "select your security question" |
-                resetPasswordRequest.securityQuestion === ""
-            ) {
+           
+        
+                const data = await resetPassword(resetPasswordRequest);
+    
+                setResetStatus(data.body);
+    
+                // Success handling
+                if (data === 'Successfully reset password') {
                     setPopUp(true);
-                    setPopUpMesage("Please put in your Security Question Upon Sign Up");
-            }
-            // Check if both passwords match
-            else if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
-                setPopUp(true);
-                setPopUpMesage("Both new and confirming passwords should match");
-            }
-            // Check if password meets criteria
-            else if (!evaluator.doesPasswordMeetRequirements(resetPasswordRequest.newPassword)) {
-                setPopUp(true);
-                setPopUpMesage("New Password doesn't meet the criteria");
-            }
-            // Password passed all checks
-            else {
-                // Reset password logic
-                // Example: call API or perform reset action
-                console.log("Password meets criteria. Proceed with reset logic.");
-            }
+                    setPopUpMesage("Password reset successfully");
+                    router.push('/sign-in');
+                } else if (data === 'Invalid credentials') {
+                    setPopUp(true);
+                    setPopUpMesage("Invalid credentials");
+                } else if (data === 'Security Question is incorrect') {
+                    setPopUp(true);
+                    setPopUpMesage("Security Question is incorrect");
+                } else if (data === 'Security Answer is incorrect') {
+                    setPopUp(true);
+                    setPopUpMesage("Security Answer is incorrect");
+                }
+            
         } catch (error) {
+            console.log('Error occurred:', error);
         } finally {
             setIsSubmitting(false);
         }
     };
+
     return (
         <SafeAreaView className="h-full bg-primary">
             <ScrollView>
@@ -98,36 +89,36 @@ const ResetPassword = () => {
                         reset</Text> */}
                 <View className='w-full h-full'>
                     <View className='p-2 mt-10'>
-                    <FormField
-                        placeholder={"Email"}
-                        title='Email'
-                        value={setResetPasswordRequest.email}
-                        handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, email: e })}
-                        keyboardType='text'
-                    />
-                     <DropDown
-                        testID='securityQuestion'
-                        title='Security Question'
-                        updateForm={(itemValue) => setResetPasswordRequest({ ...resetPasswordRequest, securityQuestion: itemValue })}
-                        options={[
-                            "Select your Security Question"
-                            , "What was the name of your first pet?"
-                            , "What was your childhood nickname?"
-                            , "What is your mother’s maiden name?"
-                            , "What is your favorite book?",
-                            "What is your favorite movie?"
-                            , "What was your favorite teacher’s name?",
-                            "What is your favorite food?"
-                        ]}
-                    />
-                    <FormField
-                        placeholder={"Security Answer"}
-                        title='Security Answer'
-                        value={resetPasswordRequest.securityAnswer}
-                        handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, securityAnswer: e })}
-                        otherStyles='mt-7'
-                        keyboardType='text'
-                    />
+                        <FormField
+                            placeholder={"Email"}
+                            title='Email'
+                            value={setResetPasswordRequest.email}
+                            handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, email: e })}
+                            keyboardType='text'
+                        />
+                        <DropDown
+                            testID='securityQuestion'
+                            title='Security Question'
+                            updateForm={(itemValue) => setResetPasswordRequest({ ...resetPasswordRequest, securityQuestion: itemValue })}
+                            options={[
+                                "Select your Security Question"
+                                , "What was the name of your first pet?"
+                                , "What was your childhood nickname?"
+                                , "What is your mother’s maiden name?"
+                                , "What is your favorite book?",
+                                "What is your favorite movie?"
+                                , "What was your favorite teacher’s name?",
+                                "What is your favorite food?"
+                            ]}
+                        />
+                        <FormField
+                            placeholder={"Security Answer"}
+                            title='Security Answer'
+                            value={resetPasswordRequest.securityAnswer}
+                            handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, securityAnswer: e })}
+                            otherStyles='mt-7'
+                            keyboardType='text'
+                        />
                     </View>
                     <View>
                         <ResetPasswordInput
@@ -152,7 +143,7 @@ const ResetPassword = () => {
                     </View>
                     <CustomButton
                         title='Reset Password'
-                        handlePress={onResetPassword}
+                        handlePress={() => onResetPassword()}
                         containerStyle='mt-7 mx-4'
                         isLoading={isSubmitting}
 

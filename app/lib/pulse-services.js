@@ -74,7 +74,6 @@ export const isUsersQrValid = async (userID, uuid, token) => {
 
 export const createOrUpdateContract = async (payload, token) => {
 
-    console.log(payload)
     await apiClient.post(
         `/contract/create`,
         payload,
@@ -183,18 +182,25 @@ export const getContractStats = async (userId, token) => {
     }
 }
 
-export const resetPassword = async (id, token, requestBody) => {
+export const resetPassword = async (requestBody) => {
+    
     try {
-        const response = await apiClient.put(`/account/password/reset/${id}`,
-            requestBody, {  
+        const response = await apiClient.put(`/auth/password/reset`, requestBody, {
             headers: {
-                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-
+        console.log(response.data);
         return response.data;
     } catch (error) {
-        return error;
+        if (error.response) {
+            // Log the full error response
+            console.error('Error response data:', error.response.data);
+            console.error('Error status:', error.response.status);
+            console.error('Error headers:', error.response.headers);
+        } else {
+            console.error('Error message:', error.message);
+        }
+        throw error; // Re-throw the error if needed
     }
-}
+};
