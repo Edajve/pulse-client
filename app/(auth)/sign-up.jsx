@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Alert, ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
 import CustomButton from "../components/CustomButton";
 import { Link, useRouter } from "expo-router";
 import DropDown from "../components/DropDown";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import icons from '../../constants/icons';
 
 const SignUp = () => {
     const { setSignUpFormData } = useGlobalContext();
@@ -113,6 +114,15 @@ const SignUp = () => {
     return (
         <SafeAreaView className="bg-primary h-full">
             <ScrollView>
+                <View className='mt-4 mb-9'>
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Image
+                            className='w-[25px] h-[25px]'
+                            source={icons.leftArrow}
+                            resizeMode="contain"
+                        />
+                    </TouchableOpacity>
+                </View>
                 <View className="w-full justify-center min-h-[80vh] px-4 my-6">
                     <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>
                         Sign Up to Pulse
