@@ -7,8 +7,10 @@ import { Link, useRouter } from "expo-router";
 import DropDown from "../components/DropDown";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import icons from '../../constants/icons';
+import PasswordStrengthEvaluator from '../utilities/PasswordStrengthEvaluator';
 
 const SignUp = () => {
+    const evaluator = new PasswordStrengthEvaluator()
     const { setSignUpFormData } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState({
@@ -50,6 +52,28 @@ const SignUp = () => {
         if (!form.firstName || !form.lastName || !form.email || !form.password) {
             Alert.alert('Error', 'Please fill in all the fields');
             return false;
+        }
+
+        // Check if email is in the correct format
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(form.email)) {
+            Alert.alert('Email Error', 'Please enter a valid email address');
+            return false;
+        }
+
+        // Check if password is up to sequrity
+        const passwordStrength = evaluator.validatePassword(form.password).title
+
+        if (passwordStrength !== "Strong Password") {
+            Alert.alert('Password', 
+                'Please increase password strength:\n' +
+                '- At least one uppercase letter required\n' +
+                '- At least one lowercase letter required\n' +
+                '- At least one symbol required\n' +
+                '- At least one number required'
+              );
+            return false;
+        
         }
 
         // Check if age and date of birth are valid
