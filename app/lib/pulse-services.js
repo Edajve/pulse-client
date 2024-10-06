@@ -183,7 +183,7 @@ export const getContractStats = async (userId, token) => {
 }
 
 export const resetPassword = async (requestBody) => {
-    
+
     try {
         const response = await apiClient.put(`/auth/password/reset`, requestBody, {
             headers: {
@@ -204,3 +204,19 @@ export const resetPassword = async (requestBody) => {
         throw error; // Re-throw the error if needed
     }
 };
+
+export const updatePinSeting = async (token, accountId, pinSetting) => {
+    try {
+        const response = await apiClient.put(`/account/update/pin/${accountId}?pin=${pinSetting}`,
+            requestBody, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+}

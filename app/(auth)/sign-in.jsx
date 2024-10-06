@@ -1,28 +1,67 @@
 import { Link, router } from "expo-router";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import BlurModalOk from '../components/BlurModalOk';
 import CustomButton from "../components/CustomButton";
 import FormField from "../components/FormField";
-import { authenticate } from "../lib/pulse-services";
+import { authenticate, updatePinSeting } from "../lib/pulse-services";
+import BlurModalYesOrNo from "../components/BlurModalYesOrNo"
+import PinModal from "../components/PinModal";
 
 const SignIn = () => {
-    const { setToken, setId, setIsLoggedIn } = useGlobalContext();
+    const { setToken, setId, setIsLoggedIn, id, user, token } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [modalForIncorrectCredentials, setModalForIncorrectCredentials] = useState(false);
     const [modalForEmptyFields, setModalForEmptyFields] = useState(false);
+    const [popUpForPinPrompt, setPopUpForPinPrompt] = useState(null)
+    const [pinPopUp, setPinPopup] = useState(null)
+    const [pinStep, setPinStep] = useState()
     const [form, setForm] = useState({
         email: ''
         , password: ''
     });
+    const [pin, setPin] = useState({
+        pin: "",
+        confirmPin: ""
+    })
+
+    useEffect(() => {
+        promptForPIN();
+    }, [pinStep]);
+
+    const promptForPIN = () => {
+        if (user?.isBiometricLogin === undefined) {
+            setPopUpForPinPrompt(true)
+        }
+    }
+
+    const acceptInitialRevoke = async () => {
+        // go through PIN flow
+        setPopUpForPinPrompt(false)
+        setPinPopup(true)
+
+        // await updatePinSeting(token, id, true)
+    }
+
+    const rejectInitialRevoke = async () => {
+        setPopUpForPinPrompt(false)
+    }
 
     const acceptButtonOnToggle = () => {
         // no two modals should be up at the same time
         if (modalForIncorrectCredentials) setModalForIncorrectCredentials(false)
         if (modalForEmptyFields) setModalForEmptyFields(false)
     };
+
+    const recievePinFromChild = (pin) => {
+        setPinPopup(false)
+        setPin(prevPin => ({
+            ...prevPin,
+            pin: pin
+        }));
+    }
 
     const submit = async () => {
         if (!form.email || !form.password) {
@@ -56,6 +95,33 @@ const SignIn = () => {
                         title='Incorrect email or password. Please try again.'
                         affirmativeButtonTitle='OK'
                         onYes={acceptButtonOnToggle}
+                    />
+                )
+            }
+
+            {
+                pinPopUp && (
+                    <PinModal
+                        visible={pinPopUp}
+                        onRequestClose={() => setPinPopup(false)}
+                        title='Insert Pin'
+                        affirmativeButtonTitle='OK'
+                        onYes={acceptButtonOnToggle}
+                        sendDataToParent={(pin) => recievePinFromChild(pin)}
+                    />
+                )
+            }
+
+            {
+                popUpForPinPrompt && (
+                    <BlurModalYesOrNo
+                        visible={popUpForPinPrompt}
+                        onRequestClose={() => setPopUpForPinPrompt(false)}
+                        title='Set a PIN for Easy Login?'
+                        affirmativeButtonTitle='Set PIN'
+                        negativeButtonTitle='Maybe Later'
+                        onYes={acceptInitialRevoke}
+                        onNo={rejectInitialRevoke}
                     />
                 )
             }
