@@ -59,7 +59,7 @@ const Settings = () => {
                     >
                         <SettingsOption title='Copyright Information' route='copyright'/>
                         <SettingsOption title='Privacy Policy' route='privacyPolicy'/>
-                        <SettingsOption title='Rate Us' route='rateUs'/>
+                        <SettingsOption title='Contact Us' route='rateUs'/>
                         <SettingsOption title='About'  route='about'/>
                     </View>
                 </View>
