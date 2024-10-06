@@ -6,7 +6,7 @@ import icons from "../../constants/icons";
 
 const Tutorial = () => {
 
-    const videoId = 'gKj-lsXPT2M'; // Corrected video ID
+    const videoId = 'gKj-lsXPT2M';
     const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
     const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
