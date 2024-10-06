@@ -34,11 +34,19 @@ const ResetPassword = () => {
         setIsSubmitting(true);
 
         try {
-
             
+            //before attempting to reset password, check password strength
+            var passwordStrength = evaluator.validatePassword(resetPasswordRequest.newPassword).title;
             const data = await resetPassword(resetPasswordRequest);
+            
+            if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
+                setPopUp(true);
+                setPopUpMesage("Both new password and confirming new password does not match");
+            } else if (passwordStrength === "Weak Password") {
+                setPopUp(true);
+                setPopUpMesage("Password needs to meet strength requirement");
 
-            if (data === 'Successfully reset password') {
+            } else if (data === 'Successfully reset password') {
                 setPopUp(true);
                 setPopUpMesage("Password reset successfully");
                 router.push('/sign-in');
@@ -52,7 +60,7 @@ const ResetPassword = () => {
                 setPopUp(true);
                 setPopUpMesage("Security Answer is incorrect");
             }
-
+        
         } catch (error) {
             console.log('Error occurred:', error);
         } finally {
@@ -141,7 +149,7 @@ const ResetPassword = () => {
                     <CustomButton
                         title='Reset Password'
                         handlePress={() => onResetPassword()}
-                        containerStyle='mt-7 mx-4'
+                        containerStyle='mt-7 mx-4 mb-[60px]'
                         isLoading={isSubmitting}
 
                     />
