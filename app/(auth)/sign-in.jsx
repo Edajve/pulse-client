@@ -17,7 +17,6 @@ const SignIn = () => {
     const [modalForEmptyFields, setModalForEmptyFields] = useState(false);
     const [popUpForPinPrompt, setPopUpForPinPrompt] = useState(null)
     const [pinPopUp, setPinPopup] = useState(null)
-    const [pinStep, setPinStep] = useState()
     const [form, setForm] = useState({
         email: ''
         , password: ''
@@ -27,9 +26,19 @@ const SignIn = () => {
         confirmPin: ""
     })
 
+    // OK so the bigges issue right onw is that inorder to submit the new pin, we need to login first
+    // Reason being is because we need to know what account we are updating the pin to, and we
+    // need the id to do that, after login..
+    // currently where you left off
+    // you set it up to when it opens the login page it checks if the isBiometric flag is true false or null
+    // if its null, means they wer never prompted to choose biometirc or not so you were workng on that flow
+    // where you left off on that flow is that you got it to when you get to the page, select yes for pin
+    // you put in the pin and it saves to state, but now you need to move all this logic AFTER you log in
+    // so that we have the correct credentials
+
     useEffect(() => {
         promptForPIN();
-    }, [pinStep]);
+    }, []);
 
     const promptForPIN = () => {
         if (user?.isBiometricLogin === undefined) {
@@ -37,12 +46,10 @@ const SignIn = () => {
         }
     }
 
-    const acceptInitialRevoke = async () => {
+    const acceptInitialRevoke = () => {
         // go through PIN flow
         setPopUpForPinPrompt(false)
         setPinPopup(true)
-
-        // await updatePinSeting(token, id, true)
     }
 
     const rejectInitialRevoke = async () => {
@@ -55,12 +62,17 @@ const SignIn = () => {
         if (modalForEmptyFields) setModalForEmptyFields(false)
     };
 
-    const recievePinFromChild = (pin) => {
+    const recievePinFromChild = async (pin) => {
+
         setPinPopup(false)
+
         setPin(prevPin => ({
             ...prevPin,
             pin: pin
         }));
+
+        // After we get the PIN update the database
+        await updatePinSeting(id, true, pin.pin)
     }
 
     const submit = async () => {
@@ -125,6 +137,7 @@ const SignIn = () => {
                     />
                 )
             }
+
             {
                 modalForEmptyFields && (
                     <BlurModalOk
