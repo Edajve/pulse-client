@@ -16,7 +16,6 @@ const ResetPassword = () => {
     const [popUpMessage, setPopUpMesage] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false);
     const evaluator = new PasswordStrengthEvaluator()
-    const [resetStatus, setResetStatus] = useState(null);
     const [resetPasswordRequest, setResetPasswordRequest] = useState({
         email: ""
         , securityQuestion: ""
@@ -31,31 +30,29 @@ const ResetPassword = () => {
     }
 
     const onResetPassword = async () => {
+
         setIsSubmitting(true);
-        console.log('Submitting reset password request...');
+
         try {
-           
-        
-                const data = await resetPassword(resetPasswordRequest);
-    
-                setResetStatus(data.body);
-    
-                // Success handling
-                if (data === 'Successfully reset password') {
-                    setPopUp(true);
-                    setPopUpMesage("Password reset successfully");
-                    router.push('/sign-in');
-                } else if (data === 'Invalid credentials') {
-                    setPopUp(true);
-                    setPopUpMesage("Invalid credentials");
-                } else if (data === 'Security Question is incorrect') {
-                    setPopUp(true);
-                    setPopUpMesage("Security Question is incorrect");
-                } else if (data === 'Security Answer is incorrect') {
-                    setPopUp(true);
-                    setPopUpMesage("Security Answer is incorrect");
-                }
+
             
+            const data = await resetPassword(resetPasswordRequest);
+
+            if (data === 'Successfully reset password') {
+                setPopUp(true);
+                setPopUpMesage("Password reset successfully");
+                router.push('/sign-in');
+            } else if (data === 'Invalid credentials') {
+                setPopUp(true);
+                setPopUpMesage("Invalid credentials");
+            } else if (data === 'Security Question is incorrect') {
+                setPopUp(true);
+                setPopUpMesage("Security Question is incorrect");
+            } else if (data === 'Security Answer is incorrect') {
+                setPopUp(true);
+                setPopUpMesage("Security Answer is incorrect");
+            }
+
         } catch (error) {
             console.log('Error occurred:', error);
         } finally {

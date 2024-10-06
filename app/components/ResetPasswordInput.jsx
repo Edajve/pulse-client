@@ -13,7 +13,7 @@ const ResetPasswordInput = ({ title, password }) => {
 
     const onChangeText = (value) => {
         setForm(value);
-        password(form)
+        password(value)
     }
 
     useEffect(() => {
