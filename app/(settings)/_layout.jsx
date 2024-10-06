@@ -35,6 +35,12 @@ const SettingLayout = () => {
                         headerShown: false
                     }}
                 />
+                 <Stack.Screen
+                    name="tutorial"
+                    options={{
+                        headerShown: false
+                    }}
+                />
                 <Stack.Screen
                     name="copyright"
                     options={{

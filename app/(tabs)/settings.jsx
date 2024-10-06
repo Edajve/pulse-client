@@ -50,6 +50,7 @@ const Settings = () => {
                         <SettingsOption title='Privacy & Security' route='security'/>
                         {/* <SettingsOption title='Display' route='display'/> */}
                         <SettingsOption title='Payments' route='payments'/>
+                        <SettingsOption title='Tutorial' route='tutorial'/>
                     </View>
                 </View>
                 <View className='w-[100vw]'>
