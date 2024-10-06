@@ -205,13 +205,18 @@ export const resetPassword = async (requestBody) => {
     }
 };
 
-export const updatePinSeting = async (token, accountId, pinSetting) => {
+export const updatePinSetting = async (accountId, pinSetting, pinCode) => {
     try {
-        const response = await apiClient.put(`/account/update/pin/${accountId}?pin=${pinSetting}`,
-            requestBody, {
+        
+        let url = `/register/update/pin/${accountId}?pin=${pinSetting}`;
+
+        if (pinCode) {
+            url += `&pinCode=${pinCode}`;
+        }
+
+        const response = await apiClient.put(url, null, {
             headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         });
 
