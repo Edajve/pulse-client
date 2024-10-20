@@ -7,6 +7,8 @@ import BlurModalOk from '../components/BlurModalOk';
 import CustomButton from "../components/CustomButton";
 import FormField from "../components/FormField";
 import { authenticate } from "../lib/pulse-services";
+import LoadingModal from "../components/LoadingModal";
+import useApi from "../hooks/useApi";
 
 const SignIn = () => {
     const { setToken, setId, setIsLoggedIn } = useGlobalContext();
@@ -18,6 +20,8 @@ const SignIn = () => {
         , password: ''
     });
 
+    const { loading, data, error, refetch } = useApi(authenticate);
+
     const acceptButtonOnToggle = () => {
         // no two modals should be up at the same time
         if (modalForIncorrectCredentials) setModalForIncorrectCredentials(false)
@@ -25,29 +29,29 @@ const SignIn = () => {
     };
 
     const submit = async () => {
-        if (!form.email || !form.password) {
-            setModalForEmptyFields(true)
-            return
-        }
-
-        setIsSubmitting(true)
-
-        try {
-            const response = await authenticate(form);
-            setToken(response.data.token.token);
-            setId(response.data.id)
-            setIsLoggedIn(true)
-
-            router.replace('/home')
-        } catch (error) {
-            setModalForIncorrectCredentials(true)
-        } finally {
-            setIsSubmitting(false)
-        }
+    if (!form.email || !form.password) {
+        setModalForEmptyFields(true);
+        return;
     }
+
+    setIsSubmitting(true);
+
+    try {
+        await refetch(form); // Pass the form data here
+        setToken(data.data.token.token);
+        setId(data.data.id);
+        setIsLoggedIn(true);
+        router.replace('/home');
+    } catch (error) {
+        setModalForIncorrectCredentials(true);
+    } finally {
+        setIsSubmitting(false);
+    }
+};
 
     return (
         <SafeAreaView className="bg-primary h-full">
+              
             {
                 modalForIncorrectCredentials && (
                     <BlurModalOk
@@ -96,6 +100,10 @@ const SignIn = () => {
                         containerStyle='mt-7'
                         isLoading={isSubmitting}
                     />
+
+                    {loading && (
+                        <LoadingModal />
+                    )}
                     <View className='justify-center pt-5 flex-row gap-2 mt-2'>
                         <Text
                             className='text-lg text-gray-100 font-pregular'
