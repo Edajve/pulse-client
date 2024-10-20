@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 const useApi = (apiFunction) => {
     const [loading, setLoading] = useState(false);
