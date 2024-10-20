@@ -15,7 +15,7 @@ const RateUs = () => {
     })
 
     const handleEmailPress = () => {
-        Linking.openURL('pulse@support.com');
+        Linking.openURL('support@qssense.com');
     };
 
     const onSubmitFeedBack = async () => {

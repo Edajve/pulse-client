@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: 'http://192.168.1.166:8080/api/v1' // Your Spring Boot backend URL by IP-Address
+    baseURL: 'http://10.0.0.153:8080/api/v1' // Your Spring Boot backend URL by IP-Address
 });
 
 export const register = async (RegisterRequest) => {
