@@ -6,20 +6,27 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import PersonalQr from "../components/PersonalQr";
+import BlurryModalYesOrNo from "../components/BlurModalYesOrNo"
 
 const Profile = () => {
     const { setIsLoggedIn, setUser, user, setToken, setId } = useGlobalContext();
     const [showQr, setShowQr] = useState()
+    const [logoutModal, setLogoutModal] = useState(false)
 
     const logout = () => {
-        console.log('logging user out')
-        setToken(null)
-        setIsLoggedIn(false);
-        setUser(null)
-        setId(null)
-        router.replace('/sign-in')
+        try {
+            console.log('logging out')
+            setLogoutModal(false)
+            setToken(null);
+            setIsLoggedIn(false);
+            setUser(null);
+            setId(null);
+            router.replace('/sign-in');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     };
-
+    
     return (
         <>
             {showQr && (
@@ -40,7 +47,7 @@ const Profile = () => {
                             <View>
                                 <TouchableOpacity
                                     className='w-full items-end mb-24'
-                                    onPress={logout}
+                                    onPress={() => setLogoutModal(true)}
                                 >
                                     <Image
                                         source={icons.logout}
@@ -59,6 +66,18 @@ const Profile = () => {
                         />
                     </ScrollView>
                 </SafeAreaView>
+            )}
+            {logoutModal && (
+                <BlurryModalYesOrNo
+                    visible={logoutModal}
+                    // onRequestClose={() => setLogoutModal(false)}
+                    title='Logout?'
+                    affirmativeButtonTitle='Yes'
+                    negativeButtonTitle='No'
+                    onYes={() => logout()}
+                    onNo={() => setLogoutModal(false)}
+                    styles='h-[200px] justify-center'
+                />
             )}
         </>
     );
