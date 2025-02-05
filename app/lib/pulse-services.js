@@ -15,13 +15,13 @@ export const register = async (RegisterRequest) => {
 
 export const authenticate = async (AuthenticateRequest) => {
     try {
-        return await apiClient.post(`/auth/authenticate`, AuthenticateRequest);
+        const response = await apiClient.post(`/auth/authenticate`, AuthenticateRequest);
+        return response.data; // Ensure we return response.data
     } catch (error) {
-        // need to use some type of loggin system for this
+        console.error("Authentication error:", error); // Log the error for debugging
+        throw error; // Rethrow the error to be caught in useApi
     }
-
-    // return true; // -> this is to force correct credentials for during development
-}
+};
 
 export const getUser = async (id, token) => {
     try {

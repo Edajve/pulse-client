@@ -10,6 +10,8 @@ import ResetPasswordInput from "../components/ResetPasswordInput";
 import PasswordStrengthEvaluator from '../utilities/PasswordStrengthEvaluator';
 import DropDown from "../components/DropDown";
 import { resetPassword } from '../lib/pulse-services';
+import useApi from '../hooks/useApi';
+import LoadingModal from '../components/LoadingModal';
 
 const ResetPassword = () => {
     const [popUp, setPopUp] = useState(false)
@@ -29,15 +31,20 @@ const ResetPassword = () => {
         setPopUp(false)
     }
 
+    const { loading, data, error, refetch } = useApi(resetPassword);
+
     const onResetPassword = async () => {
 
         setIsSubmitting(true);
 
         try {
             
-            //before attempting to reset password, check password strength
+            // BEFORE attempting to reset password, check password strength
             var passwordStrength = evaluator.validatePassword(resetPasswordRequest.newPassword).title;
-            const data = await resetPassword(resetPasswordRequest);
+
+
+            // AFTER attempting to reset password, show additional errors
+            await refetch(resetPasswordRequest);
             
             if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
                 setPopUp(true);
@@ -45,7 +52,6 @@ const ResetPassword = () => {
             } else if (passwordStrength === "Weak Password") {
                 setPopUp(true);
                 setPopUpMesage("Password needs to meet strength requirement");
-
             } else if (data === 'Successfully reset password') {
                 setPopUp(true);
                 setPopUpMesage("Password reset successfully");
@@ -65,12 +71,16 @@ const ResetPassword = () => {
             console.log('Error occurred:', error);
         } finally {
             setIsSubmitting(false);
+            setPopUp(false);
         }
     };
 
     return (
         <SafeAreaView className="h-full bg-primary">
             <ScrollView>
+                {loading && (
+                    <LoadingModal />
+                )}
                 {popUp &&
                     < BlurModalOk
                         visible={popUp}

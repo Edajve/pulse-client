@@ -12,7 +12,7 @@ import useApi from "../hooks/useApi";
 
 const SignIn = () => {
     const { setToken, setId, setIsLoggedIn } = useGlobalContext();
-    const [isSubmitting, setIsSubmitting] = useState(false)
+
     const [modalForIncorrectCredentials, setModalForIncorrectCredentials] = useState(false);
     const [modalForEmptyFields, setModalForEmptyFields] = useState(false);
     const [form, setForm] = useState({
@@ -29,25 +29,27 @@ const SignIn = () => {
     };
 
     const submit = async () => {
-    if (!form.email || !form.password) {
-        setModalForEmptyFields(true);
-        return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-        await refetch(form); // Pass the form data here
-        setToken(data.data.token.token);
-        setId(data.data.id);
-        setIsLoggedIn(true);
-        router.replace('/home');
-    } catch (error) {
-        setModalForIncorrectCredentials(true);
-    } finally {
-        setIsSubmitting(false);
-    }
-};
+        if (!form.email || !form.password) {
+            setModalForEmptyFields(true);
+            return;
+        }
+    
+        try {
+            const result = await refetch(form); // Now we can capture the result here
+            console.log(result); // Log the result of the API call
+            setToken(result.data.token.token); // Assuming result structure
+            setId(result.data.id);
+            setIsLoggedIn(true);
+            router.replace('/home');
+        } catch (error) {
+            console.log(error); // Log the error
+            setModalForIncorrectCredentials(true);
+        } finally {
+            // These can stay here or be removed based on your modal handling logic
+            setModalForIncorrectCredentials(false);
+            setModalForEmptyFields(false);
+        }
+    };
 
     return (
         <SafeAreaView className="bg-primary h-full">
@@ -98,7 +100,7 @@ const SignIn = () => {
                         title='Log In'
                         handlePress={submit}
                         containerStyle='mt-7'
-                        isLoading={isSubmitting}
+                        isLoading={loading}
                     />
 
                     {loading && (

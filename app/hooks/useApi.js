@@ -11,8 +11,10 @@ const useApi = (apiFunction) => {
         try {
             const result = await apiFunction(params);
             setData(result);
+            return result; // Return result here
         } catch (err) {
             setError(err);
+            throw err; // Throw error to be handled in submit
         } finally {
             setLoading(false);
         }
