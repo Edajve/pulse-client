@@ -19,7 +19,6 @@ export const authenticate = async (AuthenticateRequest) => {
         const response = await apiClient.post(`/auth/authenticate`, AuthenticateRequest);
         return response.data; // Ensure we return response.data
     } catch (error) {
-        console.error("Authentication error:", error); // Log the error for debugging
         throw error; // Rethrow the error to be caught in useApi
     }
 };
