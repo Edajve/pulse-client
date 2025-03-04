@@ -29,25 +29,21 @@ const SignIn = () => {
     };
 
     const submit = async () => {
+    
         if (!form.email || !form.password) {
             setModalForEmptyFields(true);
             return;
         }
     
         try {
-            const result = await refetch(form); // Now we can capture the result here
-            console.log(result); // Log the result of the API call
-            setToken(result.data.token.token); // Assuming result structure
-            setId(result.data.id);
+            const result = await refetch(form);
+    
+            setToken(result.token.token);
+            setId(result.id);
             setIsLoggedIn(true);
             router.replace('/home');
         } catch (error) {
-            console.log(error); // Log the error
             setModalForIncorrectCredentials(true);
-        } finally {
-            // These can stay here or be removed based on your modal handling logic
-            setModalForIncorrectCredentials(false);
-            setModalForEmptyFields(false);
         }
     };
 

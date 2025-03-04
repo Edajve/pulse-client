@@ -8,13 +8,14 @@ const useApi = (apiFunction) => {
     const fetchData = useCallback(async (params) => {
         setLoading(true);
         setError(null);
+
         try {
             const result = await apiFunction(params);
             setData(result);
-            return result; // Return result here
+            return result;
         } catch (err) {
             setError(err);
-            throw err; // Throw error to be handled in submit
+            throw err; 
         } finally {
             setLoading(false);
         }
