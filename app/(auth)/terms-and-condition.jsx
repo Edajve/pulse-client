@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
 
                 await register(signUpFormData);
 
-                router.replace('/sign-in')
+                router.replace('/home')
 
             } else if (terms == false) {
 
@@ -43,7 +43,7 @@ const TermsAndConditions = () => {
 
     return (
         <SafeAreaView className='w-full h-full bg-primary px-5 '>
-            <TouchableOpacity className='pl-5 mt-7' onPress={() => router.push("/sign-up")}>
+            <TouchableOpacity className='pl-5 mt-7' onPress={() => router.back()}>
                     <Image
                         className='w-[25px] h-[25px]'
                         source={icons.leftArrow}
