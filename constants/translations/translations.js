@@ -1,9 +1,20 @@
 const translations = {
     en: {
-      header: { welcome: "Welcome to our website!" },
-      buttons: { logout: "Logout" },
+      name: { name: "Qssense" },
+      buttons: { 
+        logout: "Logout",
+        login: "Log In",
+        continue: "Continue",
+        scanQrCode: "Scan QR Code"
+       },
       errors: { network: "Network error. Please try again" },
       password: {
+        text: {
+            forgotPassword: "Forgot Password?",
+            resetPassword: "Reset Password",
+            dontHaveAnAccount: "Don't have an account?",
+            signUp: "Sign Up"
+        },
         status: {
             weak: "Weak Password",
             meetStrength: "Password needs to meet strength requirement"
@@ -18,6 +29,27 @@ const translations = {
         successful: {
             successfulReset: "Successfully reset password"
         }
+      },
+      text: {
+        home: "Home",
+        create: "Create",
+        profile: "Profile",
+        settings: "Settings",
+        createConsentDocument: "Create Consent Document",
+        logInText: "Log in to Qssense",
+        email: "Email",
+        password: "Password"
+      },
+      consent: {
+        activeConsent: "Active Consent",
+        noActiveContracts: "No Active Contracts",
+        nothingToShow: "Nothing to Show",
+        inProgressContracts: "In Progress Contracts",
+        consentHistory: "Consent History",
+        searchFilterText: "Enter user of other participants",
+        button: {
+          createConsentContract: "Create Consent Contract"
+        }
       }
     },
     fr: {
@@ -30,8 +62,5 @@ const translations = {
   const getTranslation = (key, lang = "en") => {
     return key.split(".").reduce((obj, k) => (obj && obj[k] ? obj[k] : key), translations[lang]);
   };
-  
-  // Usage
-  console.log(getTranslation("buttons.logout", "fr")); // Output: Se déconnecter
 
   export { translations, getTranslation };

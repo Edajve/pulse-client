@@ -4,6 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
 import QrCamera from "../components/QrCamera";
+import { getTranslation } from "../../constants/translations/translations";
 
 const Create = () => {
     const [showCamera, setShowCamera] = useState(false);
@@ -35,7 +36,7 @@ const Create = () => {
                 <SafeAreaView className="bg-primary h-full">
                     <ScrollView className="px-4 my-6">
                         <Text className='text-4xl text-gray-200 font-psemibold'>
-                            Create Consent Document
+                            {getTranslation('text.createConsentDocument')}
                         </Text>
                         <Text className='text-gray-200 text-base font-pregular text-1xl mt-[32px]'>
                             This mobile application facilitates the process of entering into consent contracts with other individuals. Users can initiate these contracts, ensuring mutual agreement and understanding between all parties involved. To commence the consent contract, both parties are required to input the same contract number along with their respective passwords, prioritizing everyone's safety and security.
@@ -48,7 +49,7 @@ const Create = () => {
                         </Text>
                         <View>
                             <CustomButton
-                                title="Scan QR Code"
+                                title={getTranslation('buttons.scanQrCode')}
                                 handlePress={openCamera}
                                 containerStyle="mt-10"
                             />

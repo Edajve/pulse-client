@@ -2,6 +2,7 @@ import {Alert, Image, TextInput, TouchableOpacity, View} from "react-native";
 import {useState} from "react";
 import icons from "../../constants/icons";
 import {router, usePathname} from "expo-router";
+import { getTranslation } from "../../constants/translations/translations";
 
 const SearchInput = ({initialQuery}) => {
     const pathname = usePathname()
@@ -24,7 +25,7 @@ const SearchInput = ({initialQuery}) => {
             <TextInput
                 className='text-base text-white flex-1 font-pregular'
                 // value={query}
-                placeholder='Enter user of other participants'
+                placeholder={getTranslation('consent.searchFilterText')}
                 placeholderText="#CDCDE0"
                 onChangeText={(e) => setQuery(e)}
             />

@@ -9,6 +9,7 @@ import FormField from "../components/FormField";
 import { authenticate } from "../lib/pulse-services";
 import LoadingModal from "../components/LoadingModal";
 import useApi from "../hooks/useApi";
+import { getTranslation } from "../../constants/translations/translations";
 
 const SignIn = () => {
     const { setToken, setId, setIsLoggedIn } = useGlobalContext();
@@ -75,11 +76,11 @@ const SignIn = () => {
             <ScrollView>
                 <View className="w-full justify-center min-h-[80vh] px-4 my-6">
                     <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>
-                        Log in to Pulse
+                        {getTranslation('text.logInText')}
                     </Text>
                     <FormField
                         placeholder={"email"}
-                        title='Email'
+                        title={getTranslation('text.email')}
                         value={form.email}
                         handleChangeText={(e) => setForm({ ...form, email: e })}
                         otherStyles='mt-7'
@@ -87,13 +88,13 @@ const SignIn = () => {
                     />
                     <FormField
                         placeholder={"password"}
-                        title='Password'
+                        title={getTranslation('text.password')}
                         value={form.password}
                         handleChangeText={(e) => setForm({ ...form, password: e })}
                         otherStyles='mt-7'
                     />
                     <CustomButton
-                        title='Log In'
+                        title={getTranslation('buttons.login')}
                         handlePress={submit}
                         containerStyle='mt-7'
                         isLoading={loading}
@@ -106,26 +107,26 @@ const SignIn = () => {
                         <Text
                             className='text-lg text-gray-100 font-pregular'
                         >
-                            Forgot Password?
+                           {getTranslation('password.text.forgotPassword')}
                         </Text>
                         <Link
                             href='/reset-password'
                             className='text-lg font-semibold text-secondary'
                         >
-                            Reset Password
+                             {getTranslation('password.text.resetPassword')}
                         </Link>
                     </View>
                     <View className='justify-center pt-5 flex-row gap-2'>
                         <Text
                             className='text-lg text-gray-100 font-pregular'
                         >
-                            Don't have an account?
+                              {getTranslation('password.text.dontHaveAnAccount')}
                         </Text>
                         <Link
                             href='/sign-up'
                             className='text-lg font-semibold text-secondary'
                         >
-                            Sign Up
+                             {getTranslation('password.text.signUp')}
                         </Link>
                     </View>
                 </View>

@@ -1,6 +1,7 @@
 import {Image, Text, View} from "react-native";
 import {Tabs} from 'expo-router';
 import tailwindConfig from "../../tailwind.config";
+import { getTranslation } from "../../constants/translations/translations";
 
 import icons from "../../constants/icons"
 // import settings from "../../constants/settings"

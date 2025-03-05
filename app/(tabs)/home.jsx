@@ -7,6 +7,7 @@ import ActiveContracts from '../components/ActiveContracts';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
 import { InProgressContracts, InactiveContracts, activeContracts } from '../lib/pulse-services';
+import { getTranslation } from '../../constants/translations/translations';
 
 // Ignore the warning about VirtualizedLists nested inside ScrollViews
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -81,16 +82,17 @@ const Home = () => {
                 <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefreshAllContracts}
-                />}
+                />
+            }
         >
             <SafeAreaView >
                 <View className='px-2'>
-                    <Text className='text-4xl text-gray-200 font-psemibold'>Home</Text>
+                    <Text className='text-4xl text-gray-200 font-psemibold'>{getTranslation('text.home')}</Text>
                     <SearchInput />
 
                 </View>
                 <View className='px-2 my-6'>
-                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Active Consent</Text>
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>{getTranslation('consent.activeConsent')}</Text>
                     <FlatList
                         data={active}
                         keyExtractor={(contract) => contract.id}
@@ -104,14 +106,14 @@ const Home = () => {
                         )}
                         ListEmptyComponent={() => (
                             <EmptyState
-                                title='No Active Contracts'
-                                subtitle="Nothing to Show"
+                                title={getTranslation('consent.noActiveContracts')}
+                                subtitle={getTranslation('consent.nothingToShow')}
                             />
                         )}
                     />
                 </View>
                 <View className='px-2 my-6'>
-                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>In Progress Consent</Text>
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>{getTranslation('consent.inProgressContracts')}</Text>
                     <FlatList
                         data={inProgress}
                         keyExtractor={(contract) => contract.id}
@@ -125,14 +127,14 @@ const Home = () => {
                         )}
                         ListEmptyComponent={() => (
                             <EmptyState
-                                title='No In Progress Contracts'
-                                subtitle="Nothing to Show"
+                            title={getTranslation('consent.noActiveContracts')}
+                            subtitle={getTranslation('consent.nothingToShow')}
                             />
                         )}
                     />
                 </View>
                 <View className='px-2 my-6'>
-                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>Consent History</Text>
+                    <Text className='text-3xl text-gray-100 font-pregular mt-8 mb-4'>{getTranslation('consent.consentHistory')}</Text>
                 </View>
                 <FlatList
                     data={notActive}
@@ -147,8 +149,8 @@ const Home = () => {
                     )}
                     ListEmptyComponent={() => (
                         <EmptyState
-                            title='No Active Contracts'
-                            subtitle="Nothing to Show"
+                        title={getTranslation('consent.noActiveContracts')}
+                        subtitle={getTranslation('consent.nothingToShow')}
                         />
                     )}
                 />
