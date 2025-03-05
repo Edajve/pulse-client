@@ -23,11 +23,11 @@ const Profile = () => {
     };
 
     const showQrCode = () => {
-        setLoading(true); // ✅ Set loading state to true
+        setLoading(true);
 
         setTimeout(() => {
-            setLoading(false); // ✅ Hide loading after 200ms
-            setShowQr(true); // ✅ Show QR code after delay
+            setLoading(false); // Hide loading after 200ms
+            setShowQr(true);
         }, 200);
     }
 
@@ -38,12 +38,8 @@ const Profile = () => {
                     closeQr={() => setShowQr(false)}
                 />
             )}
-
             
-            {loading && (
-                <LoadingModal/>
-            )
-            }
+            {loading && ( <LoadingModal/> )}
 
             {!showQr && (
                 <SafeAreaView className='bg-primary h-full'>

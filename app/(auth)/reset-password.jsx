@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
@@ -12,10 +12,11 @@ import DropDown from "../components/DropDown";
 import { resetPassword } from '../lib/pulse-services';
 import useApi from '../hooks/useApi';
 import LoadingModal from '../components/LoadingModal';
+import { getTranslation } from '../../constants/translations/translations';
 
 const ResetPassword = () => {
     const [popUp, setPopUp] = useState(false)
-    const [popUpMessage, setPopUpMesage] = useState("")
+    const [popUpMessage, setPopUpMessage] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false);
     const evaluator = new PasswordStrengthEvaluator()
     const [resetPasswordRequest, setResetPasswordRequest] = useState({
@@ -27,53 +28,64 @@ const ResetPassword = () => {
     });
 
     const closePopUp = () => {
-        setPopUpMesage("")
-        setPopUp(false)
-    }
+        console.log("🔻 closePopUp() was called!");
+        setTimeout(() => {
+            setPopUp(false);
+            setPopUpMessage("");
+            console.log("🛑 Pop-up was manually closed.");
+        }, 2000); // Delay for debugging
+    };
 
     const { loading, data, error, refetch } = useApi(resetPassword);
 
     const onResetPassword = async () => {
-
         setIsSubmitting(true);
-
+    
         try {
-            
-            // BEFORE attempting to reset password, check password strength
             var passwordStrength = evaluator.validatePassword(resetPasswordRequest.newPassword).title;
-
-
-            // AFTER attempting to reset password, show additional errors
-            await refetch(resetPasswordRequest);
-            
+    
+    
+            const response = await refetch(resetPasswordRequest);
+            console.log("Response from refetch:", response); 
+    
+            if (!response) {
+                setPopUp(true);
+                setPopUpMessage("An error occurred. Please try again.");
+                return;
+            }
+    
             if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
                 setPopUp(true);
-                setPopUpMesage("Both new password and confirming new password does not match");
-            } else if (passwordStrength === "Weak Password") {
+                setPopUpMessage(getTranslation("password.reset.OldAndNewPasswordDoesNotMatch"));
+            } else if (passwordStrength === getTranslation("password.status.weak")) {
                 setPopUp(true);
-                setPopUpMesage("Password needs to meet strength requirement");
-            } else if (data === 'Successfully reset password') {
+                setPopUpMessage(getTranslation("password.status.meetStrength"));
+            } else if (response === getTranslation("password.successful.successfulReset")) {
                 setPopUp(true);
-                setPopUpMesage("Password reset successfully");
-                router.push('/sign-in');
-            } else if (data === 'Invalid credentials') {
+                setPopUpMessage(getTranslation("password.successful.successfulReset"));
+                setTimeout(() => router.push("/sign-in"), 2000);
+            } else if (response === getTranslation("password.reset.invalidCredentials")) {
                 setPopUp(true);
-                setPopUpMesage("Invalid credentials");
-            } else if (data === 'Security Question is incorrect') {
+                setPopUpMessage(getTranslation("password.reset.invalidCredentials"));
+            } else if (response === getTranslation("password.reset.incorrectQuestion")) {
                 setPopUp(true);
-                setPopUpMesage("Security Question is incorrect");
-            } else if (data === 'Security Answer is incorrect') {
+                setPopUpMessage(getTranslation("password.reset.incorrectQuestion"));
+            } else if (response === getTranslation("password.reset.incorrectAnswer")) {
                 setPopUp(true);
-                setPopUpMesage("Security Answer is incorrect");
+                setPopUpMessage(getTranslation("password.reset.incorrectAnswer"));
+            } else {
+                setPopUp(true);
+                setPopUpMessage("An unexpected error occurred. Please try again.");
             }
-        
+    
         } catch (error) {
-            console.log('Error occurred:', error);
+            console.log("Error during reset:", error);
+            setPopUp(true);
+            setPopUpMessage(getTranslation("password.reset.couldNotBeReset"));
         } finally {
             setIsSubmitting(false);
-            setPopUp(false);
         }
-    };
+    }
 
     return (
         <SafeAreaView className="h-full bg-primary">
@@ -82,13 +94,13 @@ const ResetPassword = () => {
                     <LoadingModal />
                 )}
                 {popUp &&
-                    < BlurModalOk
-                        visible={popUp}
-                        onRequestClose={() => closePopUp(false)}
-                        title={popUpMessage}
-                        affirmativeButtonTitle='OK'
-                        onYes={() => closePopUp(false)}
-                    />
+                   <BlurModalOk
+                   visible={popUp}
+                   onRequestClose={() => closePopUp()}
+                   title={popUpMessage}
+                   affirmativeButtonTitle='OK'
+                   onYes={() => closePopUp()}
+               />
                 }
                 <TouchableOpacity className='pl-5 mt-7' onPress={() => router.back()}>
                     <Image
@@ -107,7 +119,7 @@ const ResetPassword = () => {
                         <FormField
                             placeholder={"Email"}
                             title='Email'
-                            value={setResetPasswordRequest.email}
+                            value={resetPasswordRequest.email}
                             handleChangeText={(e) => setResetPasswordRequest({ ...resetPasswordRequest, email: e })}
                             keyboardType='text'
                         />
