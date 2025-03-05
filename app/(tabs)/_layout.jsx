@@ -1,12 +1,13 @@
 import {Image, Text, View} from "react-native";
 import {Tabs} from 'expo-router';
+import tailwindConfig from "../../tailwind.config";
 
 import icons from "../../constants/icons"
 // import settings from "../../constants/settings"
 
 const TabIcon = ({icon, color, name, focused}) => {
     return (
-        <View className='items-center justify-center gap-2'>
+        <View className='items-center justify-center gap-2 w-20'>
             <Image
                 source={icon}
                 resizeMode="contain"
@@ -23,19 +24,22 @@ const TabIcon = ({icon, color, name, focused}) => {
     );
 };
 
+// look below, you see how im hardcoding these hex values, but in the tailwind confix i have some of the defined?
+// can you replace these hardocded with the values that are matching in the tailwind file
+
 const TabsLayout = () => {
     return (
         <>
             <Tabs
                 screenOptions={{
-                    tabBarShowLabel: false
-                    , tabBarActiveTintColor: '#FFA001'
-                    , tabBarInactiveTintColor: '#CDCDE0'
-                    , tabBarStyle: {
-                        backgroundColor: '#000033'
-                        , borderTopWidth: 1
-                        , borderTopColor: "#000033"
-                        , height: 84
+                    tabBarShowLabel: false,
+                    tabBarActiveTintColor: tailwindConfig.theme.extend.colors.secondary.DEFAULT,
+                    tabBarInactiveTintColor: tailwindConfig.theme.extend.colors.gray[100],
+                    tabBarStyle: {
+                        backgroundColor: tailwindConfig.theme.extend.colors.primary,
+                        borderTopWidth: 1,
+                        borderTopColor: tailwindConfig.theme.extend.colors.primary,
+                        height: 84,
                     }
                 }}
             >

@@ -12,7 +12,6 @@ import icons from "../../constants/icons";
 import { router } from 'expo-router';
 
 const Settings = () => {
-    const navigation = useNavigation();
 
     const SettingsOption = ({ title, route }) => {
         return (
