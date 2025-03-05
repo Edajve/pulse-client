@@ -7,6 +7,7 @@ import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import PersonalQr from "../components/PersonalQr";
 import LoadingModal from '../components/LoadingModal';
+import { getTranslation } from '../../constants/translations/translations';
 
 const Profile = () => {
     const { setIsLoggedIn, setUser, user, setToken, setId } = useGlobalContext();
@@ -47,7 +48,7 @@ const Profile = () => {
                         <View className='flex-row justify-between'>
                             <View className='mb-24'>
                                 <Text className='text-4xl text-gray-200 font-psemibold'>
-                                    Hey {user?.firstName}
+                                    {getTranslation('text.hey')} {user?.firstName}
                                 </Text>
                             </View>
                             <View>
@@ -64,10 +65,10 @@ const Profile = () => {
                             </View>
                         </View>
                         <Text className='text-gray-200 text-base font-pregular text-1xl text-center mb-[50]'>
-                            This mobile application offers users a personalized QR code for identity verification. Users are cautioned against scanning codes of individuals they aren't consenting to engage with in a contractual agreement. When scanning, users must authenticate their identity with a password, ensuring informed and deliberate consent in the contract process.
+                            {getTranslation('longText.ProfileQrVerbage')}
                         </Text>
                         <CustomButton
-                            title='Show Personal QR-Code'
+                            title= {getTranslation('text.showQrCode')}
                             handlePress={showQrCode}
                         />
                     </ScrollView>
