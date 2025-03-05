@@ -18,6 +18,7 @@ const ResetPassword = () => {
     const [popUp, setPopUp] = useState(false)
     const [popUpMessage, setPopUpMessage] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [loadingSpinner, setLoadingSpinner] = useState(false)
     const evaluator = new PasswordStrengthEvaluator()
     const [resetPasswordRequest, setResetPasswordRequest] = useState({
         email: ""
@@ -28,17 +29,14 @@ const ResetPassword = () => {
     });
 
     const closePopUp = () => {
-        console.log("🔻 closePopUp() was called!");
-        setTimeout(() => {
             setPopUp(false);
             setPopUpMessage("");
-            console.log("🛑 Pop-up was manually closed.");
-        }, 2000); // Delay for debugging
     };
 
     const { loading, data, error, refetch } = useApi(resetPassword);
 
     const onResetPassword = async () => {
+        setLoadingSpinner(loading)
         setIsSubmitting(true);
     
         try {
@@ -49,18 +47,21 @@ const ResetPassword = () => {
             console.log("Response from refetch:", response); 
     
             if (!response) {
+                setLoadingSpinner(false)
                 setPopUp(true);
                 setPopUpMessage("An error occurred. Please try again.");
                 return;
             }
     
+            setLoadingSpinner(false)
+
             if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
                 setPopUp(true);
                 setPopUpMessage(getTranslation("password.reset.OldAndNewPasswordDoesNotMatch"));
             } else if (passwordStrength === getTranslation("password.status.weak")) {
                 setPopUp(true);
                 setPopUpMessage(getTranslation("password.status.meetStrength"));
-            } else if (response === getTranslation("password.successful.successfulReset")) {
+            } else if (response === 'verified') {
                 setPopUp(true);
                 setPopUpMessage(getTranslation("password.successful.successfulReset"));
                 setTimeout(() => router.push("/sign-in"), 2000);
@@ -90,9 +91,7 @@ const ResetPassword = () => {
     return (
         <SafeAreaView className="h-full bg-primary">
             <ScrollView>
-                {loading && (
-                    <LoadingModal />
-                )}
+            {loadingSpinner && <LoadingModal />}
                 {popUp &&
                    <BlurModalOk
                    visible={popUp}
@@ -170,7 +169,7 @@ const ResetPassword = () => {
                     </View>
                     <CustomButton
                         title='Reset Password'
-                        handlePress={() => onResetPassword()}
+                        handlePress={onResetPassword}
                         containerStyle='mt-7 mx-4 mb-[60px]'
                         isLoading={isSubmitting}
 

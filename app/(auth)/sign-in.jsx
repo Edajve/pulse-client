@@ -16,6 +16,7 @@ const SignIn = () => {
 
     const [modalForIncorrectCredentials, setModalForIncorrectCredentials] = useState(false);
     const [modalForEmptyFields, setModalForEmptyFields] = useState(false);
+    const [loadingSpinner, setLoadingSpinner] = useState(false)
     const [form, setForm] = useState({
         email: ''
         , password: ''
@@ -30,15 +31,18 @@ const SignIn = () => {
     };
 
     const submit = async () => {
+
+        setLoadingSpinner(loading)
     
         if (!form.email || !form.password) {
+            setLoadingSpinner(false)
             setModalForEmptyFields(true);
             return;
         }
     
         try {
             const result = await refetch(form);
-    
+            setLoadingSpinner(false)
             setToken(result.token.token);
             setId(result.id);
             setIsLoggedIn(true);
@@ -100,7 +104,7 @@ const SignIn = () => {
                         isLoading={loading}
                     />
 
-                    {loading && (
+                    {loadingSpinner && (
                         <LoadingModal />
                     )}
                     <View className='justify-center pt-5 flex-row gap-2 mt-2'>

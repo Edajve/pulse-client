@@ -8,11 +8,15 @@ import DropDown from "../components/DropDown";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import icons from '../../constants/icons';
 import PasswordStrengthEvaluator from '../utilities/PasswordStrengthEvaluator';
+import BlurModalOk from '../components/BlurModalOk';
+import { getTranslation } from '../../constants/translations/translations';
 
 const SignUp = () => {
     const evaluator = new PasswordStrengthEvaluator()
     const { setSignUpFormData } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [popUp, setPopUp] = useState(false)
+    const [popUpMessage, setPopUpMessage] = useState("")
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -41,7 +45,8 @@ const SignUp = () => {
             router.replace('/terms-and-condition');
 
         } catch (error) {
-            Alert.alert('Error', error.message || 'Something went wrong');
+            // replace with better error mechanism
+            // Alert.alert('Error', error.message || 'Something went wrong');
         } finally {
             setIsSubmitting(false);
         }
@@ -50,14 +55,20 @@ const SignUp = () => {
     function checkSignInFields() {
         // Check if all required fields are populated
         if (!form.firstName || !form.lastName || !form.email || !form.password) {
-            Alert.alert('Error', 'Please fill in all the fields');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.fillAllFields'));
+
             return false;
         }
 
         // Check if email is in the correct format
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailPattern.test(form.email)) {
-            Alert.alert('Email Error', 'Please enter a valid email address');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.enterValidEmail'));
+            
             return false;
         }
 
@@ -72,20 +83,27 @@ const SignUp = () => {
                 '- At least one symbol required\n' +
                 '- At least one number required'
               );
+
+            // setPopUp(false);
+            // setPopUpMessage("Please fill in all the fields");
             return false;
         
         }
 
         // Check if age and date of birth are valid
         if (!form.dateOfBirth) {
-            Alert.alert("Please Fill in Date of Birth", "Date of Birth Field is not populated");
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.DoBNotPopulated'));
             return false;
         }
 
         // is DoB in correct formatting? MM-DD-YYYY
         const datePattern = /^(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])-(19|20)\d{2}$/;
         if (!datePattern.test(form.dateOfBirth)) {
-            Alert.alert('Date Of Birth Incorrect format', 'The correct format is MM-DD-YYYY');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.correctDobFormat'));
             return false;
         }
 
@@ -97,7 +115,9 @@ const SignUp = () => {
         const ageInYears = ageDifference / (1000 * 60 * 60 * 24 * 365);
 
         if (ageInYears < 18) {
-            Alert.alert('Age Error', 'You have to be 18+');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.eighteenOrOlder'));
             return false;
         }
 
@@ -108,36 +128,63 @@ const SignUp = () => {
         const isSecurityAnswerEmpty = !form.securityAnswer
 
         if (isSexDropdownEmpty && isSecurityQuestionDropdownEmpty && isCountryEmpty) {
-            Alert.alert('Dropdown Errors', 'All DropDowns need to be Populated');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.allDropdownsPopulated'));
+
             return false;
         }
 
         if (isSexDropdownEmpty) {
-            Alert.alert('Dropdown Error', 'Please populate the Sex Dropdown');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.populateSexDropdown'));
+
             return false;
         }
 
         if (isSecurityQuestionDropdownEmpty) {
-            Alert.alert('Dropdown Error', 'Please populate the Security Question Dropdown');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.populateSecurityQuestion'));
             return false;
         }
 
         if (isCountryEmpty) {
-            Alert.alert('Dropdown Error', 'Please populate the Country/Region Dropdown');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.populateCountry'));
             return false;
         }
 
         if (isSecurityAnswerEmpty) {
-            Alert.alert('Security Answer Error', 'Please answer the Security Answer');
+
+            setPopUp(true);
+            setPopUpMessage(getTranslation('signUp.populateSecurityAnswer'));
             return false;
         }
 
         return true;
     }
 
+    const closePopUp = () => {
+        setPopUp(false);
+        setPopUpMessage("");
+    };
+
     return (
+    <>
+        {popUp &&
+                   <BlurModalOk
+                   visible={popUp}
+                   onRequestClose={() => closePopUp()}
+                   title={popUpMessage}
+                   affirmativeButtonTitle='OK'
+                   onYes={() => closePopUp()}
+               />}
         <SafeAreaView className="bg-primary h-full">
             <ScrollView>
+                
                 <View className='mt-4 mb-9'>
                     <TouchableOpacity onPress={() => router.back()}>
                         <Image
@@ -149,7 +196,7 @@ const SignUp = () => {
                 </View>
                 <View className="w-full justify-center min-h-[80vh] px-4 my-6">
                     <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>
-                        Sign Up to Pulse
+                       {getTranslation('text.signIntoQsense')}
                     </Text>
                     <FormField
                         placeholder={"First Name"}
@@ -237,18 +284,19 @@ const SignUp = () => {
                         <Text
                             className='text-lg text-gray-100 font-pregular'
                         >
-                            Have an account already?
+                           {getTranslation('password.text.alreadyHaveAnAccount')}
                         </Text>
                         <Link
                             href='/sign-in'
                             className='text-lg font-semibold text-secondary'
                         >
-                            Sign In
+                            {getTranslation('buttons.login')}
                         </Link>
                     </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
+        </>
     );
 };
 
