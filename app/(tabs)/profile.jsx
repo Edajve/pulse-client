@@ -6,10 +6,12 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import PersonalQr from "../components/PersonalQr";
+import LoadingModal from '../components/LoadingModal';
 
 const Profile = () => {
     const { setIsLoggedIn, setUser, user, setToken, setId } = useGlobalContext();
     const [showQr, setShowQr] = useState()
+    const [loading, setLoading] = useState(null)
 
     const logout = () => {
         console.log('logging user out')
@@ -20,6 +22,15 @@ const Profile = () => {
         router.replace('/sign-in')
     };
 
+    const showQrCode = () => {
+        setLoading(true); // ✅ Set loading state to true
+
+        setTimeout(() => {
+            setLoading(false); // ✅ Hide loading after 200ms
+            setShowQr(true); // ✅ Show QR code after delay
+        }, 200);
+    }
+
     return (
         <>
             {showQr && (
@@ -27,6 +38,12 @@ const Profile = () => {
                     closeQr={() => setShowQr(false)}
                 />
             )}
+
+            
+            {loading && (
+                <LoadingModal/>
+            )
+            }
 
             {!showQr && (
                 <SafeAreaView className='bg-primary h-full'>
@@ -55,7 +72,7 @@ const Profile = () => {
                         </Text>
                         <CustomButton
                             title='Show Personal QR-Code'
-                            handlePress={() => setShowQr(true)}
+                            handlePress={showQrCode}
                         />
                     </ScrollView>
                 </SafeAreaView>
