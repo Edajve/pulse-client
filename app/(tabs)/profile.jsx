@@ -48,7 +48,7 @@ const Profile = () => {
                         <View className='flex-row justify-between'>
                             <View className='mb-24'>
                                 <Text className='text-4xl text-gray-200 font-psemibold'>
-                                    {getTranslation('text.hey')} {user?.firstName}
+                                    Hey {user?.firstName}
                                 </Text>
                             </View>
                             <View>

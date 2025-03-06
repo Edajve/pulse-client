@@ -8,6 +8,8 @@ import CustomButton from "../components/CustomButton";
 import FormField from "../components/FormField";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { createOrUpdateContract } from "../lib/pulse-services";
+import { getTranslation } from "../../constants/translations/translations";
+import BlurModalOk from "../components/BlurModalOk";
 
 const PasswordValidate = () => {
 
@@ -18,6 +20,8 @@ const PasswordValidate = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { scannieId, user, token } = useGlobalContext();
+  const [popUpMessage, setPopUpMessage] = useState("")
+  const [popUp, setPopUp] = useState(false)
 
   const handleEnrollInConsent = async () => {
     if (!checkSignInFields()) return;
@@ -25,36 +29,50 @@ const PasswordValidate = () => {
     setIsSubmitting(true);
 
     const payload = {
-      contractNumber: parseInt(form.consentNumber),
-      usersPassword: String(form.password).toLowerCase(),
-      scannerUserId: parseInt(user.id),
-      scannieUserId: parseInt(scannieId.scannieId)
+        contractNumber: parseInt(form.consentNumber),
+        usersPassword: String(form.password),
+        scannerUserId: parseInt(user.id),
+        scannieUserId: parseInt(scannieId.scannieId),
     };
 
-    await createOrUpdateContract(payload, token)
-      .then((response) => {
-        router.replace('/post-contract-authentication')
-      })
-      .catch((err) => {
-        if (err) {
-          Alert.alert('Issue occured while trying to connect to consent number: ' + form.consentNumber, err);
-        }
-      })
-      .finally(() => {
-        setIsSubmitting(false)
-      })
+    try {
+        const response = await createOrUpdateContract(payload, token);
 
-  };
+        if (!response || !response.status) {
+            throw new Error("Unexpected response format");
+        }
+
+        if (response.status >= 400) {
+            // Get the error message from the backend response body
+            const errorMessage = response.data || "An unknown error occurred.";
+            setPopUpMessage(errorMessage);
+            setPopUp(true);
+        } else {
+            router.replace('/post-contract-authentication');
+        }
+    } catch (err) {
+
+        setPopUpMessage(getTranslation('text.issueWhileConsenting'));
+        setPopUp(true);
+    } finally {
+        setIsSubmitting(false);
+    }
+};
 
   const checkSignInFields = () => {
+
     // Are all fields not null
     if (!form.password || !form.consentNumber) {
-      Alert.alert('Error', 'Please fill in all the fields');
+
+      setPopUpMessage(getTranslation('signUp.fillAllFields'));
+      setPopUp(true);
       return false;
     }
 
     if (!isOnlyNumbers(form.consentNumber)) {
-      Alert.alert('Incorrect Consent Number', 'Consent Number Should Only Contain Numbers');
+
+      setPopUpMessage(getTranslation('text.onlyConsentNumbers'));
+      setPopUp(true);
       return false;
     }
 
@@ -65,7 +83,22 @@ const PasswordValidate = () => {
     return /^\d+$/.test(text);
   };
 
+  const closePopUp = () => {
+    setPopUp(false);
+    setPopUpMessage("");
+};
+
   return (
+    <>
+    {popUp && (
+            <BlurModalOk
+            visible={popUp}
+            onRequestClose={() => closePopUp()}
+            title={popUpMessage}
+            affirmativeButtonTitle='OK'
+            onYes={() => closePopUp()} 
+            />
+        )}
     <ScrollView className="bg-primary h-full w-full">
       <GestureHandlerRootView >
         <SafeAreaView >
@@ -84,7 +117,7 @@ const PasswordValidate = () => {
 
           <View className="w-full justify-center min-h-[60vh] px-4 my-6">
             <Text className="text-base text-gray-200 font-medium mb-[50px] text-3xl font-pmedium">
-              Authorize into Consent
+              {getTranslation('text.authorizeIntoConsent')}
             </Text>
             <FormField
               title='Consent Number - Make sure you and the other participant put in the same consent number to authorize into contract'
@@ -108,7 +141,8 @@ const PasswordValidate = () => {
         </SafeAreaView>
       </GestureHandlerRootView>
     </ScrollView>
-  );
+    </>
+    );
 };
 
 export default PasswordValidate;

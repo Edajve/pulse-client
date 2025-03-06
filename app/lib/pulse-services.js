@@ -9,7 +9,6 @@ export const register = async (RegisterRequest) => {
     try {
         return await apiClient.post(`/auth/register`, RegisterRequest);
     } catch (error) {
-        console.error('Register error:', error);
         throw error;
     }
 }
@@ -73,23 +72,21 @@ export const isUsersQrValid = async (userID, uuid, token) => {
 }
 
 export const createOrUpdateContract = async (payload, token) => {
-
-    await apiClient.post(
-        `/contract/create`,
-        payload,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    ).then((response) => {
-        return response.data
-    }).catch((err) => {
-        if (err) {
-            return err
-        }
-    })
-}
+    try {
+        const response = await apiClient.post(
+            `/contract/create`,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        return response; // Ensure the entire response is returned
+    } catch (err) {
+        return err.response || { status: 500, message: "Unknown error" }; // Ensure error response has a status
+    }
+};
 
 export const activeContracts = async (userId, token) => {
     try {
@@ -102,7 +99,7 @@ export const activeContracts = async (userId, token) => {
 
         return response.data;
     } catch (error) {
-        return error;
+
     }
 }
 
@@ -117,7 +114,7 @@ export const InactiveContracts = async (userId, token) => {
 
         return response.data;
     } catch (error) {
-        return error;
+
     }
 }
 
@@ -147,7 +144,7 @@ export const InProgressContracts = async (userId, token) => {
 
         return response.data;
     } catch (error) {
-        return error;
+
     }
 }
 

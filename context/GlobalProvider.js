@@ -46,7 +46,7 @@ const GlobalProvider = ({ children }) => {
         if (token) {
             setIsLoggedIn(true)
         } else { // Means user logged out
-            console.info('users credential cleared...')
+            // console.info('users credential cleared...')
             setUser(null)
             setId(null)
             setIsLoggedIn(false)

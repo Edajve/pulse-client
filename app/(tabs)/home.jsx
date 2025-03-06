@@ -22,16 +22,14 @@ const Home = () => {
     const onRefreshAllContracts = async () => {
         setRefreshing(true);
 
-        try {
+      
             const activeResponse = await activeContracts(id, token);
             const inActiveResponse = await InactiveContracts(id, token);
             const inProgressContracts = await InProgressContracts(id, token);
             setActiveContracts(activeResponse);
             setNotActiveContracts(inActiveResponse);
             inProgress(inProgressContracts);
-        } catch (error) {
-            console.error('Error fetching Active Contracts:', error);
-        }
+       
 
         setRefreshing(false);
     };
