@@ -99,8 +99,8 @@ const ResetPassword = () => {
                    title={popUpMessage}
                    affirmativeButtonTitle='OK'
                    onYes={() => closePopUp()}
-               />
-                }
+               />}
+
                 <TouchableOpacity className='pl-5 mt-7' onPress={() => router.back()}>
                     <Image
                         className='w-[25px] h-[25px]'
@@ -108,11 +108,11 @@ const ResetPassword = () => {
                         resizeMode="contain"
                     />
                 </TouchableOpacity>
-                <Text className='text-white text-base font-psemibold text-3xl justify-center pl-5 mt-7'>Reset
-                    Password</Text>
-                {/*               
-                    <Text className='text-secondary font-psemibold text-1xl mt-7 pl-5'>Password has been
-                        reset</Text> */}
+
+                <Text className='text-white text-base font-psemibold text-3xl justify-center pl-5 mt-7'>
+                    {getTranslation('password.text.resetPassword')}
+                </Text>
+
                 <View className='w-full h-full'>
                     <View className='p-2 mt-10'>
                         <FormField
@@ -172,7 +172,6 @@ const ResetPassword = () => {
                         handlePress={onResetPassword}
                         containerStyle='mt-7 mx-4 mb-[60px]'
                         isLoading={isSubmitting}
-
                     />
                 </View>
 

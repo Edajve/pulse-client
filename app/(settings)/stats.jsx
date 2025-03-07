@@ -21,7 +21,6 @@ const Stats = () => {
         const fetchContractStats = async () => {
             try {
                 const res = await getContractStats(id, token);
-                console.log(res)
                 setcontractStats(res);
             } catch (error) {
                 console.error('Error fetching contract stats:', error);

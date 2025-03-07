@@ -20,6 +20,7 @@ const TermsAndConditions = () => {
             const userAlreadyExistsVerbage = getTranslation("text.userAlreadyExists");
 
             if (terms) {
+                console.lgo("we are here")
                 const response = await register(signUpFormData);
                 if (response.data === userAlreadyExistsVerbage) {
                     setPopUp(true);

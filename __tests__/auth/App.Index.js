@@ -12,7 +12,7 @@ jest.mock('expo-router', () => ({
     router: {
         push: jest.fn(),
     },
-}));
+})); 
 
 describe('Splash component test', () => {
     beforeEach(() => {

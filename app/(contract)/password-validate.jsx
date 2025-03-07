@@ -24,7 +24,7 @@ const PasswordValidate = () => {
   const [popUp, setPopUp] = useState(false)
 
   const handleEnrollInConsent = async () => {
-    if (!checkSignInFields()) return;
+    if (!checkContractFields()) return;
 
     setIsSubmitting(true);
 
@@ -59,7 +59,7 @@ const PasswordValidate = () => {
     }
 };
 
-  const checkSignInFields = () => {
+  const checkContractFields = () => {
 
     // Are all fields not null
     if (!form.password || !form.consentNumber) {

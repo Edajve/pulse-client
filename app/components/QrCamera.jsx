@@ -1,5 +1,5 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
+import { getTranslation } from '../../constants/translations/translations';
 import React, { useRef, useState } from 'react';
 import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +10,6 @@ import { isUsersQrValid } from '../lib/pulse-services';
 const QrCamera = ({closeCamera, isQrValid}) => {
     const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
-    const [hasMediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
     const cameraRef = useRef(null);
     const [scanned, setScanned] = useState(true);
     const {setScannieId} = useGlobalContext();
@@ -48,23 +47,9 @@ const QrCamera = ({closeCamera, isQrValid}) => {
         return (
             <View className="flex-1 justify-center bg-primary">
                 <Text className="text-center text-base text-gray-200 font-medium px-4">
-                    We need your permission to show the camera
+                    {getTranslation('text.cameraPermission')}
                 </Text>
                 <Button onPress={requestPermission} title="Grant permission"/>
-            </View>
-        );
-    }
-
-    // Media library permissions are still loading.
-    if (!hasMediaLibraryPermission) return <View/>;
-
-    if (!hasMediaLibraryPermission.granted) {
-        return (
-            <View className="flex-1 justify-center bg-primary">
-                <Text className="text-center text-base text-gray-200 font-medium px-4">
-                    We need your permission to access the media library
-                </Text>
-                <Button onPress={requestMediaLibraryPermission} title="Grant permission"/>
             </View>
         );
     }
@@ -97,14 +82,14 @@ const QrCamera = ({closeCamera, isQrValid}) => {
                             </View>
                             <View>
                                 <TouchableOpacity className="flex-1 items-center" onPress={toggleCameraFacing}>
-                                    <Text className="text-2xl font-bold text-secondary">Flip</Text>
+                                    <Text className="text-2xl font-bold text-secondary">{getTranslation('buttons.flip')}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                         <View className="absolute bottom-0 left-0 flex-row p-4 w-full justify-center">
                             <TouchableOpacity className="items-center bg-primary p-4 rounded-full" onPress={scanBarcode}>
                                 {scanned && (
-                                    <Text className="text-2xl font-bold text-secondary">Scan QR Code</Text>
+                                    <Text className="text-2xl font-bold text-secondary">{getTranslation('buttons.scanQrCode')}</Text>
                                 )}
                             </TouchableOpacity>
                         </View>

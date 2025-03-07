@@ -8,6 +8,7 @@ import BlurryModalYesOrNo from '../../components/BlurModalYesOrNo';
 import CustomButton from "../../components/CustomButton";
 import { getContract, revokeContract } from '../../lib/pulse-services';
 import BlurryModalInput from '../../components/BlurryModalInput';
+import { getTranslation } from '../../../constants/translations/translations';
 
 const SingleContract = () => {
   const [contract, setContract] = useState(null);
@@ -15,7 +16,7 @@ const SingleContract = () => {
   const [askForReasonModal, setAskForReasonModal] = useState(false)
   const [revoke, setRevoke] = useState({
     initialRevoke: false,
-    finalRevoke: false,
+    confirmRevoke: false,
   });
   const [togglePopup, setTogglePopUp] = useState(false);
 
@@ -69,12 +70,12 @@ const SingleContract = () => {
   };
 
   const rejectInitialRevoke = () => {
-    setRevoke({ ...revoke, initialRevoke: false, finalRevoke: false });
+    setRevoke({ ...revoke, initialRevoke: false, confirmRevoke: false });
     setTogglePopUp(false);
   };
 
   const acceptInitialRevoke = () => {
-    setRevoke({ ...revoke, finalRevoke: true });
+    setRevoke({ ...revoke, confirmRevoke: true });
     setTogglePopUp(false);
 
     // ask for reason of revoke
@@ -93,12 +94,13 @@ const SingleContract = () => {
     }
   }
 
-  const onSkipReason = () => {
+  const onSkipRevokeReasonAndChangeContractStatus = async () => {
     // sent api call to update contract record status to CANCELLED
     try {
-      console.log(id)
-    } catch (Err) {
-
+      const noReasonDefault = getTranslation('text.revokedWithNoReason')
+      await revokeContract(contractId, id, token, noReasonDefault)
+    } catch (error) {
+      console.error('Error revoking contract', error);
     }
     finally {
       setAskForReasonModal(false)
@@ -113,7 +115,7 @@ const SingleContract = () => {
   const renderUsersNames = 'text-md text-gray-100 font-pregular ml-3';
 
   // Editable styles
-  const renderEndTime = () => contract.endTime === null || contract.endTime === "" ? "Contract Still Progress" : contract?.endTime;
+  const renderEndTime = () => contract.endTime === null || contract.endTime === "" ? getTranslation('text.contractStillInProgress') : contract?.endTime;
   const renderRevokeStatusText = (userStatus) => userStatus ? "Yes" : "No";
   const renderRevokeText = () => 'text-md text-gray-100 font-pregular w-[70%] mt-1 mb-2 ml-6';
   const wasContractCancelledText = () => contract?.contractCancelReason === null ? "No" : "Yes";
@@ -146,39 +148,39 @@ const SingleContract = () => {
             </View>
             <View className='w-full flex-col'>
               <View className='mt-4'>
-                <Text className={headerStyle}>Participants</Text>
+                <Text className={headerStyle}>{getTranslation('contract.participants')}</Text>
                 <Text className={textSpacing}>{contract?.participantOne?.firstName} & {contract?.participantTwo?.firstName}</Text>
               </View>
               <View className={sectionStyle}>
-                <Text className={headerStyle}>Contract Details</Text>
-                <Text className={textSpacing}>Contract # {contract?.contractNumber}</Text>
-                <Text className={textSpacing}>Duration: {contract?.durationMinutes} minutes</Text>
+                <Text className={headerStyle}>{getTranslation('contract.details')}</Text>
+                <Text className={textSpacing}>{getTranslation('contract.contractNumber')} {contract?.contractNumber}</Text>
+                <Text className={textSpacing}>{getTranslation('contract.duration')} {contract?.durationMinutes} minutes</Text>
               </View>
               <View className={sectionStyle}>
-                <Text className={headerStyle}>Status</Text>
+                <Text className={headerStyle}>{getTranslation('contract.status')}</Text>
                 <Text className={textSpacing}>
                   Contract Status:<Text className={`textSpacing ${dynamicStatusColor(contract.status)}`}> {contract.status} </Text>
                 </Text>
-                <Text className={textSpacing}>Start Time: {contract.startTime}</Text>
-                <Text className={textSpacing}>End Time: {renderEndTime()}</Text>
+                <Text className={textSpacing}>{getTranslation('contract.startTime')} {contract.startTime}</Text>
+                <Text className={textSpacing}>{getTranslation('contract.endTime')} {renderEndTime()}</Text>
               </View>
               <View className={sectionStyle}>
-                <Text className={headerStyle}>Contract Summary</Text>
-                <Text className={'text-md text-gray-100 font-psemibold mt-2'}>Was contract Cancelled: {wasContractCancelledText()}</Text>
+                <Text className={headerStyle}>{getTranslation('contract.contractSummary')}</Text>
+                <Text className={'text-md text-gray-100 font-psemibold mt-2'}>{getTranslation('contract.wasContractCancelled')} {wasContractCancelledText()}</Text>
                 {isThereCancelReason && (
                   <Text className={'text-md text-gray-100 font-pregular w-[70%]'}>
                     {contract?.contractCancelReason}
                   </Text>
                 )}
                 <Text className={renderParticipantNames}>{contract.participantOne.firstName}</Text>
-                <Text className={renderUsersNames}>Did {contract.participantOne.firstName} revoke: {renderRevokeStatusText(contract.didParticipantOneRevoke)}</Text>
+                <Text className={renderUsersNames}>Did {contract.participantOne.firstName} {getTranslation('contract.revoke')} {renderRevokeStatusText(contract.didParticipantOneRevoke)}</Text>
                 {contract.didParticipantOneRevoke && (
                   <Text className={renderRevokeText()}>
                     {contract?.participantOneRevokeContractReason}
                   </Text>
                 )}
                 <Text className={renderParticipantNames}>{contract?.participantTwo?.firstName}</Text>
-                <Text className={renderUsersNames}>Did {contract?.participantTwo?.firstName} revoke: {renderRevokeStatusText(contract.didParticipantTwoRevoke)}</Text>
+                <Text className={renderUsersNames}>Did {contract?.participantTwo?.firstName} {getTranslation('contract.revoke')} {renderRevokeStatusText(contract.didParticipantTwoRevoke)}</Text>
                 {contract.didParticipantTwoRevoke && (
                   <Text className={renderRevokeText()}>
                     {contract?.participantTwoRevokeContractReason}
@@ -188,7 +190,7 @@ const SingleContract = () => {
             </View>
           </>
         ) : (
-          <Text className='text-2xl text-gray-100 font-semibold'>Loading...</Text>
+          <Text className='text-2xl text-gray-100 font-semibold'>{getTranslation('contract.loading')}</Text>
         )}
         {isContractActive && (
           <CustomButton
@@ -201,9 +203,9 @@ const SingleContract = () => {
           <BlurryModalYesOrNo
             visible={togglePopup}
             onRequestClose={() => setTogglePopUp(false)}
-            title='Are you sure you want to revoke this contract?'
-            affirmativeButtonTitle='Yes'
-            negativeButtonTitle='No'
+            title={getTranslation('contract.sureYouWantToRevokeContract')}
+            affirmativeButtonTitle={getTranslation('text.yes')}
+            negativeButtonTitle={getTranslation('text.no')}
             onYes={acceptInitialRevoke}
             onNo={rejectInitialRevoke}
           />
@@ -212,11 +214,11 @@ const SingleContract = () => {
           <BlurryModalInput
             visible={askForReasonModal}
             onRequestClose={() => setAskForReasonModal(false)}
-            title='What is the reason for revoking? (This is Optional)?'
-            affirmativeButtonTitle='Submit Reason'
-            negativeButtonTitle='Skip Reason'
+            title={getTranslation('contract.whatIsTheReasonForRevoke')}
+            affirmativeButtonTitle={getTranslation('contract.submitReason')}
+            negativeButtonTitle={getTranslation('contract.skipReason')}
             onSubmit={(revokeReason) => onSubmitReasonAndChangeContractStatus(revokeReason)}
-            onSkip={onSkipReason}
+            onSkip={onSkipRevokeReasonAndChangeContractStatus}
           />
         )}
       </ScrollView>

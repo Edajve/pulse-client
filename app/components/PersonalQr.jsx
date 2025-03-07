@@ -5,6 +5,7 @@ import icons from "../../constants/icons";
 import QRCode from 'react-native-qrcode-svg';
 import { getUserQrCode } from '../lib/pulse-services';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import { getTranslation } from '../../constants/translations/translations';
 
 const PersonalQr = ({closeQr}) => {
     const [error, setError] = useState(null);
@@ -58,7 +59,7 @@ const PersonalQr = ({closeQr}) => {
                         size={250}
                     />
                 ) : (
-                    <Text>Loading...</Text>
+                    <Text>{getTranslation('contract.loading')}</Text>
                 )}
             </View>
         </SafeAreaView>

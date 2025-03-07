@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View } from "react-native";
+import { getTranslation } from '../../constants/translations/translations';
 
 const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
 
@@ -40,27 +41,27 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
                         {truncateName(participantOne)} & {truncateName(participantTwo)}
                     </Text>
                     <Text className={`font-plight text-2xs text-gray-100 pt-[4px]`}>
-                        STATUS: <Text className={`font-plight text-2xs ${dynamicStatusColor(contract?.status)}`}>
+                        {getTranslation('contract.status')} <Text className={`font-plight text-2xs ${dynamicStatusColor(contract?.status)}`}>
                             {contract?.status || "UNKNOWN"}
                         </Text>
                     </Text>
                 </View>
                 <View>
                     <Text className='font-plight text-xs text-gray-100'>
-                        Started: {parseTime(contract?.startTime)}
+                    {getTranslation('contract.started')} {parseTime(contract?.startTime)}
                     </Text>
                     {doesContractHaveEndTime() && (
                         <Text className='font-plight text-xs text-gray-100'>
-                            Ended: {parseTime(contract?.endTime)}
+                            {getTranslation('contract.ended')} {parseTime(contract?.endTime)}
                         </Text>
                     )}
                     <Text className='font-plight text-xs text-gray-100'>
-                        Duration: {contract?.durationMinutes}m
+                    {getTranslation('contract.duration')} {contract?.durationMinutes}m
                     </Text>
 
                     {contract?.status === 'CANCELLED' && (
                         <Text className='font-plight text-xs text-gray-100'>
-                            Cancel Reason: By A Participant
+                            {getTranslation('contract.cancelledByParticipant')}
                         </Text>
                     )}
                 </View>

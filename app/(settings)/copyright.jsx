@@ -18,7 +18,7 @@ const Copyright = () => {
                 </TouchableOpacity>
             </View>
             <View>
-                <Text> Payments</Text>
+                <Text>CopyRight</Text>
             </View>
         </SafeAreaView>
     )

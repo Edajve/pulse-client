@@ -1,11 +1,35 @@
 const translations = {
     en: {
-      name: { name: "Qssense" },
+      name: { 
+        name: "Qssense",
+        email: "support@qssense.com"
+       },
+      contract: {
+        participants: "Participants",
+        details: "Contract Details",
+        contractNumber: "Contract #:",
+        duration: "Duration:",
+        status: "Status",
+        startTime: "Start Time:",
+        endTime: "End Time:",
+        contractSummary: "Contract Summary",
+        wasContractCancelled: "Was Contract Cancelled",
+        revoke: "revoke:",
+        loading: "Loading ...",
+        sureYouWantToRevokeContract: "Are you sure you want to revoke this contract?",
+        whatIsTheReasonForRevoke: "What is the reason for revoking? (This is Optional)?",
+        submitReason: "Submit Reason",
+        skipReason: "Skip Reason",
+        started: "Started:",
+        ended: "Ended:",
+        cancelledByParticipant: "Cancel Reason: By A Participant"
+      },
       buttons: { 
         logout: "Logout",
         login: "Log In",
         continue: "Continue",
-        scanQrCode: "Scan QR Code"
+        scanQrCode: "Scan QR Code",
+        flip: "Flip"
        },
        signUp: {
         fillAllFields: "Please fill in all the fields",
@@ -26,11 +50,15 @@ const translations = {
             resetPassword: "Reset Password",
             dontHaveAnAccount: "Don't have an account?",
             alreadyHaveAnAccount: "Already Have an Account?",
-            signUp: "Sign Up",
+            signUp: "Sign Up"
         },
         status: {
             weak: "Weak Password",
-            meetStrength: "Password needs to meet strength requirement"
+            meetStrength: "Password needs to meet strength requirement",
+            atLeastSixCharacters: "have at least 6 characters",
+            upperAndLowerCase: "Upper & lower case letters",
+            aSymbol: "A Symbol (#$&)",
+            atLeastOneNumber: "At least one number"
         },
         reset: {
             OldAndNewPasswordDoesNotMatch: "Both new password and confirming new password does not match",
@@ -60,7 +88,16 @@ const translations = {
         userAlreadyExists: "User already exists",
         onlyConsentNumbers: "Consent Number Should Only Contain Numbers",
         authorizeIntoConsent: ' Authorize into Consent',
-        issueWhileConsenting: "Issue occurred while trying to connect to consent number"
+        issueWhileConsenting: "Issue occurred while trying to connect to consent number",
+        cameraPermission: "We need your permission to show the camera",
+        revokedWithNoReason: "Revoked without a reason",
+        contractStillInProgress: "Contract Still Progress",
+        yes: "Yes",
+        no: "No",
+        allSetOnYourEnd: "All Set from Your End!",
+        sucessfulRateSubmittion: "Thanks for submitting feedback",
+        howToUseQssense: "How to use Qssense",
+        tutorial: "Tutorial"
       },
       consent: {
         activeConsent: "Active Consent",
@@ -98,7 +135,10 @@ const translations = {
           choiceOfLaw: "Choice of Law. This Agreement is governed by and construed in accordance with the laws of the State of New York and the laws of the United States, without giving effect to any conflict of law principles.",
           severability: "Severability. If any provision of this Agreement shall be unlawful, void, or for any reason unenforceable, then that provision shall be deemed severable from this Agreement and shall not affect the validity and enforceability of any remaining provisions.",
           survival: "Survival. The provisions of this Agreement which by their nature should survive the termination of this Agreement shall survive such termination, including but not limited to the restrictions, disclaimers, limitations, our rights to use submitted content, and rules regarding dispute resolution.",
-          waiver: "Waiver. No waiver of any provision of this Agreement by us shall be deemed a further or continuing waiver of such provision or any other provision, and our failure to assert any right or provision under this Agreement shall not constitute a waiver of such right or provision."
+          waiver: "Waiver. No waiver of any provision of this Agreement by us shall be deemed a further or continuing waiver of such provision or any other provision, and our failure to assert any right or provision under this Agreement shall not constitute a waiver of such right or provision.",
+        },
+        postScan: {
+          letOtherUserScan: "If you initiated the scan, let the participant scan your QR code. If you've just scanned your participant after being scanned, congratulations, you've entered a consentual contract!"
         }
       }
     },

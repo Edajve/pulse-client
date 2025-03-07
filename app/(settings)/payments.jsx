@@ -18,7 +18,7 @@ const Payments = () => {
                 </TouchableOpacity>
             </View>
             <View>
-                <Text> Payments</Text>
+                <Text>Payments</Text>
             </View>
         </SafeAreaView>
     )

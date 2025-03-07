@@ -33,9 +33,7 @@ const BlurryModalInput = ({
                 className='flex-1 justify-center items-center'
             >
                 <View className={`bg-primary p-4 rounded-2xl items-center w-[90vw] border border-secondary ${styles}`}>
-                    {/* <Text className='text-md text-gray-100 font-psemibold'>
-                        {title}
-                    </Text> */}
+                    
                     <FormField
                         title={title}
                         value={form.revokeReason}
@@ -44,16 +42,6 @@ const BlurryModalInput = ({
                         placeholder='This can be optional'
                         handleChangeText={(e) => setForm({ ...form, revokeReason: e })}
                     />
-
-                    {/* {
-                        title
-                       , value
-                       , handleChangeText
-                       , placeholder
-                       , otherStyles
-                       , keyboardType
-                       , ...props
-                    } */}
                     <View className='flex-row w-[100%] justify-between'>
 
                         <CustomButton

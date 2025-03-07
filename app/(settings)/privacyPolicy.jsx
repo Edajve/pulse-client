@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
                 </TouchableOpacity>
             </View>
             <View>
-                <Text> Payments</Text>
+                <Text>Privacy Policy</Text>
             </View>
         </SafeAreaView>
     )

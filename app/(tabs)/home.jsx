@@ -9,8 +9,6 @@ import SearchInput from '../components/SearchInput';
 import { InProgressContracts, InactiveContracts, activeContracts } from '../lib/pulse-services';
 import { getTranslation } from '../../constants/translations/translations';
 
-// Ignore the warning about VirtualizedLists nested inside ScrollViews
-LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
 const Home = () => {
     const { id, token } = useGlobalContext();
@@ -19,18 +17,25 @@ const Home = () => {
     const [inProgress, setInProgress] = useState([])
     const [notActive, setNotActiveContracts] = useState([])
 
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, []);
+
     const onRefreshAllContracts = async () => {
         setRefreshing(true);
-
-      
+    
+        try {
             const activeResponse = await activeContracts(id, token);
             const inActiveResponse = await InactiveContracts(id, token);
-            const inProgressContracts = await InProgressContracts(id, token);
+            const inProgressResponse = await InProgressContracts(id, token);
+    
             setActiveContracts(activeResponse);
             setNotActiveContracts(inActiveResponse);
-            inProgress(inProgressContracts);
-       
-
+            setInProgress(inProgressResponse); // Fix here
+        } catch (error) {
+            console.error('Error refreshing contracts:', error);
+        }
+    
         setRefreshing(false);
     };
 

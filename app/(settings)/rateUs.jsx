@@ -7,6 +7,11 @@ import FormField from '../components/FormField';
 import { useState } from 'react';
 import StarRating from 'react-native-star-rating-widget';
 import CustomButton from '../components/CustomButton';
+import { getTranslation } from '../../constants/translations/translations';
+import BlurModalOk from '../components/BlurModalOk';
+
+const [popUp, setPopUp] = useState(false)
+const [popUpMessage, setPopUpMessage] = useState('')
 
 const RateUs = () => {
     const [starRating, setStarRating] = useState(0);
@@ -15,7 +20,8 @@ const RateUs = () => {
     })
 
     const handleEmailPress = () => {
-        Linking.openURL('support@qssense.com');
+        const companyEmail = getTranslation('name.email')
+        Linking.openURL(companyEmail);
     };
 
     const onSubmitFeedBack = async () => {
@@ -26,15 +32,33 @@ const RateUs = () => {
 
         try {
 
-            const data = await sendFeedBack(feedbackData);
-            console.log('Feedback sent:', feedbackData);
+            await sendFeedBack(feedbackData);
+            setPopUpMessage(getTranslation('text.sucessfulRateSubmittion'))
+            setPopUp(true)
 
         } catch (error) {
             console.error('Error sending feedback:', error);
         }
     };
 
+    const closePopUp = () => {
+        setPopUp(false);
+        setPopUpMessage("");
+    };
+
     return (
+        <>
+
+        {popUp && (
+             <BlurModalOk
+                visible={popUp}
+                onRequestClose={closePopUp}
+                title={popUpMessage}
+                affirmativeButtonTitle='OK'
+                onYes={closePopUp} 
+            />
+        )}
+
         <SafeAreaView className="bg-primary h-full p-5">
             <View className='mt-4 mb-9'>
                 <TouchableOpacity onPress={() => router.back()}>
@@ -96,6 +120,7 @@ const RateUs = () => {
                 containerStyle='mt-7 mb-[60px]'
             />
         </SafeAreaView>
+        </>
     )
 }
 

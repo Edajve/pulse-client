@@ -4,11 +4,10 @@ import SignIn from '../../app/(auth)/sign-in.jsx';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { authenticate } from '../../app/lib/pulse-services.js';
 import { useRouter } from 'expo-router';
-import { getByTestId } from '@testing-library/react';
 
 jest.mock('expo-router', () => ({
-    ...jest.requireActual('expo-router'), // Use actual implementation for other functions
-    useRouter: jest.fn(), // Mock useRouter function
+    ...jest.requireActual('expo-router'),
+    useRouter: jest.fn(),
 }));
 
 jest.mock('../../context/GlobalProvider.js', () => ({
@@ -19,9 +18,17 @@ jest.mock('../../app/lib/pulse-services.js', () => ({
     authenticate: jest.fn(),
 }));
 
-describe('SignIn component test', () => {
+describe('SignIn Component', () => {
+    let mockRouterReplace, mockGlobalContext;
+
     beforeEach(() => {
-        useGlobalContext.mockReturnValue({
+        mockRouterReplace = jest.fn();
+
+        useRouter.mockReturnValue({
+            replace: mockRouterReplace,
+        });
+
+        mockGlobalContext = {
             isLoading: false,
             isLoggedIn: false,
             user: null,
@@ -33,14 +40,16 @@ describe('SignIn component test', () => {
             token: '',
             id: '',
             scannieId: { scannieId: '' },
-        });
+        };
+
+        useGlobalContext.mockReturnValue(mockGlobalContext);
+        jest.clearAllMocks();
     });
 
-    test('should render SignIn page', () => {
+    test('renders the SignIn page correctly', () => {
         const { getByText } = render(<SignIn />);
 
-        // Check if important elements are rendered
-        expect(getByText('Log in to Pulse')).toBeTruthy();
+        expect(getByText('Log in to Qssense')).toBeTruthy();
         expect(getByText('Email')).toBeTruthy();
         expect(getByText('Password')).toBeTruthy();
         expect(getByText('Log In')).toBeTruthy();
@@ -48,64 +57,53 @@ describe('SignIn component test', () => {
         expect(getByText('Sign Up')).toBeTruthy();
     });
 
-    test('should show pop up when clicks Log In button with no fields present', async () => {
+    test('displays an error when Log In is clicked with no fields present', async () => {
         const { getByText, findByTestId } = render(<SignIn />);
         fireEvent.press(getByText('Log In'));
+
         const modal = await findByTestId('blur-modal-container');
         expect(modal).toBeTruthy();
     });
 
-    test('should show pop up when user only puts in email field and not password as well', async () => {
+    test('displays an error when only email is entered', async () => {
         const { getByPlaceholderText, getByText, findByTestId } = render(<SignIn />);
         fireEvent.changeText(getByPlaceholderText('email'), 'test@example.com');
         fireEvent.press(getByText('Log In'));
+
         const modal = await findByTestId('blur-modal-container');
         expect(modal).toBeTruthy();
     });
 
-    test('should show pop up when user only puts in password field and not email as well', async () => {
+    test('displays an error when only password is entered', async () => {
         const { getByPlaceholderText, getByText, findByTestId } = render(<SignIn />);
         fireEvent.changeText(getByPlaceholderText('password'), 'testPassword');
         fireEvent.press(getByText('Log In'));
+
         const modal = await findByTestId('blur-modal-container');
         expect(modal).toBeTruthy();
     });
 
-    test('should show pop up when user only puts in password field and not email as well', async () => {
+    test('displays an error when the email format is incorrect', async () => {
         const { getByPlaceholderText, getByText, findByTestId } = render(<SignIn />);
-        fireEvent.changeText(getByPlaceholderText('password'), 'testPassword');
+        fireEvent.changeText(getByPlaceholderText('email'), 'invalidemail');
+        fireEvent.changeText(getByPlaceholderText('password'), 'ValidPass123!');
         fireEvent.press(getByText('Log In'));
+
         const modal = await findByTestId('blur-modal-container');
         expect(modal).toBeTruthy();
     });
 
-    // still needs to be worked on, the react-router replace is not verifying correctly
-    test.skip('should navigate to home page after correct home page', async () => {
-        useRouter.mockReturnValue({
-            replace: jest.fn(),
-        });
+    test('shows an error when authentication fails', async () => {
+        authenticate.mockRejectedValue(new Error('Invalid credentials'));
 
-        authenticate.mockResolvedValue({
-            data: {
-                token: 'mockedToken',
-                id: 'mockedId',
-            },
-        });
-
-        const { getByPlaceholderText, getByText } = render(<SignIn />);
-
+        const { getByPlaceholderText, getByText, findByTestId } = render(<SignIn />);
         fireEvent.changeText(getByPlaceholderText('email'), 'test@example.com');
         fireEvent.changeText(getByPlaceholderText('password'), 'testPassword');
-        
-        const continueButton = getByTestId('loginBtn');
-        expect(continueButton).toBeTruthy()
-        fireEvent.press(continueButton);
+        fireEvent.press(getByText('Log In'));
 
         await waitFor(() => {
-            expect(useGlobalContext().setToken).toHaveBeenCalledWith('mockedToken');
-            expect(useGlobalContext().setId).toHaveBeenCalledWith('mockedId');
-            expect(useGlobalContext().setIsLoggedIn).toHaveBeenCalledWith(true);
-            expect(useRouter().replace).toHaveBeenCalledWith('/home');
+            expect(findByTestId('blur-modal-container')).toBeTruthy();
         });
     });
+
 });

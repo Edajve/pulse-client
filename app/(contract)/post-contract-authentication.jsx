@@ -5,12 +5,13 @@ import CustomButton from '../components/CustomButton';
 import { router } from 'expo-router';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { useEffect } from 'react';
+import { getTranslation } from '../../constants/translations/translations';
 
 const PostContractAuthentication = () => {
     const { setScannieId } = useGlobalContext()
 
     useEffect(() => {
-        // Clear user that you scanned bc record is already in db
+        // Clear scannie id that the scanner scanned bc record is already in db
         setScannieId({
             "scannieId": ""
         })
@@ -20,10 +21,10 @@ const PostContractAuthentication = () => {
         <SafeAreaView className='w-full h-full bg-primary px-5 '>
             <View className='w-full h-full items-center justify-center'>
                 <Text className='text-white text-base font-psemibold text-2xl'>
-                    All Set from Your End!
+                   {getTranslation('text.allSetOnYourEnd')}
                 </Text>
                 <Text className='text-gray-200 text-base font-pregular text-1xl mt-[32px]'>
-                    If you initiated the scan, let the participant scan your QR code. If you've just scanned your participant after being scanned, congratulations, you've entered a consentual contract!
+                    {getTranslation('longText.postScan.letOtherUserScan')}
                 </Text>
                 <CustomButton
                     title='Home'

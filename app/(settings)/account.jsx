@@ -9,7 +9,7 @@ import { formatCountryName } from '../utilities/RegionUtils.js';
 import {formatDateString} from '../utilities/DateUtils.js';
 
 const Account = () => {
-  const { setIsLoggedIn, setUser, user, setToken, setId } = useGlobalContext();
+  const { user } = useGlobalContext();
 
   return (
     <SafeAreaView className="bg-primary h-full p-5">

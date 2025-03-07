@@ -99,6 +99,7 @@ const SignIn = () => {
                     />
                     <CustomButton
                         title={getTranslation('buttons.login')}
+                        testID="loginBtn"
                         handlePress={submit}
                         containerStyle='mt-7'
                         isLoading={loading}

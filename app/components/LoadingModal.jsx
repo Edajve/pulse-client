@@ -1,7 +1,6 @@
 import { BlurView } from 'expo-blur';
 import React from 'react';
 import { Modal, Text, View } from 'react-native';
-import CustomButton from './CustomButton';
 import { ActivityIndicator } from 'react-native';
 
 const LoadingModal = ({ additionalStyles, text }) => {
@@ -12,7 +11,7 @@ const LoadingModal = ({ additionalStyles, text }) => {
         >
              <BlurView
                 id='blur-test-id'
-                blurAmount={60}           // You can set the blur amount as needed
+                blurAmount={60} // You can set the blur amount as needed
                 className='flex-1 justify-center items-center '
             >
                  <View className="flex-1 justify-center items-center">

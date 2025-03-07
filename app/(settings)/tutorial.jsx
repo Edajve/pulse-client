@@ -3,6 +3,7 @@ import React from 'react';
 import { Image, Text, TouchableOpacity, View, Linking } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
+import { getTranslation } from '../../constants/translations/translations';
 
 const Tutorial = () => {
 
@@ -26,7 +27,7 @@ const Tutorial = () => {
                 </TouchableOpacity>
             </View>
             <Text className='text-4xl text-gray-200 font-psemibold mb-10'>
-                Tutorial
+                {getTranslation('text.tutorial')}
             </Text>
 
             <View>
@@ -46,7 +47,7 @@ const Tutorial = () => {
             </View>
 
             <Text className='text-xl text-gray-200 font-psemibold mb-5 mt-6 text-center'>
-                How to use Pulse
+                {getTranslation('text.howToUseQssense')}
             </Text>
         </SafeAreaView>
     )

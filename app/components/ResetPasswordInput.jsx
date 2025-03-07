@@ -3,6 +3,7 @@ import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import icons from "../../constants/icons";
 import PasswordVisualStrength from "../components/PasswordVisualStrength";
 import PasswordStrengthEvaluator from "./../utilities/PasswordStrengthEvaluator";
+import { getTranslation } from '../../constants/translations/translations';
 
 const ResetPasswordInput = ({ title, password }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -85,7 +86,7 @@ const PasswordAuthentication = ({ form }) => {
                 </Text>
             ) : (
                 <Text className=" text-base text-white font-pmedium text-sm ml-4 mt-4">
-                    have at least 6 characters.
+                    {getTranslation('password.status.atLeastSixCharacters')}
                 </Text>
             )}
 
@@ -103,7 +104,7 @@ const PasswordAuthentication = ({ form }) => {
                         }
                     </View>
                     <Text className='text-white text-1xl'>
-                        Upper & lower case letters
+                    {getTranslation('password.status.upperAndLowerCase')}
                     </Text>
                 </View>
                 <View className='flex-row w-full ml-1'>
@@ -114,7 +115,7 @@ const PasswordAuthentication = ({ form }) => {
                         }
                     </View>
                     <Text className='text-white text-1xl'>
-                        A Symbol (#$&)
+                    {getTranslation('password.status.aSymbol')}
                     </Text>
                 </View>
                 <View className='flex-row w-full ml-1'>
@@ -125,7 +126,7 @@ const PasswordAuthentication = ({ form }) => {
                         }
                     </View>
                     <Text className='text-white text-1xl'>
-                        At least one number
+                    {getTranslation('password.status.atLeastOneNumber')}
                     </Text>
                 </View>
             </View>
