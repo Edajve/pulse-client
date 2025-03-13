@@ -3,7 +3,14 @@ const translations = {
       name: { 
         name: "Qssense",
         email: "support@qssense.com"
-       },
+      },
+      auth: {
+        chooseAuthMethod: "Please choose your auth method. This can be reconfigured in your settings",
+        basic: "Use Standard as default Login",
+        pin: "Use PIN as default Login",
+        biometric: "Use Biometric as default Login",
+        cancel: "Cancel"
+      },
       contract: {
         participants: "Participants",
         details: "Contract Details",

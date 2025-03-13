@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../context/GlobalProvider";
 import CustomButton from "./components/CustomButton";
 import { getTranslation } from "../constants/translations/translations";
+import { printLocalHash } from "./utilities/localHashStorage";
 
 export default function Index() {
     const { isLoading, isLoggedIn } = useGlobalContext();
@@ -12,6 +13,8 @@ export default function Index() {
     if (!isLoading && isLoggedIn) return <Redirect href='/home'/>;
 
     // const navigateTo
+
+    printLocalHash()
 
     return (
         <SafeAreaView className='bg-primary h-full'>

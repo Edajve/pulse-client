@@ -6,8 +6,9 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
-import { InProgressContracts, InactiveContracts, activeContracts } from '../lib/pulse-services';
+import { InProgressContracts, InactiveContracts, activeContracts, getUser } from '../lib/pulse-services';
 import { getTranslation } from '../../constants/translations/translations';
+import BlurModalPromptAuthMethod from '../components/BlurModalPromptAuthMethod';
 
 
 const Home = () => {
@@ -16,10 +17,32 @@ const Home = () => {
     const [active, setActiveContracts] = useState([])
     const [inProgress, setInProgress] = useState([])
     const [notActive, setNotActiveContracts] = useState([])
+    const [promptForAutMethod, setPromptForAuthMethod] = useState(false)
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+
+        // what is wrong with my await get user
+        const getUserInformation = async () => {
+            const user = await getUser(id, token)
+
+            if (!user.hasUserBeenAskedAuthMethod) {
+                // hey gpt, if i wanted to add some complicated logic right here, can i define the method outside of the use effect?
+                // or since the original method is inside the use effect i have to define everymethod inside the use effect
+                
+                setTimeout(() => {
+                    setPromptForAuthMethod(true);
+                  }, 600);
+            
+            }
+            
+      }
+
+      getUserInformation()
+    
     }, []);
+
+    //  printLocalHash()
 
     const onRefreshAllContracts = async () => {
         setRefreshing(true);
@@ -31,7 +54,7 @@ const Home = () => {
     
             setActiveContracts(activeResponse);
             setNotActiveContracts(inActiveResponse);
-            setInProgress(inProgressResponse); // Fix here
+            setInProgress(inProgressResponse); 
         } catch (error) {
             console.error('Error refreshing contracts:', error);
         }
@@ -79,7 +102,37 @@ const Home = () => {
 
     }, [])
 
+    const onSelectDefaultLoginOrCancel = () => {
+        // Hit endpoint to update hasUserBeenAskedAuthMethod to true
+        // The user auth method is defaulted to BASIC
+        console.log('do nothing')
+        setPromptForAuthMethod(false)
+    }
+
+    const onSelectPinLogin = () => {
+        // Hit endpoint to update hasUserBeenAskedAuthMethod to true
+        console.log('navigate to PIN using the pin package')
+        setPromptForAuthMethod(false)
+    }
+
+    const onSelectBiometrictLogin = () => {
+        // Hit endpoint to update hasUserBeenAskedAuthMethod to true
+        console.log('use biometrics')
+        setPromptForAuthMethod(false)
+    }
+
     return (
+        <>
+        {promptForAutMethod && ( 
+            <BlurModalPromptAuthMethod
+            visible={promptForAutMethod}
+            onRequestClose={() => onSelectDefaultLoginOrCancel()}
+            title={getTranslation('auth.chooseAuthMethod')}
+            firstSelection={() => onSelectDefaultLoginOrCancel()}
+            secondSelection={() => onSelectPinLogin()}
+            thirdSelection={() => onSelectBiometrictLogin()}
+            />
+        )}
         <ScrollView className='bg-primary h-full'
             refreshControl={
                 <RefreshControl
@@ -159,6 +212,7 @@ const Home = () => {
                 />
             </SafeAreaView>
         </ScrollView >
+        </>
     );
 };
 

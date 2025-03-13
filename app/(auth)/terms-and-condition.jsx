@@ -8,6 +8,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { register } from "../lib/pulse-services";
 import { getTranslation } from "../../constants/translations/translations";
 import BlurModalOk from "../components/BlurModalOk";
+import { saveLocalHash } from "../utilities/localHashStorage";
 
 const TermsAndConditions = () => {
     const [terms, setTerms] = useState(null);
@@ -31,8 +32,8 @@ const TermsAndConditions = () => {
                      Since this is the terms and conditions, the users can should only see this page on first sign in
                      meaning, this is where we want to take the local storage hash and add it to the local storage
                     */
-                   console.log('we are now fetching the hash from the register response')
-                   console.log('This is the hash on register' + response.data.localHash)
+
+                    await saveLocalHash(response.data.localHash);
                     router.replace('/sign-in');
                 }
             } else if (terms === false) {
