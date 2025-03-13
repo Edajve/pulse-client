@@ -11,6 +11,8 @@ export default function Index() {
 
     if (!isLoading && isLoggedIn) return <Redirect href='/home'/>;
 
+    // const navigateTo
+
     return (
         <SafeAreaView className='bg-primary h-full'>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

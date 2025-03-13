@@ -12,21 +12,27 @@ import BlurModalOk from "../components/BlurModalOk";
 const TermsAndConditions = () => {
     const [terms, setTerms] = useState(null);
     const [popUpMessage, setPopUpMessage] = useState("");
-    const { signUpFormData } = useGlobalContext();
     const [popUp, setPopUp] = useState(false);
+
+    const { signUpFormData } = useGlobalContext();
 
     useEffect(() => {
         const handleTerms = async () => {
             const userAlreadyExistsVerbage = getTranslation("text.userAlreadyExists");
 
             if (terms) {
-                console.lgo("we are here")
                 const response = await register(signUpFormData);
                 if (response.data === userAlreadyExistsVerbage) {
                     setPopUp(true);
                     setTerms(null);
                     setPopUpMessage(userAlreadyExistsVerbage);
                 } else {
+                    /*
+                     Since this is the terms and conditions, the users can should only see this page on first sign in
+                     meaning, this is where we want to take the local storage hash and add it to the local storage
+                    */
+                   console.log('we are now fetching the hash from the register response')
+                   console.log('This is the hash on register' + response.data.localHash)
                     router.replace('/sign-in');
                 }
             } else if (terms === false) {

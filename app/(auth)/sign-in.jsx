@@ -22,7 +22,7 @@ const SignIn = () => {
         , password: ''
     });
 
-    const { loading, data, error, refetch } = useApi(authenticate);
+    const { loading, refetch } = useApi(authenticate);
 
     const acceptButtonOnToggle = () => {
         // no two modals should be up at the same time

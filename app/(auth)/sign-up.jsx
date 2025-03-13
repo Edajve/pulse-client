@@ -53,7 +53,7 @@ const SignUp = () => {
     };
 
     function checkSignInFields() {
-        // Check if all required fields are populated
+
         if (!form.firstName || !form.lastName || !form.email || !form.password) {
 
             setPopUp(true);
@@ -84,8 +84,8 @@ const SignUp = () => {
                 '- At least one number required'
               );
 
-            // setPopUp(false);
-            // setPopUpMessage("Please fill in all the fields");
+            //   setPopUp(true);
+            //   setPopUpMessage(getTranslation('password.status.meetStrength'));
             return false;
         
         }

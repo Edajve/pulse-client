@@ -201,3 +201,17 @@ export const resetPassword = async (requestBody) => {
         throw error; // Re-throw the error if needed
     }
 };
+
+export const getAuthMethodByLocalHash = async (localHash, token) => {
+    try {
+        const response = await apiClient.get(`/account/authMethod?localHash=${encodeURIComponent(localHash)}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        return error.response ? error.response.data : error.message;
+    }
+};
