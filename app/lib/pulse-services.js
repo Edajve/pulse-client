@@ -33,7 +33,7 @@ export const getUser = async (id, token) => {
 
         return response.data;
     } catch (error) {
-        // need to use some type of loggin system for this
+        // need to use some type of login system for this
     }
 }
 
@@ -202,16 +202,38 @@ export const resetPassword = async (requestBody) => {
     }
 };
 
-export const getAuthMethodByLocalHash = async (localHash, token) => {
+export const getAuthMethodByLocalHash = async (localHash) => {
     try {
-        const response = await apiClient.get(`/account/authMethod?localHash=${encodeURIComponent(localHash)}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
+        const response = await apiClient.get(`/auth/authMethod?localHash=${localHash}`);
         return response.data;
     } catch (error) {
         return error.response ? error.response.data : error.message;
     }
 };
+
+export const updateUser = async (userId, updateUserRequestPayload, token) => {
+    try {
+        const response = await apiClient.put(
+            `/account/update/${userId}`,
+            updateUserRequestPayload,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+export const registerWithPin = async (RegisterRequest) => {
+    try {
+        return await apiClient.post(`/auth/authenticate/pin`, RegisterRequest);
+    } catch (error) {
+        throw error;
+    }
+}

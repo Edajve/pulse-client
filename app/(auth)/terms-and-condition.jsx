@@ -8,7 +8,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { register } from "../lib/pulse-services";
 import { getTranslation } from "../../constants/translations/translations";
 import BlurModalOk from "../components/BlurModalOk";
-import { saveLocalHash } from "../utilities/localHashStorage";
+import { saveLocalHash, printLocalHash } from "../utilities/localHashStorage";
 
 const TermsAndConditions = () => {
     const [terms, setTerms] = useState(null);
@@ -33,6 +33,8 @@ const TermsAndConditions = () => {
                      meaning, this is where we want to take the local storage hash and add it to the local storage
                     */
 
+                     console.log('helloooooooo')
+                     console.log(response.data)
                     await saveLocalHash(response.data.localHash);
                     router.replace('/sign-in');
                 }

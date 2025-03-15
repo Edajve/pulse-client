@@ -3,11 +3,31 @@ import {useState} from "react";
 import icons from "../../constants/icons";
 import {router, usePathname} from "expo-router";
 import { getTranslation } from "../../constants/translations/translations";
+import BlurModalOk from "./BlurModalOk";
 
 const SearchInput = ({initialQuery}) => {
+    const [popUp, setPopUp] = useState()
+    const [popUpMessage, setPopUpMessage] = useState("")
+
     const pathname = usePathname()
     const [query, setQuery] = useState(initialQuery || '')
+
+    
+    const closePopUp = () => {
+        setPopUp(false);
+        setPopUpMessage("");
+    };
+
     return (
+        <>
+            {popUp && 
+                <BlurModalOk
+                    visible={popUp}
+                    onRequestClose={() => closePopUp()}
+                    title={popUpMessage}
+                    affirmativeButtonTitle='OK'
+                    onYes={() => closePopUp()}
+                />}
         <View
             className='border-2
                 border-black-200
@@ -24,7 +44,7 @@ const SearchInput = ({initialQuery}) => {
         >
             <TextInput
                 className='text-base text-white flex-1 font-pregular'
-                // value={query}
+                value={query}
                 placeholder={getTranslation('consent.searchFilterText')}
                 placeholderText="#CDCDE0"
                 onChangeText={(e) => setQuery(e)}
@@ -33,12 +53,13 @@ const SearchInput = ({initialQuery}) => {
 
                 <TouchableOpacity
                     onPress={() => {
-                        if (!query)
-                            return Alert.alert("Missing query",
-                                "Please input something to search results across database")
+                        if (!query) {
+                                setPopUpMessage("Please put in a name to search by")
+                                setPopUp(true)
+                        }
+                        
 
-
-                        if (pathname.startsWith('/search')) router.setParams({query})
+                        else if (pathname.startsWith('/search')) router.setParams({query})
                         else router.push(`/search/${query}`)
                     }}
                 >
@@ -50,6 +71,7 @@ const SearchInput = ({initialQuery}) => {
                 </TouchableOpacity>
             </View>
         </View>
+        </>
     );
 };
 

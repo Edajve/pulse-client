@@ -57,7 +57,8 @@ const translations = {
             resetPassword: "Reset Password",
             dontHaveAnAccount: "Don't have an account?",
             alreadyHaveAnAccount: "Already Have an Account?",
-            signUp: "Sign Up"
+            signUp: "Sign Up",
+            loginInWithBasic: "Log in with Email and Password"
         },
         status: {
             weak: "Weak Password",

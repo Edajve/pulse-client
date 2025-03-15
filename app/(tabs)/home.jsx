@@ -6,10 +6,10 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import ActiveContracts from '../components/ActiveContracts';
 import EmptyState from '../components/EmptyState';
 import SearchInput from '../components/SearchInput';
-import { InProgressContracts, InactiveContracts, activeContracts, getUser } from '../lib/pulse-services';
+import { InProgressContracts, InactiveContracts, activeContracts, getUser, updateUser } from '../lib/pulse-services';
 import { getTranslation } from '../../constants/translations/translations';
 import BlurModalPromptAuthMethod from '../components/BlurModalPromptAuthMethod';
-
+import { updateLocalHashIfNeeded } from '../utilities/localHashStorage';
 
 const Home = () => {
     const { id, token } = useGlobalContext();
@@ -19,32 +19,51 @@ const Home = () => {
     const [notActive, setNotActiveContracts] = useState([])
     const [promptForAutMethod, setPromptForAuthMethod] = useState(false)
 
+    const PIN = "PIN"
+    const BASIC = "BASIC"
+    const BIOMETRIC = "BIOMETRIC"
+    const PIN_PAGE_ROUTE = "/Pin"
+
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-
-        // what is wrong with my await get user
-        const getUserInformation = async () => {
-            const user = await getUser(id, token)
-
-            if (!user.hasUserBeenAskedAuthMethod) {
-                // hey gpt, if i wanted to add some complicated logic right here, can i define the method outside of the use effect?
-                // or since the original method is inside the use effect i have to define everymethod inside the use effect
-                
-                setTimeout(() => {
-                    setPromptForAuthMethod(true);
-                  }, 600);
-            
-            }
-            
-      }
-
-      getUserInformation()
     
-    }, []);
+        const fetchData = async () => {
+            try {
 
-    //  printLocalHash()
+                const user = await getUser(id, token);
+
+                if (!user.hasUserBeenAskedAuthMethod) {
+                    setTimeout(() => {
+                        setPromptForAuthMethod(true);
+                    }, 600);
+                }
+
+                console.log('lets see if has is there')
+                console.log(user.localHash)
+                // This always keeps localHash up to date and adds it if its not there
+                await updateLocalHashIfNeeded(user.localHash)
+    
+                // Fetch contracts data in parallel
+                const [activeResponse, inactiveResponse, inProgressResponse] = await Promise.all([
+                    activeContracts(id, token),
+                    InactiveContracts(id, token),
+                    InProgressContracts(id, token)
+                ]);
+    
+                setActiveContracts(activeResponse);
+                setNotActiveContracts(inactiveResponse);
+                setInProgress(inProgressResponse);
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, [id, token]);
 
     const onRefreshAllContracts = async () => {
+
         setRefreshing(true);
     
         try {
@@ -55,6 +74,7 @@ const Home = () => {
             setActiveContracts(activeResponse);
             setNotActiveContracts(inActiveResponse);
             setInProgress(inProgressResponse); 
+            
         } catch (error) {
             console.error('Error refreshing contracts:', error);
         }
@@ -62,75 +82,50 @@ const Home = () => {
         setRefreshing(false);
     };
 
-    useEffect(() => {
+    const handleAuthMethodSelection = async (method) => {
 
-        const getActiveContracts = async () => {
-            try {
-                const response = await activeContracts(id, token)
-                setActiveContracts(response)
+          setPromptForAuthMethod(false);
+
+        try {
+    
+            if (method === PIN) {
+
+                router.push(PIN_PAGE_ROUTE)
+
+            } else if (method === BIOMETRIC) {
+
+                console.log('Use biometrics');
+
+                // update hasUserBeenAskedAuthMethod after bio has been set
+
+            } else if (method === BASIC) {
+
+                // Update user setting for hasUserBeenAskedAuthMethod
+                await updateUser(
+                    id, 
+                    {
+                        hasUserBeenAskedAuthMethod: true
+                    },
+                    token
+                )
+
             }
-            catch (err) {
-                console.error('Error fetching Active Contracts:', err);
-            }
+
+        } catch (error) {
+            console.error('Error updating auth method:', error);
         }
-
-        getActiveContracts()
-
-        const getInactiveContracts = async () => {
-            try {
-                const response = await InactiveContracts(id, token)
-                setNotActiveContracts(response)
-            }
-            catch (err) {
-                console.error('Error fetching Active Contracts:', err);
-            }
-        }
-
-        getInactiveContracts()
-
-        const getInProgressContracts = async () => {
-            try {
-                const response = await InProgressContracts(id, token)
-                setInProgress(response)
-            }
-            catch (err) {
-                console.error('Error fetching In Progress Contracts:', err);
-            }
-        }
-
-        getInProgressContracts()
-
-    }, [])
-
-    const onSelectDefaultLoginOrCancel = () => {
-        // Hit endpoint to update hasUserBeenAskedAuthMethod to true
-        // The user auth method is defaulted to BASIC
-        console.log('do nothing')
-        setPromptForAuthMethod(false)
-    }
-
-    const onSelectPinLogin = () => {
-        // Hit endpoint to update hasUserBeenAskedAuthMethod to true
-        console.log('navigate to PIN using the pin package')
-        setPromptForAuthMethod(false)
-    }
-
-    const onSelectBiometrictLogin = () => {
-        // Hit endpoint to update hasUserBeenAskedAuthMethod to true
-        console.log('use biometrics')
-        setPromptForAuthMethod(false)
-    }
+    };
 
     return (
         <>
         {promptForAutMethod && ( 
             <BlurModalPromptAuthMethod
-            visible={promptForAutMethod}
-            onRequestClose={() => onSelectDefaultLoginOrCancel()}
-            title={getTranslation('auth.chooseAuthMethod')}
-            firstSelection={() => onSelectDefaultLoginOrCancel()}
-            secondSelection={() => onSelectPinLogin()}
-            thirdSelection={() => onSelectBiometrictLogin()}
+                visible={promptForAutMethod}
+                onRequestClose={() => handleAuthMethodSelection(BASIC)}
+                title={getTranslation('auth.chooseAuthMethod')}
+                firstSelection={() => handleAuthMethodSelection(BASIC)}
+                secondSelection={() => handleAuthMethodSelection(PIN)}
+                thirdSelection={() => handleAuthMethodSelection(BIOMETRIC)}
             />
         )}
         <ScrollView className='bg-primary h-full'

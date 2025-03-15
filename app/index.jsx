@@ -1,22 +1,59 @@
 import { Redirect, router } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../context/GlobalProvider";
 import CustomButton from "./components/CustomButton";
 import { getTranslation } from "../constants/translations/translations";
-import { printLocalHash } from "./utilities/localHashStorage";
+import { getLocalHash } from "./utilities/localHashStorage";
+import { getAuthMethodByLocalHash } from "./lib/pulse-services";
 
 export default function Index() {
+const [authMethod, setAuthMethod] = useState()
+
     const { isLoading, isLoggedIn } = useGlobalContext();
 
     if (!isLoading && isLoggedIn) return <Redirect href='/home'/>;
 
-    // const navigateTo
+    useEffect(() => {
+    
+        const getAuthMethod = async = async () => {
+        
+        const localHash = await getLocalHash()  
 
-    printLocalHash()
+        console.log(localHash)
 
+        const method = await getAuthMethodByLocalHash(localHash)
+
+        setAuthMethod(method)
+
+        }
+    
+        getAuthMethod()
+    }, [])
+
+
+    const routeToAuthMethod = async (auth) => {
+        if (auth === "BASIC") {
+            router.push('/sign-in');
+    
+        } else if (auth === "PIN") {
+            const localHash = await getLocalHash();
+    
+            router.push({
+                pathname: '/sign-in-pin',
+                params: { localHash },
+            });
+    
+        } else if (auth === "BIOMETRIC") {
+            // Handle biometric login
+        } else {
+            router.push('/sign-in');
+        }
+    };
+       
     return (
+        <>
         <SafeAreaView className='bg-primary h-full'>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View className='flex-1 items-center justify-center'>
@@ -28,11 +65,12 @@ export default function Index() {
                     </Text>
                     <CustomButton
                         title={getTranslation('buttons.continue')}
-                        handlePress={() => router.push('/sign-in')}
+                        handlePress={() =>  routeToAuthMethod(authMethod)}
                         containerStyle='w-[95vw] mt-7'
                     />
                 </View>
             </ScrollView>
         </SafeAreaView>
+        </>
     );
 }

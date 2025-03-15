@@ -41,3 +41,15 @@ export const printLocalHash = async () => {
         console.error('Error retrieving local hash:', error);
     }
 };
+
+export const updateLocalHashIfNeeded = async (incomingHash) => {
+    try {
+        const storedHash = await getLocalHash();
+
+        if (!storedHash || storedHash !== incomingHash) {
+            await saveLocalHash(incomingHash);
+        }
+    } catch (error) {
+        console.error('Error updating local hash:', error);
+    }
+};

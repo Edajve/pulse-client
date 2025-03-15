@@ -30,6 +30,12 @@ const AuthLayout = () => {
                         headerShown: false
                     }}
                 />
+                 <Stack.Screen
+                    name="sign-in-pin"
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </Stack>
             <StatusBar
                 backgroundColor="#161622"
