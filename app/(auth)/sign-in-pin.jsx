@@ -103,13 +103,13 @@ const SignInPin = () => {
         <SafeAreaView className="bg-primary h-full p-5">
             {/* Back Button */}
             <View className='mt-4 mb-9'>
-                <TouchableOpacity onPress={() => router.back()}>
+                {/* <TouchableOpacity onPress={() => router.back()}>
                     <Image
                         className='w-[25px] h-[25px]'
                         source={icons.leftArrow}
                         resizeMode="contain"
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
             <Text className='text-2xl text-gray-200 font-psemibold mb-[12%]'>

@@ -1,10 +1,6 @@
 import { Redirect, router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalContext } from "../context/GlobalProvider";
-import CustomButton from "./components/CustomButton";
-import { getTranslation } from "../constants/translations/translations";
 import { getLocalHash } from "./utilities/localHashStorage";
 import { getAuthMethodByLocalHash } from "./lib/pulse-services";
 
@@ -28,7 +24,7 @@ export default function Index() {
 
                 // Ensure routing happens only after fetching auth method
                 routeToAuthMethod(method);
-                
+
             } catch (error) {
                 console.error("Error fetching auth method:", error);
             }
@@ -41,13 +37,13 @@ export default function Index() {
         const localHash = await getLocalHash();
 
         if (auth === "BASIC") {
-            router.push("/sign-in");
+            router.replace("/sign-in");
         } else if (auth === "PIN") {
-            router.push({ pathname: "/sign-in-pin", params: { localHash } });
+            router.replace({ pathname: "/sign-in-pin", params: { localHash } });
         } else if (auth === "BIOMETRIC") {
-            router.push({ pathname: "/biometric-login", params: { localHash } });
+            router.replace({ pathname: "/biometric-login", params: { localHash } });
         } else {
-            router.push("/sign-in");
+            router.replace("/sign-in");
         }
     };
 
