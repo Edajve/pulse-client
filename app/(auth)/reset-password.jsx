@@ -44,7 +44,6 @@ const ResetPassword = () => {
     
     
             const response = await refetch(resetPasswordRequest);
-            console.log("Response from refetch:", response); 
     
             if (!response) {
                 setLoadingSpinner(false)
@@ -80,7 +79,7 @@ const ResetPassword = () => {
             }
     
         } catch (error) {
-            console.log("Error during reset:", error);
+
             setPopUp(true);
             setPopUpMessage(getTranslation("password.reset.couldNotBeReset"));
         } finally {

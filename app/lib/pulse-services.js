@@ -187,7 +187,7 @@ export const resetPassword = async (requestBody) => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log(response.data);
+
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -233,6 +233,14 @@ export const updateUser = async (userId, updateUserRequestPayload, token) => {
 export const registerWithPin = async (RegisterRequest) => {
     try {
         return await apiClient.post(`/auth/authenticate/pin`, RegisterRequest);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const registerWithLocalHash = async (localHash) => {
+    try {
+        return await apiClient.post(`/auth/authenticate/hash/${localHash}`);
     } catch (error) {
         throw error;
     }

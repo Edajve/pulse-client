@@ -21,8 +21,6 @@ const [authMethod, setAuthMethod] = useState()
         
         const localHash = await getLocalHash()  
 
-        console.log(localHash)
-
         const method = await getAuthMethodByLocalHash(localHash)
 
         setAuthMethod(method)
@@ -34,11 +32,13 @@ const [authMethod, setAuthMethod] = useState()
 
 
     const routeToAuthMethod = async (auth) => {
+
+        const localHash = await getLocalHash()  
+
         if (auth === "BASIC") {
             router.push('/sign-in');
     
         } else if (auth === "PIN") {
-            const localHash = await getLocalHash();
     
             router.push({
                 pathname: '/sign-in-pin',
@@ -46,9 +46,16 @@ const [authMethod, setAuthMethod] = useState()
             });
     
         } else if (auth === "BIOMETRIC") {
-            // Handle biometric login
+
+            router.push({
+                pathname: '/biometric-login',
+                params: { localHash },
+            });
+            
         } else {
+
             router.push('/sign-in');
+
         }
     };
        

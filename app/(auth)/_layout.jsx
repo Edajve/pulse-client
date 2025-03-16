@@ -36,6 +36,12 @@ const AuthLayout = () => {
                         headerShown: false
                     }}
                 />
+                <Stack.Screen
+                    name="biometric-login"
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </Stack>
             <StatusBar
                 backgroundColor="#161622"

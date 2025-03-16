@@ -6,9 +6,9 @@ const translations = {
       },
       auth: {
         chooseAuthMethod: "Please choose your auth method. This can be reconfigured in your settings",
-        basic: "Use Standard as default Login",
-        pin: "Use PIN as default Login",
-        biometric: "Use Biometric as default Login",
+        basic: "Use Standard as Default Login",
+        pin: "Use PIN as Default Login",
+        biometric: "Use Biometric as Default Login",
         cancel: "Cancel"
       },
       contract: {

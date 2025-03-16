@@ -9,7 +9,7 @@ import SearchInput from '../components/SearchInput';
 import { InProgressContracts, InactiveContracts, activeContracts, getUser, updateUser } from '../lib/pulse-services';
 import { getTranslation } from '../../constants/translations/translations';
 import BlurModalPromptAuthMethod from '../components/BlurModalPromptAuthMethod';
-import { updateLocalHashIfNeeded } from '../utilities/localHashStorage';
+import { getLocalHash, updateLocalHashIfNeeded } from '../utilities/localHashStorage';
 
 const Home = () => {
     const { id, token } = useGlobalContext();
@@ -23,6 +23,7 @@ const Home = () => {
     const BASIC = "BASIC"
     const BIOMETRIC = "BIOMETRIC"
     const PIN_PAGE_ROUTE = "/Pin"
+    const BIOMETRIC_PAGE_ROUTE = "/biometric-login"
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -38,8 +39,6 @@ const Home = () => {
                     }, 600);
                 }
 
-                console.log('lets see if has is there')
-                console.log(user.localHash)
                 // This always keeps localHash up to date and adds it if its not there
                 await updateLocalHashIfNeeded(user.localHash)
     
@@ -94,13 +93,16 @@ const Home = () => {
 
             } else if (method === BIOMETRIC) {
 
-                console.log('Use biometrics');
+               const localHash =  await getLocalHash()  
 
-                // update hasUserBeenAskedAuthMethod after bio has been set
+                router.push({
+                    pathname: BIOMETRIC_PAGE_ROUTE,
+                    params: { localHash },
+                });
+                    
 
             } else if (method === BASIC) {
 
-                // Update user setting for hasUserBeenAskedAuthMethod
                 await updateUser(
                     id, 
                     {

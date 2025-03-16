@@ -7,6 +7,8 @@ import { getTranslation } from '../../constants/translations/translations';
 import { registerWithPin } from '../lib/pulse-services';
 import BlurModalOk from '../components/BlurModalOk';
 import { useLocalSearchParams } from 'expo-router';
+import { useGlobalContext } from '../../context/GlobalProvider';
+import { ROUTES } from '../utilities/Routes';
 
 const codeLimit = 4;
 const dialPad = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'set', 0, 'del'];
@@ -16,6 +18,7 @@ const SignInPin = () => {
     const [popUp, setPopUp] = useState()
     const [popUpMessage, setPopUpMessage] = useState("")
     const { localHash } = useLocalSearchParams();
+    const { setToken, setId, setIsLoggedIn } = useGlobalContext();
 
     const title = "Log In Qssene"
 
@@ -41,13 +44,14 @@ const SignInPin = () => {
 
                     const response = await registerWithPin(payload)
 
-                    console.log(response.data)
+                    if (response.data.token) {
 
-                    if (response.data === 'Authenticated') {
+                        setToken(response.data.token)
+                        setId(response.data.id)
+                        setIsLoggedIn(true)
+                        router.replace(ROUTES.HOME);
 
-                        router.replace('/home');
-
-                    } else if (response.data = 'Incorrect Credentials') {
+                    } else {
 
                         setPopUp(true);
                         setPopUpMessage("Incorrect PIN please try again")

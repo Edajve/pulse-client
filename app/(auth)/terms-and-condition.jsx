@@ -8,7 +8,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { register } from "../lib/pulse-services";
 import { getTranslation } from "../../constants/translations/translations";
 import BlurModalOk from "../components/BlurModalOk";
-import { saveLocalHash, printLocalHash } from "../utilities/localHashStorage";
+import { saveLocalHash } from "../utilities/localHashStorage";
 
 const TermsAndConditions = () => {
     const [terms, setTerms] = useState(null);
