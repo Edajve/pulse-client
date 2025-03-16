@@ -9,75 +9,68 @@ import { getLocalHash } from "./utilities/localHashStorage";
 import { getAuthMethodByLocalHash } from "./lib/pulse-services";
 
 export default function Index() {
-const [authMethod, setAuthMethod] = useState()
-
+    const [authMethod, setAuthMethod] = useState(null);
     const { isLoading, isLoggedIn } = useGlobalContext();
 
-    if (!isLoading && isLoggedIn) return <Redirect href='/home'/>;
+    if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
 
     useEffect(() => {
-    
-        const getAuthMethod = async = async () => {
-        
-        const localHash = await getLocalHash()  
+        const fetchAuthMethod = async () => {
+            try {
 
-        const method = await getAuthMethodByLocalHash(localHash)
+                const localHash = await getLocalHash();
 
-        setAuthMethod(method)
+                if (!localHash) return; // Prevents errors if hash is missing
 
-        }
-    
-        getAuthMethod()
-    }, [])
+                const method = await getAuthMethodByLocalHash(localHash);
 
+                setAuthMethod(method);
+
+                // Ensure routing happens only after fetching auth method
+                routeToAuthMethod(method);
+                
+            } catch (error) {
+                console.error("Error fetching auth method:", error);
+            }
+        };
+
+        fetchAuthMethod();
+    }, []);
 
     const routeToAuthMethod = async (auth) => {
-
-        const localHash = await getLocalHash()  
+        const localHash = await getLocalHash();
 
         if (auth === "BASIC") {
-            router.push('/sign-in');
-    
+            router.push("/sign-in");
         } else if (auth === "PIN") {
-    
-            router.push({
-                pathname: '/sign-in-pin',
-                params: { localHash },
-            });
-    
+            router.push({ pathname: "/sign-in-pin", params: { localHash } });
         } else if (auth === "BIOMETRIC") {
-
-            router.push({
-                pathname: '/biometric-login',
-                params: { localHash },
-            });
-            
+            router.push({ pathname: "/biometric-login", params: { localHash } });
         } else {
-
-            router.push('/sign-in');
-
+            router.push("/sign-in");
         }
     };
-       
+
     return (
         <>
-        <SafeAreaView className='bg-primary h-full'>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View className='flex-1 items-center justify-center'>
-                    <Text className='text-4xl text-gray-100 font-semibold'>
-                        {getTranslation('name.name')}
-                    </Text>
-                    <Text className='text-5xl text-gray-100 font-semibold mb-7 mt-7'>
-                        Logo Here
-                    </Text>
-                    <CustomButton
-                        title={getTranslation('buttons.continue')}
-                        handlePress={() =>  routeToAuthMethod(authMethod)}
-                        containerStyle='w-[95vw] mt-7'
-                    />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            {/* Uncomment this when you want to display UI */}
+            {/* <SafeAreaView className="bg-primary h-full">
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <View className="flex-1 items-center justify-center">
+                        <Text className="text-4xl text-gray-100 font-semibold">
+                            {getTranslation("name.name")}
+                        </Text>
+                        <Text className="text-5xl text-gray-100 font-semibold mb-7 mt-7">
+                            Logo Here
+                        </Text>
+                        <CustomButton
+                            title={getTranslation("buttons.continue")}
+                            handlePress={() => routeToAuthMethod(authMethod)}
+                            containerStyle="w-[95vw] mt-7"
+                        />
+                    </View>
+                </ScrollView>
+            </SafeAreaView> */}
         </>
     );
 }
