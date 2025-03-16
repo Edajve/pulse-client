@@ -95,7 +95,7 @@ const BiometricAuthentication = () => {
             </View>
             <View>
                 <Text className="text-white text-center text-xl">Biometric Authentication</Text>
-                {popUpMessage ? <Text className="text-red-500 text-center mt-4">{popUpMessage}</Text> : null}
+                
             </View>
 
             <View className='justify-center pt-5 flex-row gap-2'>
