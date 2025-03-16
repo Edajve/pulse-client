@@ -245,3 +245,23 @@ export const registerWithLocalHash = async (localHash) => {
         throw error;
     }
 }
+
+export const getContractsByNameAndUserId = async (name, userId, token) => {
+    try {
+        
+        const response = await apiClient.get(
+            `/contract/search?name=${name}&userId=${userId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching contracts:", error.response?.data || error.message);
+        return error.response?.data || { message: "An unexpected error occurred." };
+    }
+};

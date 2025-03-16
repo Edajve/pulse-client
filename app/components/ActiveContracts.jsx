@@ -38,7 +38,14 @@ const ActiveContracts = ({ contract, participantOne, participantTwo }) => {
             <View className='flex justify-between items-start flex-row mb-6'>
                 <View>
                     <Text className='font-plight text-xs text-gray-100'>
-                        {truncateName(participantOne)} & {truncateName(participantTwo)}
+                        {participantOne}
+                    </Text>
+                    <Text className='font-plight text-xs text-gray-100'>
+                        &
+                    </Text>
+
+                    <Text className='font-plight text-xs text-gray-100'>
+                        {participantTwo}
                     </Text>
                     <Text className={`font-plight text-2xs text-gray-100 pt-[4px]`}>
                         {getTranslation('contract.status')} <Text className={`font-plight text-2xs ${dynamicStatusColor(contract?.status)}`}>

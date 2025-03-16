@@ -131,7 +131,7 @@ const SingleContract = () => {
               <View>
                 <TouchableOpacity
                   className="flex-1"
-                  onPress={() => router.replace('/home')}
+                  onPress={() => router.back()}
                 >
                   <Image
                     className="w-[30px] h-[30px]"
@@ -149,7 +149,9 @@ const SingleContract = () => {
             <View className='w-full flex-col'>
               <View className='mt-4'>
                 <Text className={headerStyle}>{getTranslation('contract.participants')}</Text>
-                <Text className={textSpacing}>{contract?.participantOne?.firstName} & {contract?.participantTwo?.firstName}</Text>
+                <Text className={textSpacing}>{contract?.participantOne?.firstName} {contract?.participantOne?.lastName}</Text>
+                <Text className={textSpacing}> & </Text>
+                <Text className={textSpacing}>{contract?.participantTwo?.firstName} {contract?.participantTwo?.lastName}</Text>
               </View>
               <View className={sectionStyle}>
                 <Text className={headerStyle}>{getTranslation('contract.details')}</Text>
@@ -172,8 +174,8 @@ const SingleContract = () => {
                     {contract?.contractCancelReason}
                   </Text>
                 )}
-                <Text className={renderParticipantNames}>{contract.participantOne.firstName}</Text>
-                <Text className={renderUsersNames}>Did {contract.participantOne.firstName} {getTranslation('contract.revoke')} {renderRevokeStatusText(contract.didParticipantOneRevoke)}</Text>
+                <Text className={renderParticipantNames}>{contract?.participantOne?.firstName}</Text>
+                <Text className={renderUsersNames}>Did {contract?.participantOne?.firstName} {getTranslation('contract.revoke')} {renderRevokeStatusText(contract.didParticipantOneRevoke)}</Text>
                 {contract.didParticipantOneRevoke && (
                   <Text className={renderRevokeText()}>
                     {contract?.participantOneRevokeContractReason}

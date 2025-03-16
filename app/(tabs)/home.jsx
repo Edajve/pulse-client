@@ -149,7 +149,7 @@ const Home = () => {
                     <FlatList
                         data={active}
                         keyExtractor={(contract) => contract.id}
-                        renderItem={({ item: contract }) => (
+                    renderItem={({ item: contract }) => (
                             <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
                                 <ActiveContracts
                                     participantOne={contract.participantOne?.firstName}
@@ -173,9 +173,10 @@ const Home = () => {
                         renderItem={({ item: contract }) => (
                             <TouchableOpacity onPress={() => router.push(`/single-contract/${contract.id}`)} >
                                 <ActiveContracts
-                                    participantOne={contract.participantOne?.firstName}
-                                    participantTwo={contract.participantTwo?.firstName}
-                                    contract={contract} />
+                                    participantOne={`${contract.participantOne?.firstName} ${contract.participantOne?.lastName}`}
+                                    participantTwo={`${contract.participantTwo?.firstName} ${contract.participantTwo?.lastName}`}
+                                    contract={contract}
+                                />
                             </TouchableOpacity>
                         )}
                         ListEmptyComponent={() => (

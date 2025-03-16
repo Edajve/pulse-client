@@ -1,4 +1,4 @@
-import {Alert, Image, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, TextInput, TouchableOpacity, View} from "react-native";
 import {useState} from "react";
 import icons from "../../constants/icons";
 import {router, usePathname} from "expo-router";
@@ -52,15 +52,23 @@ const SearchInput = ({initialQuery}) => {
             <View className={'mt-1.5'}>
 
                 <TouchableOpacity
+
                     onPress={() => {
                         if (!query) {
-                                setPopUpMessage("Please put in a name to search by")
-                                setPopUp(true)
-                        }
-                        
 
-                        else if (pathname.startsWith('/search')) router.setParams({query})
-                        else router.push(`/search/${query}`)
+                            setPopUpMessage("Please put in a name to search by")
+                            setPopUp(true)
+
+                        }else if (pathname.startsWith('/search')) {
+
+                            router.setParams({query})
+
+                        }
+                        else  {
+
+                            router.push(`/search/${query}`)
+
+                        }
                     }}
                 >
                     <Image
