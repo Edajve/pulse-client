@@ -39,6 +39,7 @@ const RootLayout = () => {
                     ,  gestureEnabled: false
                     }}/>
                 <Stack.Screen name="(contract)" options={{headerShown: false,  gestureEnabled: false}}/>
+                <Stack.Screen name="search" options={{ headerShown: false }} />
             </Stack>
         </GlobalProvider>
     )

@@ -3,21 +3,18 @@ import React from 'react';
 import { Modal, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native';
 
-const LoadingModal = ({ additionalStyles, text }) => {
+const LoadingModal = ({ additionalStyles, text, intensity = 15 }) => {
     return (
-        <Modal  
-            animationType='fade'
-            transparent={true}
-        >
-             <BlurView
+        <Modal animationType='fade' transparent={true}>
+            <BlurView
                 id='blur-test-id'
-                blurAmount={60} // You can set the blur amount as needed
-                className='flex-1 justify-center items-center '
+                className='flex-1 justify-center items-center'
+                intensity={intensity} // <- use the prop here
             >
-                 <View className="flex-1 justify-center items-center">
-                <ActivityIndicator size="large" color="orange" />
-                <Text className="mt-4 text-lg text-white">{text}</Text>
-            </View>
+                <View className="flex-1 justify-center items-center">
+                    <ActivityIndicator size="large" color="orange" />
+                    <Text className="mt-4 text-lg text-white">{text}</Text>
+                </View>
             </BlurView>
         </Modal>
     );

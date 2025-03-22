@@ -53,6 +53,10 @@ const SignIn = () => {
     };
 
     return (
+        <>
+        {loading && (
+            <LoadingModal/>
+        )}
         <SafeAreaView className="bg-primary h-full">
               
             {
@@ -137,6 +141,7 @@ const SignIn = () => {
                 </View>
             </ScrollView>
         </SafeAreaView>
+        </>
     );
 };
 

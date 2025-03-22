@@ -6,33 +6,28 @@ import icons from "../../constants/icons";
 import InformationBlock from '../components/SettingsInformationBlocks';
 import { getContractStats } from '../lib/pulse-services';
 import { useGlobalContext } from '../../context/GlobalProvider';
+import useApi from '../hooks/useApi';
+import LoadingModal from '../components/LoadingModal';
 
 const Stats = () => {
-    const { id, token } = useGlobalContext()
-    const [contractStats, setcontractStats] = useState({
-        "totalContracts": 0,
-        "totalContractsRevoked": 0,
-        "successfulToRevokedRatio": 0,
-        "mostConsentedPartner": "",
-        "mostRevokedPartner": ""
-    })
+    const { id, token } = useGlobalContext();
+
+    const wrappedGetContractStats = async ({ userId, token }) => {
+        return await getContractStats(userId, token);
+    };
+
+    const { data: contractStats, error, loading, refetch } = useApi(wrappedGetContractStats);
 
     useEffect(() => {
-        const fetchContractStats = async () => {
-            try {
-                const res = await getContractStats(id, token);
-                setcontractStats(res);
-            } catch (error) {
-                console.error('Error fetching contract stats:', error);
-            }
-        };
-
-        fetchContractStats();
-    }, []);
-
+        if (id && token) {
+            refetch({ userId: id, token });
+        }
+    }, [id, token]);
 
     return (
         <SafeAreaView className="bg-primary h-full p-5">
+            {loading && <LoadingModal intensity={60} text="Loading Stats..." />}
+
             <View className='mt-4 mb-9'>
                 <TouchableOpacity onPress={() => router.back('/settings')}>
                     <Image
@@ -42,15 +37,16 @@ const Stats = () => {
                     />
                 </TouchableOpacity>
             </View>
+
             <View>
-                <InformationBlock title='Total Contracts' text={contractStats.totalContracts} />
-                <InformationBlock title='Contracts Revoked' text={contractStats.totalContractsRevoked} />
-                <InformationBlock title='Successful to Revoked contract ratio' text={`${contractStats.successfulToRevokedRatio}%`} />
-                <InformationBlock title='Most consent parthner' text={contractStats.mostConsentedPartner} />
-                <InformationBlock title='Most revoked parthner' text={contractStats.mostRevokedPartner} />
+                <InformationBlock title='Total Contracts' text={contractStats?.totalContracts || 0} />
+                <InformationBlock title='Contracts Revoked' text={contractStats?.totalContractsRevoked || 0} />
+                <InformationBlock title='Successful to Revoked contract ratio' text={`${contractStats?.successfulToRevokedRatio || 0}%`} />
+                <InformationBlock title='Most consent partner' text={contractStats?.mostConsentedPartner || "N/A"} />
+                <InformationBlock title='Most revoked partner' text={contractStats?.mostRevokedPartner || "N/A"} />
             </View>
         </SafeAreaView>
-    )
-}
+    );
+};
 
-export default Stats
+export default Stats;

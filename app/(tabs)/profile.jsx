@@ -27,12 +27,7 @@ const Profile = () => {
     };
 
     const showQrCode = () => {
-        setLoading(true);
-
-        setTimeout(() => {
-            setLoading(false); // Hide loading after 200ms
-            setShowQr(true);
-        }, 200);
+        setShowQr(true);
     }
 
     return (

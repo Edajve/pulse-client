@@ -6,40 +6,43 @@ import QRCode from 'react-native-qrcode-svg';
 import { getUserQrCode } from '../lib/pulse-services';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { getTranslation } from '../../constants/translations/translations';
+import useApi from '../hooks/useApi';
+import LoadingModal from './LoadingModal';
 
-const PersonalQr = ({closeQr}) => {
-    const [error, setError] = useState(null);
-    const [qr, setQr] = useState({
-        id: ""
-        , data: ""
-    });
+const PersonalQr = ({ closeQr }) => {
+    const { token, id } = useGlobalContext();
 
-    const {token, id} = useGlobalContext()
+    // Wrap getUserQrCode to accept a single object
+    const wrappedGetQr = async ({ accountId, token }) => {
+        return await getUserQrCode(accountId, token);
+    };
+
+    const { error, loading, refetch } = useApi(wrappedGetQr);
+    const [qr, setQr] = useState({ id: "", data: "" });
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await getUserQrCode(id, token);
-                if (response) {
-                    const userCredentials = {
-                        id: response.id
-                        , data: response.generatedQrID
+        if (id && token) {
+            refetch({ accountId: id, token })
+                .then((response) => {
+                    if (response?.generatedQrID) {
+                        setQr({
+                            id: response.id,
+                            data: response.generatedQrID
+                        });
                     }
-
-                    setQr(userCredentials)
-                } else {
-                    setError('Invalid data received from the server');
-                }
-            } catch (err) {
-                console.error('Error fetching QR code:', err);
-                setError('Failed to fetch QR code');
-            }
-        };
-
-        fetchData();
-    }, []);
+                })
+                .catch((err) => {
+                    console.error("Error fetching QR code:", err);
+                    // error is already handled by useApi, so no need to re-set local error
+                });
+        }
+    }, [id, token]);
 
     return (
+        <>
+        {loading && (
+    <LoadingModal intensity={75} />
+)}
         <SafeAreaView className="bg-white h-full w-full">
             <View className='pl-5'>
                 <TouchableOpacity onPress={closeQr}>
@@ -51,18 +54,21 @@ const PersonalQr = ({closeQr}) => {
                 </TouchableOpacity>
             </View>
             <View className='justify-center h-full items-center'>
-                {error ? (
-                    <Text>Error: {error}</Text>
-                ) : qr ? (
+                {loading ? (
+                    <Text>{getTranslation('contract.loading')}</Text>
+                ) : error ? (
+                    <Text>Error: {getTranslation('text.qrCodeFetchFailed')}</Text>
+                ) : qr?.data ? (
                     <QRCode 
                         value={JSON.stringify(qr)} 
                         size={250}
                     />
                 ) : (
-                    <Text>{getTranslation('contract.loading')}</Text>
+                    <Text>{getTranslation('text.qrCodeNotAvailable')}</Text>
                 )}
             </View>
         </SafeAreaView>
+        </>
     );
 };
 

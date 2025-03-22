@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../context/GlobalProvider";
 import { getLocalHash } from "./utilities/localHashStorage";
 import { getAuthMethodByLocalHash } from "./lib/pulse-services";
+import AuthenticationMethod from "./(settings)/authentication-method";
+import { SafeAreaView,ScrollView, View } from "react-native-web";
+import CustomButton from "./components/CustomButton";
+import { Text } from "react-native";
+import { getTranslation } from "../constants/translations/translations";
 
 export default function Index() {
     const [authMethod, setAuthMethod] = useState(null);
@@ -13,37 +18,51 @@ export default function Index() {
     useEffect(() => {
         const fetchAuthMethod = async () => {
             try {
-
                 const localHash = await getLocalHash();
-
-                if (!localHash) return; // Prevents errors if hash is missing
-
+    
+                // If there's no localHash, just send to /sign-in
+                if (!localHash) {
+                    router.replace("/sign-in");
+                    return;
+                }
+    
                 const method = await getAuthMethodByLocalHash(localHash);
-
+    
+                // If method is not found or invalid, default to /sign-in
+                if (!method || !["BASIC", "PIN", "BIOMETRIC"].includes(method)) {
+                    router.replace("/sign-in");
+                    return;
+                }
+    
                 setAuthMethod(method);
-
-                // Ensure routing happens only after fetching auth method
-                routeToAuthMethod(method);
-
+                routeToAuthMethodScreen(method);
+    
             } catch (error) {
                 console.error("Error fetching auth method:", error);
+                router.replace("/sign-in"); // fallback on any error
             }
         };
-
+    
         fetchAuthMethod();
     }, []);
 
-    const routeToAuthMethod = async (auth) => {
+    const routeToAuthMethodScreen = async (auth) => {
+
         const localHash = await getLocalHash();
 
-        if (auth === "BASIC") {
-            router.replace("/sign-in");
-        } else if (auth === "PIN") {
-            router.replace({ pathname: "/sign-in-pin", params: { localHash } });
-        } else if (auth === "BIOMETRIC") {
-            router.replace({ pathname: "/biometric-login", params: { localHash } });
-        } else {
-            router.replace("/sign-in");
+        // We pass localhash only during sign-in-in and biometric-login because on sign-in we grab the local hash upon login
+        switch (auth) {
+            case "BASIC":
+                router.replace("/sign-in");
+                break;
+            case "PIN":
+                router.replace({ pathname: "/sign-in-pin", params: { localHash } });
+                break;
+            case "BIOMETRIC":
+                router.replace({ pathname: "/biometric-login", params: { localHash } });
+                break;
+            default:
+                router.replace("/sign-in");
         }
     };
 

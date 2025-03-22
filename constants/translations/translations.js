@@ -6,10 +6,18 @@ const translations = {
       },
       auth: {
         chooseAuthMethod: "Please choose your auth method. This can be reconfigured in your settings",
-        basic: "Use Standard as Default Login",
-        pin: "Use PIN as Default Login",
-        biometric: "Use Biometric as Default Login",
-        cancel: "Cancel"
+        basicOption: "Use Standard as Default Login",
+        pinOption: "Use PIN as Default Login",
+        biometricOption: "Use Biometric as Default Login",
+        cancel: "Cancel",
+        authMethodText: "Auth Method",
+        authMethodSettingsSubText: "This will be your login mehtod upon opening application",
+        basicText: "Basic (Email and Password)",
+        pinText: "4-Digit PIN",
+        biometricText: "Biometric (Ex. FaceID, Finger Scan)",
+        pin: "PIN",
+        basic: "BASIC",
+        biometric: "BIOMETRIC"
       },
       contract: {
         participants: "Participants",
@@ -105,7 +113,8 @@ const translations = {
         allSetOnYourEnd: "All Set from Your End!",
         sucessfulRateSubmittion: "Thanks for submitting feedback",
         howToUseQssense: "How to use Qssense",
-        tutorial: "Tutorial"
+        tutorial: "Tutorial",
+        update: "Update"
       },
       consent: {
         activeConsent: "Active Consent",

@@ -10,6 +10,8 @@ import { InProgressContracts, InactiveContracts, activeContracts, getUser, updat
 import { getTranslation } from '../../constants/translations/translations';
 import BlurModalPromptAuthMethod from '../components/BlurModalPromptAuthMethod';
 import { getLocalHash, updateLocalHashIfNeeded } from '../utilities/localHashStorage';
+import useApi from '../hooks/useApi';
+import LoadingModal from '../components/LoadingModal';
 
 const Home = () => {
     const { id, token } = useGlobalContext();
@@ -25,24 +27,30 @@ const Home = () => {
     const PIN_PAGE_ROUTE = "/Pin"
     const BIOMETRIC_PAGE_ROUTE = "/biometric-login"
 
+    const wrappedGetUser = async ({ id, token }) => {
+        return await getUser(id, token);
+    };
+
+    const { loading, refetch } = useApi(wrappedGetUser);
+
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     
         const fetchData = async () => {
             try {
 
-                const user = await getUser(id, token);
-
-                if (!user.hasUserBeenAskedAuthMethod) {
+                const user = await refetch({ id, token });
+    
+                if (!user?.hasUserBeenAskedAuthMethod) {
                     setTimeout(() => {
                         setPromptForAuthMethod(true);
                     }, 600);
                 }
-
-                // This always keeps localHash up to date and adds it if its not there
-                await updateLocalHashIfNeeded(user.localHash)
     
-                // Fetch contracts data in parallel
+                // Keep localHash updated
+                await updateLocalHashIfNeeded(user?.localHash);
+    
+                // Fetch contracts in parallel
                 const [activeResponse, inactiveResponse, inProgressResponse] = await Promise.all([
                     activeContracts(id, token),
                     InactiveContracts(id, token),
@@ -52,13 +60,14 @@ const Home = () => {
                 setActiveContracts(activeResponse);
                 setNotActiveContracts(inactiveResponse);
                 setInProgress(inProgressResponse);
-                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
     
-        fetchData();
+        if (id && token) {
+            fetchData();
+        }
     }, [id, token]);
 
     const onRefreshAllContracts = async () => {
@@ -120,7 +129,15 @@ const Home = () => {
 
     return (
         <>
-        {promptForAutMethod && ( 
+        {
+        loading &&
+         (
+            <LoadingModal />
+        )}
+        
+        {
+        promptForAutMethod &&
+         ( 
             <BlurModalPromptAuthMethod
                 visible={promptForAutMethod}
                 onRequestClose={() => handleAuthMethodSelection(BASIC)}

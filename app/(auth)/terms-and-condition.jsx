@@ -9,8 +9,9 @@ import { register } from "../lib/pulse-services";
 import { getTranslation } from "../../constants/translations/translations";
 import BlurModalOk from "../components/BlurModalOk";
 import { saveLocalHash } from "../utilities/localHashStorage";
-import { RouterStore } from "expo-router/build/global-state/router-store";
 import { ROUTES } from "../utilities/Routes";
+import useApi from "../hooks/useApi";
+import LoadingModal from "../components/LoadingModal";
 
 const TermsAndConditions = () => {
     const [terms, setTerms] = useState(null);
@@ -19,26 +20,33 @@ const TermsAndConditions = () => {
 
     const { signUpFormData } = useGlobalContext();
 
+    // 🧠 Wrap register so it fits useApi's one-param signature
+    const wrappedRegister = async (payload) => {
+        return await register(payload);
+    };
+
+    const { data, error, loading, refetch } = useApi(wrappedRegister);
+
     useEffect(() => {
         const handleTerms = async () => {
             const userAlreadyExistsVerbage = getTranslation("text.userAlreadyExists");
 
-            if (terms) {
-                const response = await register(signUpFormData);
-                if (response.data === userAlreadyExistsVerbage) {
-                    setPopUp(true);
-                    setTerms(null);
-                    setPopUpMessage(userAlreadyExistsVerbage);
-                } else {
-                    /*
-                     Since this is the terms and conditions, the users can should only see this page on first sign in
-                     meaning, this is where we want to take the local storage hash and add it to the local storage
-                    */
+            if (terms === true) {
+                try {
+                    const response = await refetch(signUpFormData);
 
-                     console.log('helloooooooo')
-                     console.log(response.data)
-                    await saveLocalHash(response.data.localHash);
-                    router.replace('/sign-in');
+                    if (response?.data === userAlreadyExistsVerbage) {
+                        setPopUp(true);
+                        setTerms(null);
+                        setPopUpMessage(userAlreadyExistsVerbage);
+                    } else {
+                        await saveLocalHash(response?.data?.localHash);
+                        router.replace('/sign-in');
+                    }
+                } catch (err) {
+                    console.error("Error registering user:", err);
+                    setPopUp(true);
+                    setPopUpMessage("An unexpected error occurred.");
                 }
             } else if (terms === false) {
                 setTerms(null);
@@ -48,7 +56,7 @@ const TermsAndConditions = () => {
         };
 
         handleTerms();
-    }, [signUpFormData, terms]);
+    }, [terms]); // only run when user makes a choice
 
     const closePopUp = () => {
         setPopUp(false);
@@ -57,13 +65,17 @@ const TermsAndConditions = () => {
 
     return (
         <>
+    
+            {loading && (
+                <LoadingModal />
+            )}
             {popUp && (
                 <BlurModalOk
                     visible={popUp}
                     onRequestClose={closePopUp}
                     title={popUpMessage}
                     affirmativeButtonTitle='OK'
-                    onYes={closePopUp} 
+                    onYes={closePopUp}
                 />
             )}
             <SafeAreaView className='w-full h-full bg-primary px-5 '>
@@ -76,7 +88,6 @@ const TermsAndConditions = () => {
                             {getTranslation('text.TermsandCondition')}
                         </Text>
 
-                        {/* Terms & Conditions Text Blocks */}
                         {[
                             "consentToMessages",
                             "appPermissions",
@@ -96,7 +107,6 @@ const TermsAndConditions = () => {
                             </Text>
                         ))}
 
-                        {/* Additional Provisions */}
                         <Text className='text-gray-200 text-base font-psemibold text-1xl mt-[32px]'>
                             {getTranslation("longText.termsAndConditions.additionalProvisions")}
                         </Text>
@@ -113,21 +123,20 @@ const TermsAndConditions = () => {
                             </Text>
                         ))}
 
-                        {/* Accept Terms */}
                         <Text className='text-gray-200 text-base font-pregular text-1xl mt-[32px]'>
                             Accept Terms: <Text className='font-psemibold'>{terms ? "Yes" : "No"}</Text>
                         </Text>
 
-                        {/* Buttons */}
                         <View className='w-full flex-row justify-between mb-[70px]'>
                             <CustomButton
                                 title='Accept'
                                 containerStyle={`w-[40vw] mt-10 ${terms ? "bg-green" : ""}`}
                                 handlePress={() => setTerms(true)}
+                                isLoading={loading}
                             />
                             <CustomButton
                                 title='Reject'
-                                containerStyle={`w-[40vw] mt-10 ${!terms ? "bg-red" : ""}`}
+                                containerStyle={`w-[40vw] mt-10 ${terms === false ? "bg-red" : ""}`}
                                 handlePress={() => setTerms(false)}
                             />
                         </View>

@@ -42,7 +42,6 @@ const SignUp = () => {
         setIsSubmitting(true);
 
         try {
-            // Add this to global state 
             setSignUpFormData(form)
             router.replace('/terms-and-condition');
 

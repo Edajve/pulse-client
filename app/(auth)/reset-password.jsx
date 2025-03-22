@@ -18,7 +18,6 @@ const ResetPassword = () => {
     const [popUp, setPopUp] = useState(false)
     const [popUpMessage, setPopUpMessage] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [loadingSpinner, setLoadingSpinner] = useState(false)
     const evaluator = new PasswordStrengthEvaluator()
     const [resetPasswordRequest, setResetPasswordRequest] = useState({
         email: ""
@@ -33,26 +32,22 @@ const ResetPassword = () => {
             setPopUpMessage("");
     };
 
-    const { loading, data, error, refetch } = useApi(resetPassword);
+    const { loading, refetch } = useApi(resetPassword);
 
     const onResetPassword = async () => {
-        setLoadingSpinner(loading)
+
         setIsSubmitting(true);
     
         try {
             var passwordStrength = evaluator.validatePassword(resetPasswordRequest.newPassword).title;
     
-    
             const response = await refetch(resetPasswordRequest);
     
             if (!response) {
-                setLoadingSpinner(false)
                 setPopUp(true);
                 setPopUpMessage("An error occurred. Please try again.");
                 return;
             }
-    
-            setLoadingSpinner(false)
 
             if (resetPasswordRequest.newPassword !== resetPasswordRequest.confirmPassword) {
                 setPopUp(true);
@@ -90,7 +85,7 @@ const ResetPassword = () => {
     return (
         <SafeAreaView className="h-full bg-primary">
             <ScrollView>
-            {loadingSpinner && <LoadingModal />}
+            {loading && <LoadingModal />}
                 {popUp &&
                    <BlurModalOk
                    visible={popUp}
