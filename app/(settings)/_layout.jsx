@@ -30,7 +30,7 @@ const SettingLayout = () => {
                     }}
                 />
                 <Stack.Screen
-                    name="payments"
+                    name="authentication-method"
                     options={{
                         headerShown: false
                     }}

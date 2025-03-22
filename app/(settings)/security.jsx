@@ -4,6 +4,7 @@ import { Image, TouchableOpacity, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
 import InformationBlock from '../components/SettingsInformationBlocks';
+import { ROUTES } from '../utilities/Routes';
 
 const Security = () => {
 
@@ -19,8 +20,12 @@ const Security = () => {
                 </TouchableOpacity>
             </View>
             <View>
-                <TouchableOpacity onPress={() => router.push('/reset-password')}>
+                <TouchableOpacity onPress={() => router.push(ROUTES.RESET_PASSWORD)}>
                     <InformationBlock title='Click to reset password' text='**********' />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => router.push(ROUTES.RESET_PIN)}>
+                    <InformationBlock title='Click to reset PIN' text='****' />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

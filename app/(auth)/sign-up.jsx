@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+  import React, { useState } from 'react';
 import { Alert, ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../components/FormField";
@@ -10,6 +10,8 @@ import icons from '../../constants/icons';
 import PasswordStrengthEvaluator from '../utilities/PasswordStrengthEvaluator';
 import BlurModalOk from '../components/BlurModalOk';
 import { getTranslation } from '../../constants/translations/translations';
+import SignUpValidator from '../utilities/SignUpValidator';
+import { ROUTES } from '../utilities/Routes';
 
 const SignUp = () => {
     const evaluator = new PasswordStrengthEvaluator()
@@ -54,118 +56,28 @@ const SignUp = () => {
 
     function checkSignInFields() {
 
-        if (!form.firstName || !form.lastName || !form.email || !form.password) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.fillAllFields'));
-
-            return false;
-        }
-
-        // Check if email is in the correct format
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailPattern.test(form.email)) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.enterValidEmail'));
-            
-            return false;
-        }
-
-        // Check if password is up to sequrity
-        const passwordStrength = evaluator.validatePassword(form.password).title
-
-        if (passwordStrength !== "Strong Password") {
-            Alert.alert('Password', 
+        const errorMessage = SignUpValidator.validate(form);
+    
+        if (errorMessage === "weak-password") {
+            Alert.alert('Password',
                 'Please increase password strength:\n' +
                 '- At least one uppercase letter required\n' +
                 '- At least one lowercase letter required\n' +
                 '- At least one symbol required\n' +
                 '- At least one number required'
-              );
-
-            //   setPopUp(true);
-            //   setPopUpMessage(getTranslation('password.status.meetStrength'));
+            );
             return false;
-        
         }
-
-        // Check if age and date of birth are valid
-        if (!form.dateOfBirth) {
-
+    
+        if (errorMessage) {
             setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.DoBNotPopulated'));
+            setPopUpMessage(errorMessage);
             return false;
         }
-
-        // is DoB in correct formatting? MM-DD-YYYY
-        const datePattern = /^(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])-(19|20)\d{2}$/;
-        if (!datePattern.test(form.dateOfBirth)) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.correctDobFormat'));
-            return false;
-        }
-
-        // Calculate age
-        const dateParts = form.dateOfBirth.split("-");
-        const dobDate = new Date(parseInt(dateParts[2]), parseInt(dateParts[0]) - 1, parseInt(dateParts[1]));
-        const currentDate = new Date();
-        const ageDifference = currentDate - dobDate;
-        const ageInYears = ageDifference / (1000 * 60 * 60 * 24 * 365);
-
-        if (ageInYears < 18) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.eighteenOrOlder'));
-            return false;
-        }
-
-        // Check if dropdowns are populated correctly
-        const isSexDropdownEmpty = !form.sex || form.sex === "Select your Sex";
-        const isSecurityQuestionDropdownEmpty = !form.securityQuestion || form.securityQuestion === "Select your Security Question";
-        const isCountryEmpty = !form.countryRegion || form.countryRegion === "Select your Country/Region"
-        const isSecurityAnswerEmpty = !form.securityAnswer
-
-        if (isSexDropdownEmpty && isSecurityQuestionDropdownEmpty && isCountryEmpty) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.allDropdownsPopulated'));
-
-            return false;
-        }
-
-        if (isSexDropdownEmpty) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.populateSexDropdown'));
-
-            return false;
-        }
-
-        if (isSecurityQuestionDropdownEmpty) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.populateSecurityQuestion'));
-            return false;
-        }
-
-        if (isCountryEmpty) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.populateCountry'));
-            return false;
-        }
-
-        if (isSecurityAnswerEmpty) {
-
-            setPopUp(true);
-            setPopUpMessage(getTranslation('signUp.populateSecurityAnswer'));
-            return false;
-        }
-
+    
         return true;
     }
+
 
     const closePopUp = () => {
         setPopUp(false);
@@ -186,7 +98,7 @@ const SignUp = () => {
             <ScrollView>
                 
                 <View className='mt-4 mb-9'>
-                    <TouchableOpacity onPress={() => router.back()}>
+                    <TouchableOpacity onPress={() => router.back(ROUTES.SIGN_IN)}>
                         <Image
                             className='w-[25px] h-[25px]'
                             source={icons.leftArrow}
@@ -234,7 +146,7 @@ const SignUp = () => {
                     <DropDown
                         testID='sexDropDown'
                         title='Sex'
-                        updateForm={(itemValue) => setForm({ ...form, sex: itemValue })}
+                        updateForm={(itemValue) => setForm({ ...form, sex: itemValue.toUpperCase() })}
                         options={["Select your Sex", "MALE", "FEMALE", "NON_BINARY", "GENDER_QUEER", "OTHER"]}
                     />
                     <DropDown
@@ -242,15 +154,15 @@ const SignUp = () => {
                         title='Security Question'
                         updateForm={(itemValue) => setForm({ ...form, securityQuestion: itemValue })}
                         options={[
-                            "Select your Security Question"
-                            , "What was the name of your first pet?"
-                            , "What was your childhood nickname?"
-                            , "What is your mother’s maiden name?"
-                            , "What is your favorite book?",
-                            "What is your favorite movie?"
-                            , "What was your favorite teacher’s name?",
-                            "What is your favorite food?"
-                        ]}
+                            "Select your Security Question",
+                            "What city did you meet your partner in?",
+                            "What was your dream job as a child?",
+                            "What is the name of your favorite cousin?",
+                            "What was the make of your first car?",
+                            "What is the name of your first boss?",
+                            "What is your go-to comfort food?",
+                            "What was your first concert or show?"
+                          ]}
                     />
                     <FormField
                         placeholder={"Security Answer"}

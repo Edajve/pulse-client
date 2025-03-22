@@ -10,10 +10,9 @@ import CustomButton from '../components/CustomButton';
 import { getTranslation } from '../../constants/translations/translations';
 import BlurModalOk from '../components/BlurModalOk';
 
-const [popUp, setPopUp] = useState(false)
-const [popUpMessage, setPopUpMessage] = useState('')
-
 const RateUs = () => {
+    const [popUp, setPopUp] = useState(false)
+    const [popUpMessage, setPopUpMessage] = useState('')
     const [starRating, setStarRating] = useState(0);
     const [rating, setRating] = useState({
         "comment": ""

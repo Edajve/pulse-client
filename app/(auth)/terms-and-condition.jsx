@@ -9,6 +9,8 @@ import { register } from "../lib/pulse-services";
 import { getTranslation } from "../../constants/translations/translations";
 import BlurModalOk from "../components/BlurModalOk";
 import { saveLocalHash } from "../utilities/localHashStorage";
+import { RouterStore } from "expo-router/build/global-state/router-store";
+import { ROUTES } from "../utilities/Routes";
 
 const TermsAndConditions = () => {
     const [terms, setTerms] = useState(null);
@@ -65,7 +67,7 @@ const TermsAndConditions = () => {
                 />
             )}
             <SafeAreaView className='w-full h-full bg-primary px-5 '>
-                <TouchableOpacity className='pl-5 mt-7' onPress={() => router.back()}>
+                <TouchableOpacity className='pl-5 mt-7' onPress={() => router.navigate(ROUTES.SIGN_UP)}>
                     <Image className='w-[25px] h-[25px]' source={icons.leftArrow} resizeMode="contain" />
                 </TouchableOpacity>
                 <ScrollView>

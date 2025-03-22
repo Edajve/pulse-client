@@ -42,6 +42,12 @@ const AuthLayout = () => {
                         headerShown: false
                     }}
                 />
+                  <Stack.Screen
+                    name="reset-pin"
+                    options={{
+                        headerShown: false
+                    }}
+                />
             </Stack>
             <StatusBar
                 backgroundColor="#161622"

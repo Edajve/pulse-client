@@ -6,6 +6,7 @@ export const ROUTES = {
     TERMS_AND_CONDITIONS: "/terms-and-condition",
     SIGN_IN_PIN: "/sign-in-pin",
     BIOMETRIC_LOGIN: "/biometric-login",
+    RESET_PIN: "/reset-pin",
 
     // Contract Routes
     PASSWORD_VALIDATE: "/password-validate",

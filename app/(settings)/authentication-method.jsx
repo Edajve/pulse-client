@@ -4,7 +4,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "../../constants/icons";
 
-const Payments = () => {
+const AuthenticationMethod = () => {
 
     return (
         <SafeAreaView className="bg-primary h-full p-5">
@@ -24,4 +24,4 @@ const Payments = () => {
     )
 }
 
-export default Payments
+export default AuthenticationMethod
