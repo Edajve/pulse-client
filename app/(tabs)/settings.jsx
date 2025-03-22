@@ -35,7 +35,7 @@ const Settings = () => {
 
     return (
         <SafeAreaView className="bg-primary h-full">
-            <ScrollView className="px-4 my-6">
+            <ScrollView className="px-4 mt-6">
                 <Text className='text-4xl text-gray-200 font-psemibold'>
                     Settings
                 </Text>

@@ -38,7 +38,7 @@ const TabsLayout = () => {
                     tabBarInactiveTintColor: tailwindConfig.theme.extend.colors.gray[100],
                     tabBarStyle: {
                         backgroundColor: tailwindConfig.theme.extend.colors.primary,
-                        borderTopWidth: 1,
+                        borderTopWidth: 10,
                         borderTopColor: tailwindConfig.theme.extend.colors.primary,
                         height: 84,
                     }
