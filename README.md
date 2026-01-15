@@ -47,6 +47,17 @@ When you're ready, run:
 npm run reset-project
 ```
 
+## Windows specific note (important)
+
+On Windows, Metro cannot load a custom metro.config without a small patch due to how Node handles absolute paths.
+
+This project includes a patched metro-config using patch-package.
+
+### What this means 
+npm install automatically applies the patch, If dependencies are ever reinstalled and metro fails again, regernate patch with npx patch-package metro-config//the patch file lives in patches/ directory and must be commited
+
+
+
 ## Dependencies
 WIP
 - expo install expo-media-library

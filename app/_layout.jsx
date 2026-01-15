@@ -3,6 +3,9 @@ import {useFonts} from "expo-font";
 import {useEffect} from "react";
 import GlobalProvider from "../context/GlobalProvider";
 import PasswordValidate from "./(contract)/password-validate";
+import "../global.css";
+
+
 
 // This shows the splash screen until the fonts are ready
 SplashScreen.preventAutoHideAsync();
