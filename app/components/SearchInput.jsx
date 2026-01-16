@@ -12,7 +12,6 @@ const SearchInput = ({initialQuery}) => {
     const pathname = usePathname()
     const [query, setQuery] = useState(initialQuery || '')
 
-    
     const closePopUp = () => {
         setPopUp(false);
         setPopUpMessage("");
@@ -59,7 +58,7 @@ const SearchInput = ({initialQuery}) => {
                             setPopUpMessage("Please put in a name to search by")
                             setPopUp(true)
 
-                        }else if (pathname.startsWith('/search')) {
+                        } else if (pathname.startsWith('/search')) {
 
                             router.setParams({query})
 
