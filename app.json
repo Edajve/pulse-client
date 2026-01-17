@@ -24,6 +24,7 @@
       "bundleIdentifier": "com.edajve.pulse"
     },
     "android": {
+      "package": "com.edajve.pulse",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
